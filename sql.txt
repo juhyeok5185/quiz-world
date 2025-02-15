@@ -1,9 +1,11 @@
 CREATE TABLE t_member (
                           member_id BIGINT NOT NULL AUTO_INCREMENT COMMENT '회원 일련번호',
+                          role TINYINT(1) NOT NULL COMMENT '역할',
                           login_id VARCHAR(255) NOT NULL COMMENT '아이디',
                           password VARCHAR(255) NOT NULL COMMENT '비밀번호',
                           phone VARCHAR(30) NOT NULL COMMENT '휴대전화',
                           email VARCHAR(255) NOT NULL COMMENT '이메일',
+                          device_token VARCHAR(100) NOT NULL COMMENT '디바이스 토큰',
                           use_yn TINYINT(1) NOT NULL DEFAULT 1 COMMENT '사용여부',
                           save_dtm DATETIME NOT NULL DEFAULT now() COMMENT '저장시간',
                           mod_dtm DATETIME NOT NULL DEFAULT now() COMMENT '수정시간',

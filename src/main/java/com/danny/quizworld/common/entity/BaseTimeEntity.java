@@ -24,6 +24,7 @@ public abstract class BaseTimeEntity {
     @PrePersist
     public void prePersist() {
         LocalDateTime now = LocalDateTime.now();
+        this.useYn = true;
         this.saveDtm = now;
         this.modDtm = now;
     }
