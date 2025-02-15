@@ -1,0 +1,107 @@
+CREATE TABLE t_member (
+                          member_id BIGINT NOT NULL AUTO_INCREMENT COMMENT '회원 일련번호',
+                          login_id VARCHAR(255) NOT NULL COMMENT '아이디',
+                          password VARCHAR(255) NOT NULL COMMENT '비밀번호',
+                          phone VARCHAR(30) NOT NULL COMMENT '휴대전화',
+                          email VARCHAR(255) NOT NULL COMMENT '이메일',
+                          use_yn TINYINT(1) NOT NULL DEFAULT 1 COMMENT '사용여부',
+                          save_dtm DATETIME NOT NULL DEFAULT now() COMMENT '저장시간',
+                          mod_dtm DATETIME NOT NULL DEFAULT now() COMMENT '수정시간',
+                          PRIMARY KEY (member_id)
+);
+
+CREATE TABLE t_subject (
+                           subject_id BIGINT NOT NULL AUTO_INCREMENT COMMENT '과목 일련번호',
+                           member_id BIGINT NOT NULL COMMENT '회원 일련번호',
+                           name VARCHAR(255) NOT NULL COMMENT '과목명',
+                           use_yn TINYINT(1) NOT NULL DEFAULT 1 COMMENT '사용여부',
+                           save_dtm DATETIME NOT NULL DEFAULT now() COMMENT '저장시간',
+                           mod_dtm DATETIME NOT NULL DEFAULT now() COMMENT '수정시간',
+                           PRIMARY KEY (subject_id),
+                           FOREIGN KEY (member_id) REFERENCES t_member (member_id)
+);
+
+CREATE TABLE t_chapter (
+                           chapter_id BIGINT NOT NULL AUTO_INCREMENT COMMENT '챕터 일련번호',
+                           subject_id BIGINT NOT NULL COMMENT '과목 일련번호',
+                           name VARCHAR(255) NOT NULL COMMENT '챕터명',
+                           use_yn TINYINT(1) NOT NULL DEFAULT 1 COMMENT '사용여부',
+                           save_dtm DATETIME NOT NULL DEFAULT now() COMMENT '저장시간',
+                           mod_dtm DATETIME NOT NULL DEFAULT now() COMMENT '수정시간',
+                           PRIMARY KEY (chapter_id),
+                           FOREIGN KEY (subject_id) REFERENCES t_subject (subject_id)
+);
+
+CREATE TABLE t_passage (
+                           passage_id BIGINT NOT NULL AUTO_INCREMENT COMMENT '지문 일련번호',
+                           chapter_id BIGINT NOT NULL COMMENT '챕터 일련번호',
+                           subject_id BIGINT NOT NULL COMMENT '과목 일련번호',
+                           text TEXT NOT NULL COMMENT '지문 내용',
+                           use_yn TINYINT(1) NOT NULL DEFAULT 1 COMMENT '사용여부',
+                           save_dtm DATETIME NOT NULL DEFAULT now() COMMENT '저장시간',
+                           mod_dtm DATETIME NOT NULL DEFAULT now() COMMENT '수정시간',
+                           PRIMARY KEY (passage_id),
+                           FOREIGN KEY (chapter_id) REFERENCES t_chapter (chapter_id),
+                           FOREIGN KEY (subject_id) REFERENCES t_subject (subject_id)
+);
+
+CREATE TABLE t_question (
+                            question_id BIGINT NOT NULL AUTO_INCREMENT COMMENT '퀴즈 일련번호',
+                            subject_id BIGINT NOT NULL COMMENT '과목 일련번호',
+                            chapter_id BIGINT NOT NULL COMMENT '챕터 일련번호',
+                            passage_id BIGINT NULL COMMENT '지문 일련번호',
+                            type TINYINT(1) NOT NULL COMMENT '0:주관식, 1:객관식',
+                            text TEXT NOT NULL COMMENT '텍스트 질문',
+                            use_yn TINYINT(1) NOT NULL DEFAULT 1 COMMENT '사용여부',
+                            save_dtm DATETIME NOT NULL DEFAULT now() COMMENT '저장시간',
+                            mod_dtm DATETIME NOT NULL DEFAULT now() COMMENT '수정시간',
+                            PRIMARY KEY (question_id),
+                            FOREIGN KEY (subject_id) REFERENCES t_subject (subject_id),
+                            FOREIGN KEY (chapter_id) REFERENCES t_chapter (chapter_id),
+                            FOREIGN KEY (passage_id) REFERENCES t_passage (passage_id)
+);
+
+CREATE TABLE t_answer (
+                          answer_id BIGINT NOT NULL AUTO_INCREMENT COMMENT '주관식 답 일련번호',
+                          question_id BIGINT NOT NULL COMMENT '퀴즈 일련번호',
+                          text TEXT NOT NULL COMMENT '텍스트 답',
+                          answer_yn TINYINT(1) NOT NULL DEFAULT 0 COMMENT '정답여부',
+                          use_yn TINYINT(1) NOT NULL DEFAULT 1 COMMENT '사용여부',
+                          save_dtm DATETIME NOT NULL DEFAULT now() COMMENT '저장시간',
+                          mod_dtm DATETIME NOT NULL DEFAULT now() COMMENT '수정시간',
+                          PRIMARY KEY (answer_id),
+                          FOREIGN KEY (question_id) REFERENCES t_question (question_id)
+);
+
+CREATE TABLE t_member_answer (
+                               member_answer_id BIGINT NOT NULL AUTO_INCREMENT COMMENT '선택된 답 일련번호',
+                               auth_id BIGINT NOT NULL COMMENT '회원 일련번호',
+                               answer_id BIGINT NOT NULL COMMENT '답 일련번호',
+                               question_id BIGINT NOT NULL COMMENT '퀴즈 일련번호',
+                               passage_id BIGINT NOT NULL COMMENT '지문 일련번호',
+                               chapter_id BIGINT NOT NULL COMMENT '챕터 일련번호',
+                               subject_id BIGINT NOT NULL COMMENT '과목 일련번호',
+                               text TEXT NOT NULL COMMENT '텍스트 답',
+                               answer_yn TINYINT(1) NOT NULL COMMENT '정답여부',
+                               use_yn TINYINT(1) NOT NULL DEFAULT 1 COMMENT '사용여부',
+                               save_dtm DATETIME NOT NULL DEFAULT now() COMMENT '저장시간',
+                               mod_dtm DATETIME NOT NULL DEFAULT now() COMMENT '수정시간',
+                               PRIMARY KEY (auth_answer_id),
+                               FOREIGN KEY (auth_id) REFERENCES t_member (member_id),
+                               FOREIGN KEY (answer_id) REFERENCES t_answer (answer_id),
+                               FOREIGN KEY (question_id) REFERENCES t_question (question_id),
+                               FOREIGN KEY (passage_id) REFERENCES t_passage (passage_id),
+                               FOREIGN KEY (chapter_id) REFERENCES t_chapter (chapter_id),
+                               FOREIGN KEY (subject_id) REFERENCES t_subject (subject_id)
+);
+
+CREATE TABLE t_question_keyword (
+                                    question_keyword_id BIGINT NOT NULL AUTO_INCREMENT COMMENT '주관식 답 일련번호',
+                                    question_id BIGINT NOT NULL COMMENT '퀴즈 일련번호',
+                                    name VARCHAR(100) NOT NULL COMMENT '이름',
+                                    use_yn TINYINT(1) NOT NULL DEFAULT 1 COMMENT '사용여부',
+                                    save_dtm DATETIME NOT NULL DEFAULT now() COMMENT '저장시간',
+                                    mod_dtm DATETIME NOT NULL DEFAULT now() COMMENT '수정시간',
+                                    PRIMARY KEY (question_keyword_id),
+                                    FOREIGN KEY (question_id) REFERENCES t_question (question_id)
+);
