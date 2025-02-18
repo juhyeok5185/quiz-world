@@ -18,9 +18,9 @@ public class SubjectApiController {
     private final SubjectFacade subjectFacade;
 
     @PostMapping
-    public ResponseEntity<ApiResponse<SubjectResponse>> saveSubject(Authentication authentication, @RequestBody String name) {
+    public ResponseEntity<ApiResponse<SubjectResponse>> saveSubject(Authentication authentication, @RequestBody SubjectSaveRequest request) {
         Long memberId = Utils.getAuthId(authentication);
-        return ResponseEntity.status(201).body(new ApiResponse<>(subjectFacade.saveSubject(memberId, name)));
+        return ResponseEntity.status(201).body(new ApiResponse<>(subjectFacade.saveSubject(memberId, request)));
     }
 
     @GetMapping

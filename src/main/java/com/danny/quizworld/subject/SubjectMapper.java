@@ -11,14 +11,16 @@ public class SubjectMapper {
 
     private final ModelMapper modelMapper;
 
-    public Subject toEntity(Member member, String name){
+    public Subject toEntity(Member member, SubjectSaveRequest request){
         return Subject.builder()
                 .member(member)
-                .name(name)
+                .name(request.getName())
                 .build();
     }
 
     public SubjectResponse toResponse(Subject subject) {
-        return modelMapper.map(subject, SubjectResponse.class);
+        return SubjectResponse.builder()
+                .subjectId(subject.getSubjectId())
+                .name(subject.getName()).build();
     }
 }

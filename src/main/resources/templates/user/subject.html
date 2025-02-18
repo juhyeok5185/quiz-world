@@ -7,20 +7,38 @@
     <title>Document</title>
 </head>
 <body>
-    <button onclick="save()">save</button>
+<input type="text" id="name">
+<button onclick="save()">save</button>
+
+<div class="listArea">
+
+</div>
 <script>
-    window.onload = function(){
+    window.onload = function () {
         findAllByMemberId();
     }
 
-    async function findAllByMemberId(){
+    async function findAllByMemberId() {
         const url = `/api/subjects`;
         const response = await fetchGet(url);
+        drawList(response);
     }
 
-    async function save(){
+    function drawList(response) {
+        let html = ``;
+        response.forEach(item => {
+            html += `<div><a href="/user/chapter?subjectId=${item.subjectId}">${item.name}</a></div>`
+        })
+        find('.listArea').innerHTML = html;
+    }
+
+
+    async function save() {
         const url = `/api/subjects`;
-        const response = await fetchPostByJson(url);
+        const name = find('#name').value;
+        const json = {name}
+        const response = await fetchPostByJson(url , json);
+        location.reload();
     }
 
 </script>

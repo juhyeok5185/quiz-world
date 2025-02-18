@@ -18,9 +18,9 @@ public class SubjectFacade {
     private final SubjectService subjectService;
     private final ChapterService chapterService;
 
-    public SubjectResponse saveSubject(Long memberId, String name) {
+    public SubjectResponse saveSubject(Long memberId, SubjectSaveRequest request) {
         Member member = memberService.findById(memberId);
-        Subject subject = subjectService.toEntity(member , name);
+        Subject subject = subjectService.toEntity(member , request);
         return subjectService.toResponse(subjectService.save(subject));
     }
 

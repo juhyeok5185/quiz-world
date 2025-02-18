@@ -31,7 +31,7 @@ public class QQuestion extends EntityPathBase<Question> {
 
     public final com.danny.quizworld.question.passage.QPassage passage;
 
-    public final NumberPath<Long> quizId = createNumber("quizId", Long.class);
+    public final NumberPath<Long> questionId = createNumber("questionId", Long.class);
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> saveDtm = _super.saveDtm;
