@@ -1,0 +1,30 @@
+<!-- layout.html (공통 레이아웃) -->
+<!doctype html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+<!--  <link rel="icon" type="image/x-icon" href="/static/common/images/favicon.ico">-->
+  <title>공통 레이아웃</title>
+</head>
+<body>
+<header><button onclick="logout()">로그아웃</button>
+</header>
+<content>
+  <div layout:fragment="content"></div> <!-- 페이지마다 콘텐츠가 다름 -->
+</content>
+<footer>푸터입니다</footer>
+
+
+<script src="/static/common/js/fetchUtils.js" type="application/javascript"></script>
+<script>
+  async function logout() {
+    await fetchPostByLogout("/logout")
+    location.href = "/";
+  }
+</script>
+<th:block layout:fragment="script">
+
+</th:block>
+</body>
+</html>
