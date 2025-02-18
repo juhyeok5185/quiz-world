@@ -50,10 +50,9 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable()
-//                        .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-//                        .sessionAuthenticationStrategy(new NullAuthenticatedSessionStrategy())
-
+                .csrf(csrf -> csrf
+                        .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+                        .sessionAuthenticationStrategy(new NullAuthenticatedSessionStrategy())
                 )
                 .authorizeHttpRequests(auth -> auth
                         .antMatchers("/", "/login", "/save", "/static/**", "/api/members/sessions" ,"/design/**").permitAll() // 로그인 관련 경로 허용
