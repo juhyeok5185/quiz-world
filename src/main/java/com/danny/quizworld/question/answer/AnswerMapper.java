@@ -1,7 +1,6 @@
-package com.danny.quizworld.question;
+package com.danny.quizworld.question.answer;
 
 import com.danny.quizworld.subject.Subject;
-import com.danny.quizworld.subject.SubjectMapper;
 import com.danny.quizworld.subject.chapter.Chapter;
 import com.danny.quizworld.subject.chapter.ChapterResponse;
 import lombok.RequiredArgsConstructor;
@@ -10,15 +9,15 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class QuestionMapper {
+public class AnswerMapper {
 
     private final ModelMapper modelMapper;
 
-    public Question toEntity(){
+    public Answer toEntity(){
         return null;
     }
 
-    public QuestionResponse toResponse(Question question) {
+    public AnswerResponse toResponse(Answer answer) {
         return null;
     }
 }
