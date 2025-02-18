@@ -5,6 +5,7 @@ import com.danny.quizworld.common.util.AES256Utils;
 import com.danny.quizworld.member.Member;
 import com.danny.quizworld.member.MemberReader;
 import com.danny.quizworld.member.MemberRole;
+import com.danny.quizworld.member.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -19,13 +20,13 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 public class SessionService {
 
-    private final MemberReader memberReader;
+    private final MemberService memberService;
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
     public String login(@Valid SessionRequest request) {
         String encryptedLoginId = AES256Utils.encrypt(request.getLoginId());
-        Member member = memberReader.findByLoginId(encryptedLoginId);
+        Member member = memberService.findByLoginId(encryptedLoginId);
 
         if (member == null) {
             throw new MyException("없는 계정입니다.");

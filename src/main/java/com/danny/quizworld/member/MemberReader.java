@@ -1,5 +1,6 @@
 package com.danny.quizworld.member;
 
+import com.danny.quizworld.common.config.MyException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,5 +13,9 @@ public class MemberReader {
 
     public Member findByLoginId(String loginId) {
         return memberRepository.findByLoginId(loginId);
+    }
+
+    public Member findById(Long memberId) {
+        return memberRepository.findById(memberId).orElseThrow(() -> new MyException("회원을 찾을 수 없습니다."));
     }
 }

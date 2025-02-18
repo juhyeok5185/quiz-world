@@ -3,6 +3,7 @@ package com.danny.quizworld.subject;
 import com.danny.quizworld.common.entity.BaseTimeEntity;
 import com.danny.quizworld.member.Member;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -26,4 +27,9 @@ public class Subject extends BaseTimeEntity {
     @Column(name = "name")
     private String name;
 
+    @Builder
+    public Subject(Member member, String name) {
+        this.member = member;
+        this.name = name;
+    }
 }
