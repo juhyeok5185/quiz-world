@@ -2,10 +2,11 @@ CREATE TABLE t_member (
                           member_id BIGINT NOT NULL AUTO_INCREMENT COMMENT '회원 일련번호',
                           role TINYINT(1) NOT NULL COMMENT '역할',
                           login_id VARCHAR(255) NOT NULL COMMENT '아이디',
+                          name VARCHAR(100) NOT NULL COMMENT '이름',
                           password VARCHAR(255) NOT NULL COMMENT '비밀번호',
                           phone VARCHAR(30) NOT NULL COMMENT '휴대전화',
                           email VARCHAR(255) NOT NULL COMMENT '이메일',
-                          device_token VARCHAR(100) NOT NULL COMMENT '디바이스 토큰',
+                          device_token VARCHAR(100) COMMENT '디바이스 토큰',
                           use_yn TINYINT(1) NOT NULL DEFAULT 1 COMMENT '사용여부',
                           save_dtm DATETIME NOT NULL DEFAULT now() COMMENT '저장시간',
                           mod_dtm DATETIME NOT NULL DEFAULT now() COMMENT '수정시간',
@@ -107,3 +108,15 @@ CREATE TABLE t_question_keyword (
                                     PRIMARY KEY (question_keyword_id),
                                     FOREIGN KEY (question_id) REFERENCES t_question (question_id)
 );
+
+
+1. 모놀리틱 구성에서 최대한의 DDD적인 설계를 위해 Facade패턴 사용
+- service는 단순 조회 및 저장의 업무만 수행하고 비지니스 로직은 facade에서 service를 호출하는 방식 (단일 책임 원칙)과 (의존성 분리)에 중점을 둔 설계
+- Reader , Store 구분으로 조회 및 저장의 역할 분배
+2. security csrf 토큰 적용
+3. Member save - PasswordEncode , AES256 사용으로 암호화 진행
+4. security API 로그인 UserDetails 미들웨이 방식의 로그인 및 filter chain 구현
+5. request , response 의 분리 entity 은닉으로 보안 강화
+6. Mapper 패턴으로 간편한 매핑(ModelMapper)
+7. Response 형태 APIResponse 객체 이용으로 통일
+8. Restful API를 기반으로 Controller 설계

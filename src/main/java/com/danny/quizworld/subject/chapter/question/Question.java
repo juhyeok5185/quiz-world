@@ -32,9 +32,9 @@ public class Question extends BaseTimeEntity {
     @JoinColumn(name = "passage_id")
     private Passage passage;
 
-    @Column(name = "name")
+    @Column(name = "type")
     private String type;
 
-    @Column(name = "name")
+    @Column(name = "text")
     private String text;
 }

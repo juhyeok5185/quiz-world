@@ -1,34 +1,60 @@
 package com.danny.quizworld.common.config;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.session.SessionRegistry;
+import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.session.NullAuthenticatedSessionStrategy;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
 @Configuration
-@EnableMethodSecurity(prePostEnabled = true, securedEnabled = true) // @Secured 및 @PreAuthorize 활성화
+@EnableMethodSecurity(prePostEnabled = true, securedEnabled = true)
+@EnableWebSecurity
 public class SecurityConfig {
 
+    @Bean
+    public SessionRegistry sessionRegistry() {
+        return new SessionRegistryImpl();
+    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable()) // CSRF 비활성화
-//                .authorizeHttpRequests(auth -> auth
-//                        .requestMatchers().permitAll() // save와 login만 허용
-//                        .anyRequest().authenticated() // 그 외 모든 요청은 인증 필요
-//                )
-                .httpBasic(Customizer.withDefaults()); // HTTP Basic 인증 활성화 (선택 사항)
-
+                .csrf(csrf -> csrf
+                        .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+                        .sessionAuthenticationStrategy(new NullAuthenticatedSessionStrategy())
+                ).authorizeHttpRequests(auth -> auth
+                        .requestMatchers(
+                                "/",
+                                "/login",
+                                "/save",
+                                "/api/members",
+                                "/api/members/sessions/save",
+                                "/static/**").permitAll() // ✅ 메인 페이지 접근 가능
+                        .anyRequest().authenticated() // ✅ 나머지 요청은 인증 필요
+                )
+                .logout(logout -> logout
+                        .logoutUrl("/logout")
+                        .logoutSuccessUrl("/login")
+                        .invalidateHttpSession(true)    // 세션 무효화
+                        .deleteCookies("JSESSIONID", "XSRF-TOKEN")
+                        .clearAuthentication(true)      // 인증 정보 제거
+                        .permitAll()
+                );
         return http.build();
     }
+
 }

@@ -1,12 +1,29 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Login</title>
+    <script src="/static/common/js/fetchUtils.js" type="text/javascript"></script>
 </head>
 <body>
+<input type="text" id="loginId" name="loginId" placeholder="아이디" required>
+<input type="password" id="password" name="password" placeholder="비밀번호" required>
+<button type="button" onclick="session();">로그인</button>
+<a href="/save">회원가입</a>
+<script>
+    async function session() {
+        // const loginId = find('#loginId').value;
+        // console.log(loginId)
+        // const password = find('#password').value;
+        // console.log(password)
+        // const json = {loginId , password};
+        const url = `/api/members/sessions/save`;
+        // const response = await fetchPostByJson(url , json);
+        // console.log(response);
+        const response = await fetchPostByJson(url , null);
+    }
 
-<input type="text" placeholder="아이디">
-<input type="text" placeholder="비밀번호">
+
+</script>
 </body>
 </html>
