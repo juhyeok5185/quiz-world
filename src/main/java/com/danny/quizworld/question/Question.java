@@ -34,7 +34,7 @@ public class Question extends BaseTimeEntity {
     private Passage passage;
 
     @Column(name = "type")
-    private String type;
+    private QuestionType type;
 
     @Column(name = "text")
     private String text;
