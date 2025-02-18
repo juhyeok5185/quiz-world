@@ -16,10 +16,10 @@ public class ChapterMapper {
     private final ModelMapper modelMapper;
     private final SubjectMapper subjectMapper;
 
-    public Chapter toEntity(Subject subject, String name){
+    public Chapter toEntity(Subject subject, ChapterSaveRequest request){
         return Chapter.builder()
                 .subject(subject)
-                .name(name)
+                .name(request.getName())
                 .build();
     }
 

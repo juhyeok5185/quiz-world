@@ -21,8 +21,8 @@ public class ChapterService {
         return chapterStore.save(chapter);
     }
 
-    public Chapter toEntity(Subject subject , String name) {
-        return chapterMapper.toEntity(subject, name);
+    public Chapter toEntity(Subject subject , ChapterSaveRequest request) {
+        return chapterMapper.toEntity(subject, request);
     }
 
     public ChapterResponse toResponse(Chapter chapter) {

@@ -4,9 +4,11 @@ import com.danny.quizworld.member.Member;
 import com.danny.quizworld.member.MemberService;
 import com.danny.quizworld.subject.chapter.Chapter;
 import com.danny.quizworld.subject.chapter.ChapterResponse;
+import com.danny.quizworld.subject.chapter.ChapterSaveRequest;
 import com.danny.quizworld.subject.chapter.ChapterService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -31,12 +33,13 @@ public class SubjectFacade {
                 .toList();
     }
 
-    public ChapterResponse saveChapter(Long subjectId, String name) {
+    public ChapterResponse saveChapter(Long subjectId, ChapterSaveRequest request) {
         Subject subject = subjectService.findById(subjectId);
-        Chapter chapter = chapterService.toEntity(subject, name);
+        Chapter chapter = chapterService.toEntity(subject, request);
         return chapterService.toResponse(chapterService.save(chapter));
     }
 
+    @Transactional(readOnly = true)
     public List<ChapterResponse> findAllChapterBySubjectId(Long subjectId) {
         List<Chapter> chapterList = chapterService.findAllBySubjectId(subjectId);
         return chapterList.stream()

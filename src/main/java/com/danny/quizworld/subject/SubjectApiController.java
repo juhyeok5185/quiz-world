@@ -3,6 +3,7 @@ package com.danny.quizworld.subject;
 import com.danny.quizworld.common.response.ApiResponse;
 import com.danny.quizworld.common.util.Utils;
 import com.danny.quizworld.subject.chapter.ChapterResponse;
+import com.danny.quizworld.subject.chapter.ChapterSaveRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -30,8 +31,8 @@ public class SubjectApiController {
     }
 
     @PostMapping("/{subjectId}/chapters")
-    public ResponseEntity<ApiResponse<ChapterResponse>> saveChapter(@PathVariable Long subjectId, @RequestBody String name) {
-        return ResponseEntity.status(201).body(new ApiResponse<>(subjectFacade.saveChapter(subjectId, name)));
+    public ResponseEntity<ApiResponse<ChapterResponse>> saveChapter(@PathVariable Long subjectId, @RequestBody ChapterSaveRequest request) {
+        return ResponseEntity.status(201).body(new ApiResponse<>(subjectFacade.saveChapter(subjectId, request)));
     }
 
     @GetMapping("/{subjectId}/chapters")
