@@ -39,5 +39,4 @@ public class SubjectApiController {
         return ResponseEntity.ok(new ApiResponse<>(subjectFacade.findAllChapterBySubjectId(subjectId)));
     }
 
-
 }

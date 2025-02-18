@@ -1,4 +1,4 @@
-package com.danny.quizworld.subject.chapter.passage;
+package com.danny.quizworld.question.passage;
 
 import com.danny.quizworld.subject.SubjectResponse;
 import com.danny.quizworld.subject.chapter.ChapterResponse;

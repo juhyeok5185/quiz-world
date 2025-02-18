@@ -1,9 +1,7 @@
-package com.danny.quizworld.subject.chapter.passage;
+package com.danny.quizworld.question.passage;
 
-import com.danny.quizworld.subject.Subject;
-import com.danny.quizworld.subject.SubjectService;
 import com.danny.quizworld.subject.chapter.Chapter;
-import com.danny.quizworld.subject.chapter.ChapterResponse;
+import com.danny.quizworld.subject.chapter.ChapterMapper;
 import com.danny.quizworld.subject.chapter.ChapterService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -14,7 +12,7 @@ import org.springframework.stereotype.Component;
 public class PassageMapper {
 
     private final ModelMapper modelMapper;
-    private final ChapterService chapterService;
+    private final ChapterMapper chapterMapper;
 
     public Passage toEntity(Chapter chapter, String text){
         return Passage.builder()
@@ -28,7 +26,7 @@ public class PassageMapper {
         return PassageResponse.builder()
                 .passageId(passage.getPassageId())
                 .text(passage.getText())
-                .chapter(chapterService.toResponse(passage.getChapter()))
+                .chapter(chapterMapper.toResponse(passage.getChapter()))
                 .build();
     }
 }

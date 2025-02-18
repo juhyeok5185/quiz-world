@@ -2,6 +2,7 @@ package com.danny.quizworld.subject.chapter.passage;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
+import com.danny.quizworld.question.passage.Passage;
 import com.querydsl.core.types.dsl.*;
 
 import com.querydsl.core.types.PathMetadata;
