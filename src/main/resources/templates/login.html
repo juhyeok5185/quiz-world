@@ -12,15 +12,14 @@
 <a href="/save">회원가입</a>
 <script>
     async function session() {
-        // const loginId = find('#loginId').value;
-        // console.log(loginId)
-        // const password = find('#password').value;
-        // console.log(password)
-        // const json = {loginId , password};
-        const url = `/api/members/sessions/save`;
-        // const response = await fetchPostByJson(url , json);
-        // console.log(response);
-        const response = await fetchPostByJson(url , null);
+        const loginId = find('#loginId').value;
+        console.log(loginId)
+        const password = find('#password').value;
+        console.log(password)
+        const json = {loginId , password};
+        const url = '/api/members/sessions';
+        const response = await fetchPostByJson(url , json);
+        console.log(response);
     }
 
 

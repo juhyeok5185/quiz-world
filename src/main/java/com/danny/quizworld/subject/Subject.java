@@ -2,10 +2,11 @@ package com.danny.quizworld.subject;
 
 import com.danny.quizworld.common.entity.BaseTimeEntity;
 import com.danny.quizworld.member.Member;
-import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
