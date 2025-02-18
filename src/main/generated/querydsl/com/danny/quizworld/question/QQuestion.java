@@ -1,8 +1,7 @@
-package com.danny.quizworld.subject.chapter.question;
+package com.danny.quizworld.question;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
-import com.danny.quizworld.question.Question;
 import com.querydsl.core.types.dsl.*;
 
 import com.querydsl.core.types.PathMetadata;
@@ -17,7 +16,7 @@ import com.querydsl.core.types.dsl.PathInits;
 @Generated("com.querydsl.codegen.DefaultEntitySerializer")
 public class QQuestion extends EntityPathBase<Question> {
 
-    private static final long serialVersionUID = 173739803L;
+    private static final long serialVersionUID = -1581841218L;
 
     private static final PathInits INITS = PathInits.DIRECT2;
 
@@ -30,9 +29,9 @@ public class QQuestion extends EntityPathBase<Question> {
     //inherited
     public final DateTimePath<java.time.LocalDateTime> modDtm = _super.modDtm;
 
-    public final com.danny.quizworld.subject.chapter.passage.QPassage passage;
+    public final com.danny.quizworld.question.passage.QPassage passage;
 
-    public final NumberPath<Long> passageId = createNumber("passageId", Long.class);
+    public final NumberPath<Long> quizId = createNumber("quizId", Long.class);
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> saveDtm = _super.saveDtm;
@@ -41,7 +40,7 @@ public class QQuestion extends EntityPathBase<Question> {
 
     public final StringPath text = createString("text");
 
-    public final StringPath type = createString("type");
+    public final EnumPath<QuestionType> type = createEnum("type", QuestionType.class);
 
     //inherited
     public final BooleanPath useYn = _super.useYn;
@@ -65,7 +64,7 @@ public class QQuestion extends EntityPathBase<Question> {
     public QQuestion(Class<? extends Question> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
         this.chapter = inits.isInitialized("chapter") ? new com.danny.quizworld.subject.chapter.QChapter(forProperty("chapter"), inits.get("chapter")) : null;
-        this.passage = inits.isInitialized("passage") ? new com.danny.quizworld.subject.chapter.passage.QPassage(forProperty("passage"), inits.get("passage")) : null;
+        this.passage = inits.isInitialized("passage") ? new com.danny.quizworld.question.passage.QPassage(forProperty("passage"), inits.get("passage")) : null;
         this.subject = inits.isInitialized("subject") ? new com.danny.quizworld.subject.QSubject(forProperty("subject"), inits.get("subject")) : null;
     }
 

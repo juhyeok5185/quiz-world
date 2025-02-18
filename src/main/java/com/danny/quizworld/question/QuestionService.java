@@ -23,4 +23,5 @@ public class QuestionService {
     public List<Question> findAllByChapterId(Long chapterId){
         return questionReader.findAllByChapterId(chapterId);
     }
+
 }

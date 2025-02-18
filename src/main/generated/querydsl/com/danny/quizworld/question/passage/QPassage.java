@@ -1,8 +1,7 @@
-package com.danny.quizworld.subject.chapter.passage;
+package com.danny.quizworld.question.passage;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
-import com.danny.quizworld.question.passage.Passage;
 import com.querydsl.core.types.dsl.*;
 
 import com.querydsl.core.types.PathMetadata;
@@ -17,7 +16,7 @@ import com.querydsl.core.types.dsl.PathInits;
 @Generated("com.querydsl.codegen.DefaultEntitySerializer")
 public class QPassage extends EntityPathBase<Passage> {
 
-    private static final long serialVersionUID = -1885016613L;
+    private static final long serialVersionUID = -1289521962L;
 
     private static final PathInits INITS = PathInits.DIRECT2;
 
