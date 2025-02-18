@@ -18,8 +18,8 @@ public class Question extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "question_id")
-    private Long passageId; // 회원 일련번호
+    @Column(name = "quiz_id")
+    private Long quizId; // 회원 일련번호
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "chapter_id")

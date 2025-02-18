@@ -8,6 +8,6 @@ import lombok.Setter;
 @Setter
 @Builder
 public class SubjectResponse {
-    private String subjectId;
+    private Long subjectId;
     private String name;
 }

@@ -32,4 +32,9 @@ public class SubjectService {
     public SubjectResponse toResponse(Subject subject) {
         return subjectMapper.toResponse(subject);
     }
+
+    @Transactional(readOnly = true)
+    public Subject findById(Long subjectId) {
+        return subjectReader.findById(subjectId);
+    }
 }

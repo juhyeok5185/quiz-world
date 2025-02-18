@@ -1,5 +1,6 @@
 package com.danny.quizworld.subject;
 
+import com.danny.quizworld.common.config.MyException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -12,5 +13,9 @@ public class SubjectReader {
 
     public List<Subject> findAllByMemberId(Long memberId) {
         return subjectRepository.findAllByMember_MemberIdAndUseYnTrue(memberId);
+    }
+
+    public Subject findById(Long subjectId) {
+        return subjectRepository.findById(subjectId).orElseThrow(() -> new MyException("과목을 찾을수 없습니다."));
     }
 }

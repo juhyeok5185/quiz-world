@@ -4,6 +4,7 @@ import com.danny.quizworld.common.entity.BaseTimeEntity;
 import com.danny.quizworld.subject.Subject;
 import com.danny.quizworld.subject.chapter.Chapter;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -30,4 +31,11 @@ public class Passage extends BaseTimeEntity {
 
     @Column(name = "name")
     private String text;
+
+    @Builder
+    public Passage(Chapter chapter, Subject subject, String text) {
+        this.chapter = chapter;
+        this.subject = subject;
+        this.text = text;
+    }
 }
