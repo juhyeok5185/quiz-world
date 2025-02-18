@@ -26,6 +26,7 @@ public class SubjectFacade {
         return subjectService.toResponse(subjectService.save(subject));
     }
 
+    @Transactional(readOnly = true)
     public List<SubjectResponse> findAllByMemberId(Long memberId) {
         List<Subject> subjectList = subjectService.findAllByMemberId(memberId);
         return subjectList.stream()
