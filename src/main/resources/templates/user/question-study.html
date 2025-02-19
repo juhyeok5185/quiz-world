@@ -8,9 +8,7 @@
 <div layout:fragment="content">
     <button onclick="questionHideToggle()">문제 가리기</button> <button onclick="answerHideToggle()">답 가리기</button> <button>클릭하면 넘어가는거</button> <button>깜빡이(5초마다 넘어가게)</button>
     <div class="listArea"></div>
-    <div class="popup clickArea" style="display: none;">
 
-    </div>
 </div>
 
 <th:block layout:fragment="script">
@@ -25,18 +23,6 @@
             const url = `/api/questions/chapters/${chapterId}`;
             const response = await fetchGet(url);
             drawList(response);
-            drawClickArea(response);
-        }
-
-        function drawClickArea(response){
-            let html = ``;
-            response.forEach((response , index) => {
-                html += `<div><span>${response.question.questionText}</span></div>`;
-                response.answer.forEach((answer , index) => {
-                    html += `<div><span>${answer.answerText}</span></div>`;
-                })
-            })
-            find('.clickArea').innerHTML = html;
         }
 
         function drawList(response) {
