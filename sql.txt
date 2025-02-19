@@ -54,7 +54,7 @@ CREATE TABLE t_question (
                             chapter_id BIGINT NOT NULL COMMENT '챕터 일련번호',
                             passage_id BIGINT NULL COMMENT '지문 일련번호',
                             type TINYINT(1) NOT NULL COMMENT '0:주관식, 1:객관식',
-                            text TEXT NOT NULL COMMENT '텍스트 질문',
+                            question_text TEXT NOT NULL COMMENT '텍스트 질문',
                             use_yn TINYINT(1) NOT NULL DEFAULT 1 COMMENT '사용여부',
                             save_dtm DATETIME NOT NULL DEFAULT now() COMMENT '저장시간',
                             mod_dtm DATETIME NOT NULL DEFAULT now() COMMENT '수정시간',
@@ -67,7 +67,7 @@ CREATE TABLE t_question (
 CREATE TABLE t_answer (
                           answer_id BIGINT NOT NULL AUTO_INCREMENT COMMENT '주관식 답 일련번호',
                           question_id BIGINT NOT NULL COMMENT '퀴즈 일련번호',
-                          text TEXT NOT NULL COMMENT '텍스트 답',
+                          answer_text TEXT NOT NULL COMMENT '텍스트 답',
                           answer_yn TINYINT(1) NOT NULL DEFAULT 0 COMMENT '정답여부',
                           use_yn TINYINT(1) NOT NULL DEFAULT 1 COMMENT '사용여부',
                           save_dtm DATETIME NOT NULL DEFAULT now() COMMENT '저장시간',

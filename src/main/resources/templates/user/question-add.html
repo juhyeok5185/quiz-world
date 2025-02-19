@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="user/layout">
+
+
+<div layout:fragment="content">
+    <form id="shortForm">
+        <input type="text" name="type" value="SHORT">
+        <input type="text" name="questionText" placeholder="문제 입력">
+        <input type="text" name="answerRequest.answerText" placeholder="정답 입력">
+        <input type="text" name="answerRequest.answerYn" value="true" placeholder="정답 여부">
+        <button type="button" onclick="saveShort();">입력</button>
+    </form>
+
+    <div class="listArea"></div>
+</div>
+
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+        window.onload = () => {
+            findAllByChapterId();
+        }
+
+        async function findAllByChapterId() {
+            const chapterId = getParamValue( 'chapterId')
+            const url = `/api/questions/chapters/${chapterId}`;
+            const response = await fetchGet(url);
+            drawList(response);
+        }
+
+        function drawList(response) {
+            let html = ``;
+            response.forEach(response => {
+                html += `<div><span class="questionText">${response.question.questionText}</span> `;
+                response.answer.forEach(answer => {
+                    html += `- <span class="answerText">${answer.answerText}</span> <button onclick="deleteByQuestionId(${response.question.questionId});">삭제</button></div>`;
+                })
+            })
+            find('.listArea').innerHTML = html;
+        }
+
+        async function deleteByQuestionId(questionId){
+            const url = `/api/questions/${questionId}`;
+            const response = await fetchDelete(url);
+            location.reload();
+        }
+
+        async function saveShort() {
+            const chapterId = getParamValue( 'chapterId')
+            const formData = new FormData(find('#shortForm'))
+            const url = `/api/questions/chapters/${chapterId}`;
+            const response = await fetchPostByFormData(url, formData);
+            location.reload();
+        }
+
+    </script>
+</th:block>
+
+</html>

@@ -1,5 +1,6 @@
 package com.danny.quizworld.question.answer;
 
+import com.danny.quizworld.question.Question;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -21,4 +22,11 @@ public class AnswerService {
     }
 
 
+    public Answer toEntity(Question question,AnswerRequest request) {
+        return answerMapper.toEntity(question,request);
+    }
+
+    public AnswerResponse toResponse(Answer answer) {
+        return answerMapper.toResponse(answer);
+    }
 }

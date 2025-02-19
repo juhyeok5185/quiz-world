@@ -14,7 +14,7 @@
 <th:block layout:fragment="script">
     <script th:inline="javascript">
         window.onload = () => {
-            findAllByChapterId();
+            findAllBySubjectId();
         }
 
         async function save() {
@@ -26,7 +26,7 @@
             location.reload();
         }
 
-        async function findAllByChapterId() {
+        async function findAllBySubjectId() {
             const subjectId = getParamValue('subjectId')
             const url = `/api/subjects/${subjectId}/chapters`;
             const response = await fetchGet(url);
@@ -36,7 +36,11 @@
         function drawList(response) {
             let html = ``;
             response.forEach(item => {
-                html += `<div><a href="/user/question?chapterId=${item.chapterId}">${item.name}</a></div>`
+                html += `<div>${item.name}
+                            <a href="/user/question-study?chapterId=${item.chapterId}">공부하기</a>
+                            <a href="/user/question-test?chapterId=${item.chapterId}">시험보기</a>
+                            <a href="/user/question-add?chapterId=${item.chapterId}">문제추가하기</a>
+                         </div>`
             })
             find('.listArea').innerHTML = html;
         }

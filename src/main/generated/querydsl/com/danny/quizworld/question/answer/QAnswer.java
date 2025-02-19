@@ -26,6 +26,8 @@ public class QAnswer extends EntityPathBase<Answer> {
 
     public final NumberPath<Long> answerId = createNumber("answerId", Long.class);
 
+    public final StringPath answerText = createString("answerText");
+
     public final BooleanPath answerYn = createBoolean("answerYn");
 
     //inherited
@@ -35,8 +37,6 @@ public class QAnswer extends EntityPathBase<Answer> {
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> saveDtm = _super.saveDtm;
-
-    public final StringPath text = createString("text");
 
     //inherited
     public final BooleanPath useYn = _super.useYn;

@@ -1,5 +1,6 @@
 package com.danny.quizworld.question;
 
+import com.danny.quizworld.subject.chapter.Chapter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,4 +25,16 @@ public class QuestionService {
         return questionReader.findAllByChapterId(chapterId);
     }
 
+    public Question toEntity(Chapter chapter, QuestionShortTypeSaveRequest request) {
+        return questionMapper.toEntity(chapter,request);
+    }
+
+    public QuestionResponse toResponse(Question question) {
+        return questionMapper.toResponse(question);
+    }
+
+    @Transactional(readOnly = true)
+    public Question findById(Long questionId) {
+        return questionReader.findById(questionId);
+    }
 }

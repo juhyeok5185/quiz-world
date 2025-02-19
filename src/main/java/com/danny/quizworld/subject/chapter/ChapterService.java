@@ -33,4 +33,8 @@ public class ChapterService {
     public List<Chapter> findAllBySubjectId(Long subjectId) {
         return chapterReader.findAllBySubjectId(subjectId);
     }
+
+    public Chapter findById(Long chapterId) {
+        return chapterReader.findById(chapterId);
+    }
 }

@@ -33,12 +33,12 @@ public class QQuestion extends EntityPathBase<Question> {
 
     public final NumberPath<Long> questionId = createNumber("questionId", Long.class);
 
+    public final StringPath questionText = createString("questionText");
+
     //inherited
     public final DateTimePath<java.time.LocalDateTime> saveDtm = _super.saveDtm;
 
     public final com.danny.quizworld.subject.QSubject subject;
-
-    public final StringPath text = createString("text");
 
     public final EnumPath<QuestionType> type = createEnum("type", QuestionType.class);
 

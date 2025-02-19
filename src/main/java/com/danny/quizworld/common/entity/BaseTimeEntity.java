@@ -34,4 +34,7 @@ public abstract class BaseTimeEntity {
         this.modDtm = LocalDateTime.now();
     }
 
+    public void updateUseYn(){
+        this.useYn = !this.useYn;
+    }
 }

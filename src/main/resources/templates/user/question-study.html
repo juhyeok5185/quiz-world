@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="user/layout">
+
+
+<div layout:fragment="content">
+    <button onclick="questionHideToggle()">문제 가리기</button> <button onclick="answerHideToggle()">답 가리기</button> <button>클릭하면 넘어가는거</button> <button>깜빡이(5초마다 넘어가게)</button>
+    <div class="listArea"></div>
+    <div class="popup clickArea" style="display: none;">
+
+    </div>
+</div>
+
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+
+        window.onload = () => {
+            findAllByChapterId();
+        }
+
+        async function findAllByChapterId(){
+            const chapterId = getParamValue('chapterId')
+            const url = `/api/questions/chapters/${chapterId}`;
+            const response = await fetchGet(url);
+            drawList(response);
+            drawClickArea(response);
+        }
+
+        function drawClickArea(response){
+            let html = ``;
+            response.forEach((response , index) => {
+                html += `<div><span>${response.question.questionText}</span></div>`;
+                response.answer.forEach((answer , index) => {
+                    html += `<div><span>${answer.answerText}</span></div>`;
+                })
+            })
+            find('.clickArea').innerHTML = html;
+        }
+
+        function drawList(response) {
+            let html = ``;
+            response.forEach(response => {
+                html += `<div><span class="questionText">${response.question.questionText}</span> `;
+                response.answer.forEach(answer => {
+                    html += `- <span class="answerText">${answer.answerText}</span> <button onclick="deleteByQuestionId(${response.question.questionId});">삭제</button></div>`;
+                })
+            })
+            find('.listArea').innerHTML = html;
+        }
+
+        function questionHideToggle() {
+            const questionText = findAll('.questionText');
+            questionText.forEach(element => {
+                if (element.style.display === 'none') {
+                    element.style.display = '';
+                } else {
+                    element.style.display = 'none';
+                }
+            });
+        }
+
+        function answerHideToggle(){
+            const questionText = findAll('.answerText');
+            questionText.forEach(element => {
+                if (element.style.display === 'none') {
+                    element.style.display = '';
+                } else {
+                    element.style.display = 'none';
+                }
+            });
+        }
+
+    </script>
+</th:block>
+
+</html>

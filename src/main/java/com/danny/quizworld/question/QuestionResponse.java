@@ -16,9 +16,9 @@ import javax.persistence.*;
 @Setter
 @Builder
 public class QuestionResponse {
-    private Long quizId; // 회원 일련번호
+    private Long questionId; // 회원 일련번호
     private ChapterResponse chapter;
     private PassageResponse passage;
     private QuestionType type;
-    private String text;
+    private String questionText;
 }

@@ -268,6 +268,10 @@ function find(selector) {
     return document.querySelector(selector);
 }
 
+function findAll(selector) {
+    return document.querySelectorAll(selector);
+}
+
 /**
  * FormData 를 Json으로 리턴해준다.
  * @param params FormData

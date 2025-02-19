@@ -5,6 +5,7 @@ import com.danny.quizworld.subject.Subject;
 import com.danny.quizworld.subject.chapter.Chapter;
 import com.danny.quizworld.question.passage.Passage;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -36,6 +37,18 @@ public class Question extends BaseTimeEntity {
     @Column(name = "type")
     private QuestionType type;
 
-    @Column(name = "text")
-    private String text;
+    @Column(name = "question_text")
+    private String questionText;
+
+    @Builder
+    public Question(Chapter chapter, Subject subject, Passage passage, QuestionType type, String questionText) {
+        this.chapter = chapter;
+        this.subject = subject;
+        this.passage = passage;
+        this.type = type;
+        this.questionText = questionText;
+    }
+
+
+
 }
