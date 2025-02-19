@@ -24,7 +24,7 @@ public class QuestionFacade {
     private final ChapterService chapterService;
 
     @Transactional
-    public Long save(Long chapterId, QuestionShortTypeSaveRequest request) {
+    public Long saveShortType(Long chapterId, QuestionShortTypeSaveRequest request) {
         Chapter chapter = chapterService.findById(chapterId);
         Question question = questionService.save(questionService.toEntity(chapter, request));
         Answer answer = answerService.toEntity(question, request.getAnswerRequest());
@@ -68,4 +68,5 @@ public class QuestionFacade {
         question.updateUseYn();
         return questionId;
     }
+
 }

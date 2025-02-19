@@ -36,4 +36,8 @@ public class Answer extends BaseTimeEntity {
         this.answerYn = answerYn;
         this.answerText = answerText;
     }
+
+    public void updateAnswerText(String answerText) {
+        this.answerText = answerText;
+    }
 }

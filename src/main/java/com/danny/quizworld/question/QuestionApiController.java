@@ -15,11 +15,11 @@ public class QuestionApiController {
     private final QuestionFacade questionFacade;
 
     @PostMapping("/chapters/{chapterId}")
-    public ResponseEntity<ApiResponse<Long>> saveShort(@PathVariable Long chapterId, QuestionShortTypeSaveRequest request) {
+    public ResponseEntity<ApiResponse<Long>> saveShortType(@PathVariable Long chapterId, QuestionShortTypeSaveRequest request) {
         return ResponseEntity.status(201).body(new ApiResponse<>(
                 "등록 완료"
                 , 201
-                , questionFacade.save(chapterId,request))
+                , questionFacade.saveShortType(chapterId,request))
         );
     }
 
@@ -32,4 +32,6 @@ public class QuestionApiController {
     public ResponseEntity<ApiResponse<Long>> deleteByQuestionId(@PathVariable Long questionId) {
         return ResponseEntity.ok(new ApiResponse<>(questionFacade.deleteByQuestionId(questionId)));
     }
+
+
 }

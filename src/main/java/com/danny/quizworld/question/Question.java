@@ -50,5 +50,7 @@ public class Question extends BaseTimeEntity {
     }
 
 
-
+    public void updateQuestionText(String questionText) {
+        this.questionText = questionText;
+    }
 }
