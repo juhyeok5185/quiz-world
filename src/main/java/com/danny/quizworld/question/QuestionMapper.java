@@ -16,12 +16,12 @@ public class QuestionMapper {
     private final ModelMapper modelMapper;
     private final ChapterMapper chapterMapper;
 
-    public Question toEntity(Chapter chapter,QuestionShortTypeSaveRequest request){
+    public Question toEntity(Chapter chapter,QuestionType type , String questionText){
         return Question.builder()
                 .subject(chapter.getSubject())
                 .chapter(chapter)
-                .type(request.getType())
-                .questionText(request.getQuestionText())
+                .type(type)
+                .questionText(questionText)
                 .build();
     }
 

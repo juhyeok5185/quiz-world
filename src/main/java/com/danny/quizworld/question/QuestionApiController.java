@@ -23,6 +23,13 @@ public class QuestionApiController {
         );
     }
 
+    @PostMapping("/chapters/{chapterId}")
+    public ResponseEntity<ApiResponse<Long>> saveMultipleType(@PathVariable Long chapterId, QuestionMultipleTypeSaveRequest request) {
+        return ResponseEntity.status(201).body(new ApiResponse<>(
+                "등록 완료"
+                , 201
+                , questionFacade.saveMultipleType(chapterId,request))
+        );    }
     @GetMapping("/chapters/{chapterId}")
     public ResponseEntity<ApiResponse<List<QuestionCommonResponse>>> findAllByChapterIdToCommon(@PathVariable Long chapterId) {
         return ResponseEntity.ok(new ApiResponse<>(questionFacade.findAllByChapterIdToCommon(chapterId)));

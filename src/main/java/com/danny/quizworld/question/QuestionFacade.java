@@ -26,9 +26,20 @@ public class QuestionFacade {
     @Transactional
     public Long saveShortType(Long chapterId, QuestionShortTypeSaveRequest request) {
         Chapter chapter = chapterService.findById(chapterId);
-        Question question = questionService.save(questionService.toEntity(chapter, request));
+        Question question = questionService.save(questionService.toEntity(chapter, request.getType() , request.getQuestionText()));
         Answer answer = answerService.toEntity(question, request.getAnswerRequest());
         answerService.save(answer);
+        return question.getQuestionId();
+    }
+
+    @Transactional
+    public Long saveMultipleType(Long chapterId, QuestionMultipleTypeSaveRequest request) {
+        Chapter chapter = chapterService.findById(chapterId);
+        Question question = questionService.save(questionService.toEntity(chapter , request.getType() , request.getQuestionText()));
+        request.getAnswerRequest().forEach(answerRequest -> {
+            Answer answer = answerService.toEntity(question, answerRequest);
+            answerService.save(answer);
+        });
         return question.getQuestionId();
     }
 
@@ -68,5 +79,6 @@ public class QuestionFacade {
         question.updateUseYn();
         return questionId;
     }
+
 
 }

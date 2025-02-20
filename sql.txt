@@ -108,13 +108,34 @@ CREATE TABLE t_question_keyword (
 );
 
 
-1. 모놀리틱 구성에서 최대한의 DDD적인 설계를 위해 Facade패턴 사용
-- service는 단순 조회 및 저장의 업무만 수행하고 비지니스 로직은 facade에서 service를 호출하는 방식 (단일 책임 원칙)과 (의존성 분리)에 중점을 둔 설계
-- Reader , Store 구분으로 조회 및 저장의 역할 분배
-2. security csrf 토큰 적용
-3. Member save - PasswordEncode , AES256 사용으로 암호화 진행
-4. security API 로그인 UserDetails 미들웨이 방식의 로그인 및 filter chain 구현
-5. request , response 의 분리 entity 은닉으로 보안 강화
-6. Mapper 패턴으로 간편한 매핑(ModelMapper)
-7. Response 형태 APIResponse 객체 이용으로 통일
-8. Restful API를 기반으로 Controller 설계
+1. 모놀리틱 아키텍처에서 DDD 원칙을 최대한 적용하기 위한 Facade 패턴 활용
+    1) Service 계층은 조회 및 저장의 단순 업무만 수행하고, 비즈니스 로직은 Facade에서 Service를 호출하여 처리하도록 설계.
+    2) 이를 통해 단일 책임 원칙(SRP)과 의존성 분리를 강화하고, 비즈니스 로직의 유지보수성을 높임.
+    3) Facade에서 트랜잭션 관리를 통해 일관성 보장
+    3) Reader(조회)와 Store(저장/수정) 역할을 분리하여 책임을 명확히 함.
+
+   적용 이유 - 비지니스 로직에서 발생하는 이벤트를 facade에서 발행하도록 설계하여 향후 msa 전환시 이벤트 기반 아키텍처로의 확장성을 확보
+
+2. Spring Security 기반 OAuth 2.0(Google 로그인) 및 CSRF 토큰(세션 기반) 적용
+    1) OAuth 2.0을 활용한 Google 로그인 기능 적용
+    2) CSRF(Cross-Site Request Forgery) 공격 방지를 위해 세션 기반 CSRF 토큰을 적용하여 보안 강화
+
+3. 개인정보 보호를 위한 AES-256 암호화 적용
+    1) 사용자 개인정보(예: 이메일, 전화번호 등)에 AES-256 암호화 적용
+    2) DB 저장 및 전송 시 보안성을 강화하여 개인정보 유출 방지
+
+4. Request-Response 객체 분리 및 Entity 은닉을 통한 보안 강화
+    1) Entity를 직접 노출하지 않고 DTO(Request, Response) 객체를 활용하여 데이터의 캡슐화 및 보안성 향상
+    2) 입력 검증 강화: @Valid와 함께 커스텀 Validator를 추가해 비즈니스 요구사항에 맞는 데이터 유효성 검사를 철저히 수행.
+
+5. Mapper 클래스 활용
+    1) DTO ↔ Entity 변환을 위해 Mapper 클래스를 사용하여 코드의 일관성과 유지보수성을 높임
+
+6. API 응답 객체(APIResponse) 통일
+    1) 모든 API 응답을 일관된 형식(APIResponse 객체)으로 {status , message , data}형식으로 반환하여 응답 구조를 통일
+    2) Unchecked Exception에 대해 Custom Exception(MyException) 으로 메세지를 전달하여 응답 객채(APIResponse)와 같은 형태로 response되는 구조로 설계
+        -> 추후에는 각 Exception 마다 핸들링 해야하지만 빠른 개발을 위해 채택한 구조
+
+7. RESTful API 원칙을 준수한 Controller 설계
+    1) HTTP 메서드(GET, POST, PUT, DELETE)를 RESTful 원칙에 맞게 활용
+    2) REST API의 자원(Resource) 기반 설계를 따르며, 명확한 엔드포인트 구조 유지
