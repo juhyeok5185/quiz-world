@@ -20,14 +20,17 @@ public class SubjectApiController {
 
     @PostMapping
     public ResponseEntity<ApiResponse<SubjectResponse>> saveSubject(Authentication authentication, @RequestBody SubjectSaveRequest request) {
-        Long memberId = Utils.getAuthId(authentication);
+//        Long memberId = Utils.getAuthId(authentication);
+        Long memberId = null;
         return ResponseEntity.status(201).body(new ApiResponse<>(subjectFacade.saveSubject(memberId, request)));
     }
 
     @GetMapping
     public ResponseEntity<ApiResponse<List<SubjectResponse>>> findAllSubjectByMemberId(Authentication authentication) {
-        Long memberId = Utils.getAuthId(authentication);
+//        Long memberId = Utils.getAuthId(authentication);
+        Long memberId = null;
         return ResponseEntity.ok(new ApiResponse<>(subjectFacade.findAllByMemberId(memberId)));
+
     }
 
     @PostMapping("/{subjectId}/chapters")

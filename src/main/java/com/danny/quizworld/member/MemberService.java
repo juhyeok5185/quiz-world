@@ -17,18 +17,14 @@ public class MemberService {
         return memberStore.save(member);
     }
 
-    @Transactional
-    public Member findByLoginId(String loginId) {
-        return memberReader.findByLoginId(loginId);
-    }
 
     @Transactional(readOnly = true)
     public Member findById(Long memberId) {
         return memberReader.findById(memberId);
     }
 
-    public Member toEntity(MemberSaveRequest request){
-        return memberMapper.toEntity(request);
+    public Member toEntity(String name , String email){
+        return memberMapper.toEntity(name ,email);
     }
 
     public MemberResponse toResponse(Member member){
@@ -36,4 +32,7 @@ public class MemberService {
     }
 
 
+    public Member findByEmail(String email) {
+        return memberReader.findByEmail(email);
+    }
 }

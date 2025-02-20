@@ -1,7 +1,9 @@
 package com.danny.quizworld.common.controller;
 
+import com.danny.quizworld.common.util.Utils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,8 +13,16 @@ import org.springframework.web.bind.annotation.PathVariable;
 public class PageController {
 
     @GetMapping("/")
-    public String index() {
-        return "index";
+    public String index(Authentication authentication) {
+        if(authentication == null){
+            return "/login";
+        }
+
+        if(Utils.getRole(authentication).equals("ROLE_ADMIN")){
+            return "/admin/main";
+        }
+
+        return "/user/main";
     }
 
     @GetMapping("/{firstUrl}")

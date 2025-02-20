@@ -23,24 +23,4 @@ public class SessionService {
     private final MemberService memberService;
     private final PasswordEncoder passwordEncoder;
 
-    @Transactional
-    public String login(@Valid SessionRequest request) {
-        String encryptedLoginId = AES256Utils.encrypt(request.getLoginId());
-        Member member = memberService.findByLoginId(encryptedLoginId);
-
-        if (member == null) {
-            throw new MyException("없는 계정입니다.");
-        }
-
-        if (!passwordEncoder.matches(request.getPassword(), member.getPassword())) {
-            throw new MyException("비밀번호를 잘못 입력했습니다.");
-        }
-
-        SessionDetails sessionDetails = new SessionDetails(member.getMemberId(), member.getLoginId(), member.getPassword(), member.getName(), member.getRole());
-        Authentication authentication = new UsernamePasswordAuthenticationToken(sessionDetails, null, sessionDetails.getAuthorities());
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-
-        return member.getRole().equals(MemberRole.ADMIN) ? "/admin/main" : "/user/main";
-
-    }
 }

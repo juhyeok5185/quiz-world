@@ -18,12 +18,8 @@ public class SessionApiController {
     @PostMapping
     public ResponseEntity<ApiResponse<String>> login(@RequestBody SessionRequest request,
                                                      HttpServletRequest httpServletRequest) {
-        String redirectUrl = sessionService.login(request);
-        CsrfToken csrfToken = (CsrfToken) httpServletRequest.getAttribute("_csrf");
-        return ResponseEntity
-                .status(201)
-                .header(csrfToken.getHeaderName(), csrfToken.getToken())
-                .body(new ApiResponse<>("로그인 성공", 201, redirectUrl));
+
+        return null;
     }
 
 

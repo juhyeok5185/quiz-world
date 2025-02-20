@@ -5,12 +5,17 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
+import org.springframework.security.web.authentication.logout.SimpleUrlLogoutSuccessHandler;
 import org.springframework.security.web.authentication.session.NullAuthenticatedSessionStrategy;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
@@ -20,7 +25,7 @@ import java.io.IOException;
 
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true) // @PreAuthorize, @Secured 사용을 위한 설정
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
     @Bean
@@ -33,7 +38,6 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    //로그인 만료되면 /iwings/login 으로 되돌아가게 설정
     @Bean
     public AuthenticationEntryPoint customAuthenticationEntryPoint() {
         return new AuthenticationEntryPoint() {
@@ -46,7 +50,6 @@ public class SecurityConfig {
         };
     }
 
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -55,22 +58,42 @@ public class SecurityConfig {
                         .sessionAuthenticationStrategy(new NullAuthenticatedSessionStrategy())
                 )
                 .authorizeHttpRequests(auth -> auth
-                        .antMatchers("/", "/login", "/save", "/static/**", "/api/members/sessions" ,"/design/**").permitAll() // 로그인 관련 경로 허용
-                        .anyRequest().authenticated() // 나머지는 막음
+                        .antMatchers("/", "/login", "/save", "/static/**", "/api/members/sessions", "/design/**").permitAll()
+                        .anyRequest().authenticated()
                 )
                 .exceptionHandling(exception ->
-                        exception.authenticationEntryPoint(customAuthenticationEntryPoint()) //권한이 없을때 redirect
+                        exception.authenticationEntryPoint(customAuthenticationEntryPoint())
+                )
+                .oauth2Login(oauth2 -> oauth2
+                        .loginPage("/login") // 커스텀 로그인 페이지
+                        .successHandler(new CustomLoginSuccessHandler()) // ✅ 내부 클래스로 만든 핸들러 적용
+                        .failureUrl("/login?error=true") // 로그인 실패 시 리다이렉트할 URL
                 )
                 .logout(logout -> logout
                         .logoutUrl("/logout")
-                        .logoutSuccessUrl("/iwings/login")
-                        .invalidateHttpSession(true)    // 세션 무효화
+                        .logoutSuccessUrl("/login")
+                        .invalidateHttpSession(true)
                         .deleteCookies("JSESSIONID", "XSRF-TOKEN")
-                        .clearAuthentication(true)      // 인증 정보 제거
+                        .clearAuthentication(true)
                         .permitAll()
                 );
         return http.build();
     }
 
 
+    private static class CustomLoginSuccessHandler implements AuthenticationSuccessHandler {
+        @Override
+        public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
+            String role = authentication.getAuthorities().stream()
+                    .map(GrantedAuthority::getAuthority)
+                    .findFirst()
+                    .orElse("ROLE_USER"); // 기본값 설정
+
+            if ("ROLE_ADMIN".equals(role)) {
+                response.sendRedirect("/admin/main");
+            } else {
+                response.sendRedirect("/user/main");
+            }
+        }
+    }
 }

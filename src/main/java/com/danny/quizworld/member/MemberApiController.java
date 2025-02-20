@@ -15,9 +15,5 @@ public class MemberApiController {
 
     private final MemberFacade memberFacade;
 
-    @PostMapping
-    public ResponseEntity<ApiResponse<MemberResponse>> save(@ModelAttribute MemberSaveRequest request){
-        return ResponseEntity.status(201).body(new ApiResponse<>(memberFacade.save(request)));
-    }
 
 }

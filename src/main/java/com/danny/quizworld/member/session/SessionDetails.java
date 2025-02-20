@@ -13,14 +13,14 @@ import java.util.Collections;
 @Getter
 public class SessionDetails implements UserDetails {
 
-    private final Long authId;
+    private final Long memberId;
     private final String loginId;
     private final String password;
     private final MemberRole role;
     private final String name;
 
-    public SessionDetails(Long authId,String loginId, String password, String name, MemberRole role) {
-        this.authId = authId;
+    public SessionDetails(Long memberId,String loginId, String password, String name, MemberRole role) {
+        this.memberId = memberId;
         this.loginId = loginId;
         this.password = password;
         this.name = name;

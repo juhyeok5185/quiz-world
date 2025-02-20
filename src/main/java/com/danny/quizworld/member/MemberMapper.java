@@ -12,14 +12,11 @@ public class MemberMapper {
     private final ModelMapper modelMapper;
     private final PasswordEncoder passwordEncoder;
 
-    public Member toEntity(MemberSaveRequest request) {
+    public Member toEntity(String name , String email) {
         return Member.builder()
-                .loginId(AES256Utils.encrypt(request.getLoginId()))
-                .password(passwordEncoder.encode(request.getPassword()))
-                .name(AES256Utils.encrypt(request.getName()))
-                .email(AES256Utils.encrypt(request.getEmail()))
-                .phone(AES256Utils.encrypt(request.getPhone()))
-                .role(request.getRole())
+                .name(AES256Utils.encrypt(name))
+                .email(AES256Utils.encrypt(email))
+                .role(MemberRole.USER)
                 .deviceToken(null)
                 .build();
     }
@@ -27,10 +24,8 @@ public class MemberMapper {
     public MemberResponse toResponse(Member member) {
         return MemberResponse.builder()
                 .memberId(member.getMemberId())
-                .loginId(AES256Utils.decrypt(member.getLoginId()))
                 .email(AES256Utils.decrypt(member.getEmail()))
                 .name(AES256Utils.decrypt(member.getName()))
-                .phone(AES256Utils.decrypt(member.getPhone()))
                 .build();
     }
 }

@@ -2,6 +2,7 @@ package com.danny.quizworld.common.util;
 
 import com.danny.quizworld.member.session.SessionDetails;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -16,17 +17,34 @@ public class Utils {
     }
 
     public static String getRole(Authentication authentication) {
-        if (authentication == null || authentication.getAuthorities() == null || authentication.getAuthorities().isEmpty()) {
-            return null;
-        }
-        return authentication.getAuthorities().iterator().next().getAuthority();
-    }
-
-    public static Long getAuthId(Authentication authentication) {
         if (authentication == null) {
             return null;
         }
+
         Object principal = authentication.getPrincipal();
-        return ((SessionDetails) principal).getAuthId();
+        if (principal instanceof DefaultOAuth2User) {
+            DefaultOAuth2User oauth2User = (DefaultOAuth2User) principal;
+            return oauth2User.getAuthorities()
+                    .stream()
+                    .findFirst()
+                    .map(authority -> authority.getAuthority())
+                    .orElse(null);
+        }
+
+        return null;
+    }
+
+    public static Long getMemberId(Authentication authentication) {
+        if (authentication == null) {
+            return null;
+        }
+
+        Object principal = authentication.getPrincipal();
+        if (principal instanceof DefaultOAuth2User) {
+            DefaultOAuth2User oauth2User = (DefaultOAuth2User) principal;
+            return Long.valueOf(oauth2User.getAttribute("memberId").toString());
+        }
+
+        return null;
     }
 }

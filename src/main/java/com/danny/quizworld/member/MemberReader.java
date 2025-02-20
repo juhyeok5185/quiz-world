@@ -11,11 +11,11 @@ public class MemberReader {
 
     private final MemberRepository memberRepository;
 
-    public Member findByLoginId(String loginId) {
-        return memberRepository.findByLoginId(loginId);
-    }
-
     public Member findById(Long memberId) {
         return memberRepository.findById(memberId).orElseThrow(() -> new MyException("회원을 찾을 수 없습니다."));
+    }
+
+    public Member findByEmail(String email) {
+        return memberRepository.findByEmail(email);
     }
 }
