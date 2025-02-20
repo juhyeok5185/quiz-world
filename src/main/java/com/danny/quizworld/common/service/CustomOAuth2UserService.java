@@ -1,4 +1,4 @@
-package com.danny.quizworld.member.session;
+package com.danny.quizworld.common.service;
 
 import com.danny.quizworld.common.util.AES256Utils;
 import com.danny.quizworld.member.Member;
@@ -30,9 +30,16 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
         OAuth2User oAuth2User = super.loadUser(userRequest);
         Map<String, Object> attributes = oAuth2User.getAttributes();
-
         String email = (String) attributes.get("email");
         String name = (String) attributes.get("name");
+
+        HttpServletRequest request =
+                ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        String deviceToken = (String) request.getSession().getAttribute("deviceToken");
+        System.out.println(deviceToken);
+        System.out.println(deviceToken);
+        System.out.println(deviceToken);
+        System.out.println(deviceToken);
 
         Member member = memberService.findByEmail(AES256Utils.encrypt(email));
         if(member == null){
@@ -40,11 +47,10 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             member = memberService.save(newMember);
         }
 
-        // 추가: 사용자 정보를 포함한 새로운 attributes 맵 생성
         Map<String, Object> customAttributes = new HashMap<>(attributes);
         customAttributes.put("memberId", member.getMemberId());
         customAttributes.put("role", member.getRole().toString());
-
+        request.getSession().removeAttribute("deviceToken");
         return new DefaultOAuth2User(
                 Collections.singleton(new SimpleGrantedAuthority("ROLE_" + member.getRole().toString())),
                 customAttributes,

@@ -1,6 +1,5 @@
 package com.danny.quizworld.common.util;
 
-import com.danny.quizworld.member.session.SessionDetails;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 

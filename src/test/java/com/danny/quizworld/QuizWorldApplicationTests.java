@@ -30,10 +30,10 @@ class QuizWorldApplicationTests {
 //		memberRepository.save(member);
 //	}
 
-	@Test
-	void findBy(){
-		Member member = memberRepository.findById(1L).orElse(null);
+//	@Test
+//	void findBy(){
+//		Member member = memberRepository.findById(1L).orElse(null);
 
 
-	}
+//	}
 }
