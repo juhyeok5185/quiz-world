@@ -38,4 +38,8 @@ public class Member extends BaseTimeEntity {
         this.email = email;
         this.deviceToken = deviceToken;
     }
+
+    public void updateDeviceToken(String deviceToken) {
+        this.deviceToken = deviceToken;
+    }
 }

@@ -36,15 +36,15 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         HttpServletRequest request =
                 ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         String deviceToken = (String) request.getSession().getAttribute("deviceToken");
-        System.out.println(deviceToken);
-        System.out.println(deviceToken);
-        System.out.println(deviceToken);
-        System.out.println(deviceToken);
 
         Member member = memberService.findByEmail(AES256Utils.encrypt(email));
         if(member == null){
             Member newMember = memberService.toEntity(name, email);
             member = memberService.save(newMember);
+        }
+        if(deviceToken != null){
+            member.updateDeviceToken(deviceToken);
+            memberService.save(member);
         }
 
         Map<String, Object> customAttributes = new HashMap<>(attributes);
