@@ -12,4 +12,8 @@ public class KeywordStore {
     public void save(Keyword keyword) {
         keywordRepository.save(keyword);
     }
+
+    public void deleteById(Long keywordId) {
+        keywordRepository.deleteById(keywordId);
+    }
 }

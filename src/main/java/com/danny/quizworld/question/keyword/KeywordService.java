@@ -21,4 +21,12 @@ public class KeywordService {
     public Keyword toEntity(Question question, String name) {
         return keywordMapper.toEntity(question, name);
     }
+
+    public Keyword findById(Long keywordId) {
+        return keywordReader.findById(keywordId);
+    }
+
+    public void deleteById(Long keywordId) {
+        keywordStore.deleteById(keywordId);
+    }
 }

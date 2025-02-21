@@ -11,4 +11,8 @@ import org.springframework.stereotype.Component;
 public class KeywordReader {
 
     private final KeywordRepository keywordRepository;
+
+    public Keyword findById(Long keywordId) {
+        return keywordRepository.findById(keywordId).orElseThrow(() -> new MyException("키워드를 찾을 수 없습니다."));
+    }
 }
