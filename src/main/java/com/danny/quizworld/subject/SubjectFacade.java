@@ -4,7 +4,7 @@ import com.danny.quizworld.member.Member;
 import com.danny.quizworld.member.MemberService;
 import com.danny.quizworld.subject.chapter.Chapter;
 import com.danny.quizworld.subject.chapter.ChapterResponse;
-import com.danny.quizworld.subject.chapter.ChapterSaveRequest;
+import com.danny.quizworld.subject.chapter.ChapterRequest;
 import com.danny.quizworld.subject.chapter.ChapterService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,7 +20,7 @@ public class SubjectFacade {
     private final SubjectService subjectService;
     private final ChapterService chapterService;
 
-    public SubjectResponse saveSubject(Long memberId, SubjectSaveRequest request) {
+    public SubjectResponse saveSubject(Long memberId, SubjectRequest request) {
         Member member = memberService.findById(memberId);
         Subject subject = subjectService.toEntity(member , request);
         return subjectService.toResponse(subjectService.save(subject));
@@ -34,7 +34,7 @@ public class SubjectFacade {
                 .toList();
     }
 
-    public ChapterResponse saveChapter(Long subjectId, ChapterSaveRequest request) {
+    public ChapterResponse saveChapter(Long subjectId, ChapterRequest request) {
         Subject subject = subjectService.findById(subjectId);
         Chapter chapter = chapterService.toEntity(subject, request);
         return chapterService.toResponse(chapterService.save(chapter));

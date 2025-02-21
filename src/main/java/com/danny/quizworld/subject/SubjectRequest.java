@@ -1,10 +1,10 @@
-package com.danny.quizworld.subject.chapter;
+package com.danny.quizworld.subject;
 
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class ChapterSaveRequest {
+public class SubjectRequest {
     private String name;
 }

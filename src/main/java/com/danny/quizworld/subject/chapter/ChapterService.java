@@ -1,6 +1,5 @@
 package com.danny.quizworld.subject.chapter;
 
-import com.danny.quizworld.member.Member;
 import com.danny.quizworld.subject.Subject;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,7 +20,7 @@ public class ChapterService {
         return chapterStore.save(chapter);
     }
 
-    public Chapter toEntity(Subject subject , ChapterSaveRequest request) {
+    public Chapter toEntity(Subject subject , ChapterRequest request) {
         return chapterMapper.toEntity(subject, request);
     }
 

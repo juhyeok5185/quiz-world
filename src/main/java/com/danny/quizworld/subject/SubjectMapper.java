@@ -11,7 +11,7 @@ public class SubjectMapper {
 
     private final ModelMapper modelMapper;
 
-    public Subject toEntity(Member member, SubjectSaveRequest request){
+    public Subject toEntity(Member member, SubjectRequest request){
         return Subject.builder()
                 .member(member)
                 .name(request.getName())

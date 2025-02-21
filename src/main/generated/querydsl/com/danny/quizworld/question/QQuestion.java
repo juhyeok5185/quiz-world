@@ -26,6 +26,8 @@ public class QQuestion extends EntityPathBase<Question> {
 
     public final com.danny.quizworld.subject.chapter.QChapter chapter;
 
+    public final StringPath description = createString("description");
+
     //inherited
     public final DateTimePath<java.time.LocalDateTime> modDtm = _super.modDtm;
 

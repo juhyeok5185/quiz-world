@@ -15,7 +15,7 @@ public class SubjectService {
     private final SubjectStore subjectStore;
     private final SubjectReader subjectReader;
 
-    public Subject toEntity(Member member, SubjectSaveRequest request) {
+    public Subject toEntity(Member member, SubjectRequest request) {
         return subjectMapper.toEntity(member, request);
     }
 

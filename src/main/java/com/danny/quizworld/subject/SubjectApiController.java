@@ -3,7 +3,7 @@ package com.danny.quizworld.subject;
 import com.danny.quizworld.common.response.ApiResponse;
 import com.danny.quizworld.common.util.Utils;
 import com.danny.quizworld.subject.chapter.ChapterResponse;
-import com.danny.quizworld.subject.chapter.ChapterSaveRequest;
+import com.danny.quizworld.subject.chapter.ChapterRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -19,7 +19,7 @@ public class SubjectApiController {
     private final SubjectFacade subjectFacade;
 
     @PostMapping
-    public ResponseEntity<ApiResponse<SubjectResponse>> saveSubject(Authentication authentication, @RequestBody SubjectSaveRequest request) {
+    public ResponseEntity<ApiResponse<SubjectResponse>> saveSubject(Authentication authentication, @RequestBody SubjectRequest request) {
         Long memberId = Utils.getMemberId(authentication);
         return ResponseEntity.status(201).body(new ApiResponse<>(subjectFacade.saveSubject(memberId, request)));
     }
@@ -28,11 +28,10 @@ public class SubjectApiController {
     public ResponseEntity<ApiResponse<List<SubjectResponse>>> findAllSubjectByMemberId(Authentication authentication) {
         Long memberId = Utils.getMemberId(authentication);
         return ResponseEntity.ok(new ApiResponse<>(subjectFacade.findAllByMemberId(memberId)));
-
     }
 
     @PostMapping("/{subjectId}/chapters")
-    public ResponseEntity<ApiResponse<ChapterResponse>> saveChapter(@PathVariable Long subjectId, @RequestBody ChapterSaveRequest request) {
+    public ResponseEntity<ApiResponse<ChapterResponse>> saveChapter(@PathVariable Long subjectId, @RequestBody ChapterRequest request) {
         return ResponseEntity.status(201).body(new ApiResponse<>(subjectFacade.saveChapter(subjectId, request)));
     }
 
