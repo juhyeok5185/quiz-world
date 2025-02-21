@@ -14,7 +14,7 @@ public class QuestionApiController {
 
     private final QuestionFacade questionFacade;
 
-    @PostMapping("/chapters/{chapterId}")
+    @PostMapping("/short/chapters/{chapterId}")
     public ResponseEntity<ApiResponse<Long>> saveShortType(@PathVariable Long chapterId, QuestionShortTypeSaveRequest request) {
         return ResponseEntity.status(201).body(new ApiResponse<>(
                 "등록 완료"
@@ -23,7 +23,7 @@ public class QuestionApiController {
         );
     }
 
-    @PostMapping("/chapters/{chapterId}")
+    @PostMapping("/multiple/chapters/{chapterId}")
     public ResponseEntity<ApiResponse<Long>> saveMultipleType(@PathVariable Long chapterId, QuestionMultipleTypeSaveRequest request) {
         return ResponseEntity.status(201).body(new ApiResponse<>(
                 "등록 완료"
