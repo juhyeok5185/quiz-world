@@ -19,7 +19,7 @@ public class QuestionApiController {
         return ResponseEntity.status(201).body(new ApiResponse<>(
                 "등록 완료"
                 , 201
-                , questionFacade.saveShortType(chapterId,request))
+                , questionFacade.saveShortType(chapterId, request))
         );
     }
 
@@ -28,8 +28,10 @@ public class QuestionApiController {
         return ResponseEntity.status(201).body(new ApiResponse<>(
                 "등록 완료"
                 , 201
-                , questionFacade.saveMultipleType(chapterId,request))
-        );    }
+                , questionFacade.saveMultipleType(chapterId, request))
+        );
+    }
+
     @GetMapping("/chapters/{chapterId}")
     public ResponseEntity<ApiResponse<List<QuestionCommonResponse>>> findAllByChapterIdToCommon(@PathVariable Long chapterId) {
         return ResponseEntity.ok(new ApiResponse<>(questionFacade.findAllByChapterIdToCommon(chapterId)));
