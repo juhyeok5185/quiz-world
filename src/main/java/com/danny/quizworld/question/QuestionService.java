@@ -25,8 +25,8 @@ public class QuestionService {
         return questionReader.findAllByChapterId(chapterId);
     }
 
-    public Question toEntity(Chapter chapter, QuestionType type , String questionText) {
-        return questionMapper.toEntity(chapter, type , questionText);
+    public Question toEntity(Chapter chapter, QuestionRequest request) {
+        return questionMapper.toEntity(chapter, request);
     }
 
     public QuestionResponse toResponse(Question question) {

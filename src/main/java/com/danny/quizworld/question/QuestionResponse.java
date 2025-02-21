@@ -21,4 +21,5 @@ public class QuestionResponse {
     private PassageResponse passage;
     private QuestionType type;
     private String questionText;
+    private String description;
 }

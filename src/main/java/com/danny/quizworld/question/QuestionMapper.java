@@ -16,12 +16,13 @@ public class QuestionMapper {
     private final ModelMapper modelMapper;
     private final ChapterMapper chapterMapper;
 
-    public Question toEntity(Chapter chapter,QuestionType type , String questionText){
+    public Question toEntity(Chapter chapter, QuestionRequest request){
         return Question.builder()
                 .subject(chapter.getSubject())
                 .chapter(chapter)
-                .type(type)
-                .questionText(questionText)
+                .type(request.getType())
+                .questionText(request.getQuestionText())
+                .description(request.getDescription())
                 .build();
     }
 
@@ -31,6 +32,7 @@ public class QuestionMapper {
                 .chapter(chapterMapper.toResponse(question.getChapter()))
                 .type(question.getType())
                 .questionText(question.getQuestionText())
+                .description(question.getDescription())
                 .build();
     }
 }

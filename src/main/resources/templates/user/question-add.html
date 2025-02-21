@@ -25,7 +25,7 @@
 
         async function findAllByChapterId() {
             const chapterId = getParamValue('chapterId')
-            const url = `/api/questions/short/chapters/${chapterId}`;
+            const url = `/api/questions/chapters/${chapterId}`;
             const response = await fetchGet(url);
             drawList(response);
         }

@@ -1,14 +1,14 @@
 package com.danny.quizworld.question;
 
 import com.danny.quizworld.common.entity.BaseTimeEntity;
-import com.danny.quizworld.common.response.ApiResponse;
 import com.danny.quizworld.question.answer.Answer;
 import com.danny.quizworld.question.answer.AnswerResponse;
 import com.danny.quizworld.question.answer.AnswerService;
+import com.danny.quizworld.question.keyword.Keyword;
+import com.danny.quizworld.question.keyword.KeywordService;
 import com.danny.quizworld.subject.chapter.Chapter;
 import com.danny.quizworld.subject.chapter.ChapterService;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,23 +22,22 @@ public class QuestionFacade {
     private final QuestionService questionService;
     private final AnswerService answerService;
     private final ChapterService chapterService;
+    private final KeywordService keywordService;
 
     @Transactional
-    public Long saveShortType(Long chapterId, QuestionShortTypeSaveRequest request) {
+    public Long saveQuestion(Long chapterId, QuestionSaveRequest request) {
         Chapter chapter = chapterService.findById(chapterId);
-        Question question = questionService.save(questionService.toEntity(chapter, request.getType() , request.getQuestionText()));
-        Answer answer = answerService.toEntity(question, request.getAnswerRequest());
-        answerService.save(answer);
-        return question.getQuestionId();
-    }
-
-    @Transactional
-    public Long saveMultipleType(Long chapterId, QuestionMultipleTypeSaveRequest request) {
-        Chapter chapter = chapterService.findById(chapterId);
-        Question question = questionService.save(questionService.toEntity(chapter , request.getType() , request.getQuestionText()));
+        // 문제 등록
+        Question question = questionService.save(questionService.toEntity(chapter , request.getQuestionRequest()));
+        // 답 등록
         request.getAnswerRequest().forEach(answerRequest -> {
             Answer answer = answerService.toEntity(question, answerRequest);
             answerService.save(answer);
+        });
+        // 키워드 등록
+        request.getKeywordRequest().forEach(keywordRequest -> {
+            Keyword keyword = keywordService.toEntity(question, keywordRequest.getName());
+            keywordService.save(keyword);
         });
         return question.getQuestionId();
     }

@@ -14,21 +14,12 @@ public class QuestionApiController {
 
     private final QuestionFacade questionFacade;
 
-    @PostMapping("/short/chapters/{chapterId}")
-    public ResponseEntity<ApiResponse<Long>> saveShortType(@PathVariable Long chapterId, QuestionShortTypeSaveRequest request) {
+    @PostMapping("/chapters/{chapterId}")
+    public ResponseEntity<ApiResponse<Long>> saveShortType(@PathVariable Long chapterId, QuestionSaveRequest request) {
         return ResponseEntity.status(201).body(new ApiResponse<>(
                 "등록 완료"
                 , 201
-                , questionFacade.saveShortType(chapterId, request))
-        );
-    }
-
-    @PostMapping("/multiple/chapters/{chapterId}")
-    public ResponseEntity<ApiResponse<Long>> saveMultipleType(@PathVariable Long chapterId, QuestionMultipleTypeSaveRequest request) {
-        return ResponseEntity.status(201).body(new ApiResponse<>(
-                "등록 완료"
-                , 201
-                , questionFacade.saveMultipleType(chapterId, request))
+                , questionFacade.saveQuestion(chapterId, request))
         );
     }
 

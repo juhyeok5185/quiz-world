@@ -40,13 +40,17 @@ public class Question extends BaseTimeEntity {
     @Column(name = "question_text")
     private String questionText;
 
+    @Column(name = "description")
+    private String description;
+
     @Builder
-    public Question(Chapter chapter, Subject subject, Passage passage, QuestionType type, String questionText) {
+    public Question(Chapter chapter, Subject subject, Passage passage, QuestionType type, String questionText , String description) {
         this.chapter = chapter;
         this.subject = subject;
         this.passage = passage;
         this.type = type;
         this.questionText = questionText;
+        this.description = description;
     }
 
 
