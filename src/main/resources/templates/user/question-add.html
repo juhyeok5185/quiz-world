@@ -4,17 +4,39 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="user/layout">
 
+<div layout:fragment="content" class="relative p-8">
 
-<div layout:fragment="content">
-    <form id="shortForm">
-        <input type="text" name="type" value="SHORT">
-        <input type="text" name="questionText" placeholder="문제 입력">
-        <input type="text" name="answerRequest.answerText" placeholder="정답 입력">
-        <input type="text" name="answerRequest.answerYn" value="true" placeholder="정답 여부">
-        <button type="button" onclick="saveShort();">입력</button>
-    </form>
+    <!-- 문제 추가 버튼 -->
+    <button onclick="find('#modal-div').classList.remove('hidden')"
+            class="absolute top-0 right-0 bg-blue-500 text-white px-6 py-2 rounded-md shadow-md hover:bg-blue-600 transition">
+        문제 추가
+    </button>
 
-    <div class="listArea"></div>
+    <!-- 리스트 출력 영역 -->
+    <div class="listArea grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-12"></div>
+
+    <!-- 모달 (숨김 상태) -->
+    <div id="modal-div" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+        <div class="bg-white p-6 rounded-lg shadow-lg w-96">
+            <h2 class="text-xl font-bold mb-4">새 문제 추가</h2>
+            <form id="shortForm">
+                <select name="questionRequest.type" class="w-full border p-2 rounded mb-4">
+                    <option value="SHORT">단답형</option>
+                </select>
+                <input type="text" name="questionRequest.questionText" placeholder="문제 입력" class="w-full border p-2 rounded mb-4">
+                <input type="text" name="answerRequest[0].answerText" placeholder="정답 입력" class="w-full border p-2 rounded mb-4">
+                <input type="text" name="questionRequest.description" placeholder="설명 입력" class="w-full border p-2 rounded mb-4">
+                <input type="hidden" name="answerRequest[0].answerYn" value="true">
+                <div class="flex justify-end">
+                    <button type="button" onclick="find('#modal-div').classList.add('hidden')" class="bg-gray-300 text-gray-700 px-4 py-2 rounded-md mr-2">취소</button>
+                    <button type="button" onclick="saveShort()" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition">
+                        저장
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
 </div>
 
 <th:block layout:fragment="script">
@@ -33,28 +55,43 @@
         function drawList(response) {
             let html = ``;
             response.forEach(response => {
-                html += `<div><span class="questionText">${response.question.questionText}</span> `;
+                html += `
+                    <div class="bg-white shadow-lg rounded-lg p-6">
+                        <span class="questionText font-semibold text-gray-900">${response.question.questionText}</span>
+                        <div class="mt-2 text-gray-700">
+                `;
                 response.answer.forEach(answer => {
-                    html += `- <span class="answerText">${answer.answerText}</span> <button onclick="deleteByQuestionId(${response.question.questionId});">삭제</button></div>`;
-                })
-            })
+                    html += `
+                        <div class="flex justify-between items-center mt-2 p-2 border-b">
+                            <span class="answerText">${answer.answerText}</span>
+                            <button onclick="deleteByQuestionId(${response.question.questionId})"
+                                    class="bg-red-500 text-white px-3 py-1 rounded-md hover:bg-red-600 transition">
+                                삭제
+                            </button>
+                        </div>
+                    `;
+                });
+                html += `</div>${nullCheck(response.question.description)}</div>`;
+            });
+
             find('.listArea').innerHTML = html;
         }
 
         async function deleteByQuestionId(questionId){
             const url = `/api/questions/${questionId}`;
-            const response = await fetchDelete(url);
-            location.reload();
+            await fetchDelete(url);
+            findAllByChapterId();
         }
 
         async function saveShort() {
-            const chapterId = getParamValue( 'chapterId')
-            const formData = new FormData(find('#shortForm'))
+            const chapterId = getParamValue('chapterId');
+            const formData = new FormData(find('#shortForm'));
+            logFormData(formData)
             const url = `/api/questions/chapters/${chapterId}`;
-            const response = await fetchPostByFormData(url, formData);
-            location.reload();
+            await fetchPostByFormData(url, formData);
+            find('#modal-div').classList.add('hidden'); // 모달 닫기
+            findAllByChapterId(); // 저장 후 리스트 새로고침
         }
-
     </script>
 </th:block>
 

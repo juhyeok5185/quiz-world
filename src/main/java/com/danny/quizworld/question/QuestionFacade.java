@@ -29,17 +29,19 @@ public class QuestionFacade {
     public Long saveQuestion(Long chapterId, QuestionSaveRequest request) {
         Chapter chapter = chapterService.findById(chapterId);
         // 문제 등록
-        Question question = questionService.save(questionService.toEntity(chapter , request.getQuestionRequest()));
+        Question question = questionService.save(questionService.toEntity(chapter, request.getQuestionRequest()));
         // 답 등록
         request.getAnswerRequest().forEach(answerRequest -> {
             Answer answer = answerService.toEntity(question, answerRequest);
             answerService.save(answer);
         });
         // 키워드 등록
-        request.getKeywordRequest().forEach(keywordRequest -> {
-            Keyword keyword = keywordService.toEntity(question, keywordRequest.getName());
-            keywordService.save(keyword);
-        });
+        if (request.getKeywordRequest() != null) {
+            request.getKeywordRequest().forEach(keywordRequest -> {
+                Keyword keyword = keywordService.toEntity(question, keywordRequest.getName());
+                keywordService.save(keyword);
+            });
+        }
 
         return question.getQuestionId();
     }

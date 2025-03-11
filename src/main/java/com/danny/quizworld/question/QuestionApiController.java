@@ -16,7 +16,7 @@ public class QuestionApiController {
     private final QuestionFacade questionFacade;
 
     @PostMapping("/chapters/{chapterId}")
-    public ResponseEntity<ApiResponse<Long>> saveShortType(@PathVariable Long chapterId, QuestionSaveRequest request) {
+    public ResponseEntity<ApiResponse<Long>> saveShortType(@PathVariable Long chapterId,@ModelAttribute QuestionSaveRequest request) {
         return ResponseEntity.status(201).body(new ApiResponse<>(
                 "등록 완료"
                 , 201
