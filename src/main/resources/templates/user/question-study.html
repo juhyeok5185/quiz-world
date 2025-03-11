@@ -4,60 +4,116 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="user/layout">
 
+<div layout:fragment="content" class="relative p-8">
 
-<div layout:fragment="content">
-    <button onclick="questionHideToggle()">문제 가리기</button> <button onclick="answerHideToggle()">답 가리기</button> <button>클릭하면 넘어가는거</button> <button>깜빡이(5초마다 넘어가게)</button>
-    <div class="listArea"></div>
+    <!-- 컨트롤 버튼 -->
+    <div class="flex space-x-4 mb-6">
+        <button onclick="questionHideToggle()" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition">
+            문제 가리기
+        </button>
+        <button onclick="answerHideToggle()" class="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition">
+            답 가리기
+        </button>
+        <button onclick="descriptionHideToggle()" class="bg-purple-500 text-white px-4 py-2 rounded-md hover:bg-purple-600 transition">
+            설명 가리기
+        </button>
+        <button onclick="shuffleQuestions()" class="bg-orange-500 text-white px-4 py-2 rounded-md hover:bg-orange-600 transition">
+            셔플 (랜덤 순서)
+        </button>
+    </div>
+
+    <!-- 리스트 출력 영역 -->
+    <div class="listArea grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
 
 </div>
 
 <th:block layout:fragment="script">
     <script th:inline="javascript">
+        let questions = [];
+        let hiddenState = { question: false, answer: false, description: false };
 
         window.onload = () => {
             findAllByChapterId();
-        }
+        };
 
         async function findAllByChapterId(){
-            const chapterId = getParamValue('chapterId')
+            const chapterId = getParamValue('chapterId');
             const url = `/api/questions/chapters/${chapterId}`;
             const response = await fetchGet(url);
-            drawList(response);
+            questions = response; // 문제 리스트 저장
+            drawList();
         }
 
-        function drawList(response) {
+        function drawList() {
             let html = ``;
-            response.forEach(response => {
-                html += `<div><span class="questionText">${response.question.questionText}</span> `;
-                response.answer.forEach(answer => {
-                    html += `- <span class="answerText">${answer.answerText}</span> <button onclick="deleteByQuestionId(${response.question.questionId});">삭제</button></div>`;
-                })
-            })
+            if (questions.length === 0) {
+                html = `<div class="text-center text-gray-500">등록된 문제가 없습니다.</div>`;
+            } else {
+                questions.forEach(questionData => {
+                    html += `
+                        <div class="bg-white shadow-lg rounded-lg p-6">
+                            <!-- 문제 -->
+                            <span class="questionText text-lg font-semibold text-gray-900">${questionData.question.questionText}</span>
+
+                            <!-- 설명 -->
+                            <div class="descriptionText mt-2 text-sm text-gray-600 italic">
+                                ${questionData.question.description || "설명 없음"}
+                            </div>
+
+                            <!-- 답변 리스트 -->
+                            <div class="mt-2 text-gray-700">
+                    `;
+                    questionData.answer.forEach(answer => {
+                        html += `
+                            <div class="answerText mt-2 p-2 border-b">
+                                ${answer.answerText}
+                            </div>
+                        `;
+                    });
+                    html += `</div></div>`;
+                });
+            }
             find('.listArea').innerHTML = html;
+            applyHiddenState();
         }
 
-        function questionHideToggle() {
-            const questionText = findAll('.questionText');
-            questionText.forEach(element => {
-                if (element.style.display === 'none') {
-                    element.style.display = '';
-                } else {
-                    element.style.display = 'none';
-                }
+        function applyHiddenState() {
+            // 가리기 상태 적용
+            if (hiddenState.question) questionHideToggle(true);
+            if (hiddenState.answer) answerHideToggle(true);
+            if (hiddenState.description) descriptionHideToggle(true);
+        }
+
+        function questionHideToggle(fromState = false) {
+            const questionTexts = findAll('.questionText');
+            if (!fromState) hiddenState.question = !hiddenState.question;
+            questionTexts.forEach(element => {
+                element.style.display = hiddenState.question ? 'none' : '';
             });
         }
 
-        function answerHideToggle(){
-            const questionText = findAll('.answerText');
-            questionText.forEach(element => {
-                if (element.style.display === 'none') {
-                    element.style.display = '';
-                } else {
-                    element.style.display = 'none';
-                }
+        function answerHideToggle(fromState = false) {
+            const answerTexts = findAll('.answerText');
+            if (!fromState) hiddenState.answer = !hiddenState.answer;
+            answerTexts.forEach(element => {
+                element.style.display = hiddenState.answer ? 'none' : '';
             });
         }
 
+        function descriptionHideToggle(fromState = false) {
+            const descriptionTexts = findAll('.descriptionText');
+            if (!fromState) hiddenState.description = !hiddenState.description;
+            descriptionTexts.forEach(element => {
+                element.style.display = hiddenState.description ? 'none' : '';
+            });
+        }
+
+        function shuffleQuestions() {
+            if (questions.length > 0) {
+                questions = questions.sort(() => Math.random() - 0.5); // 랜덤 셔플
+                drawList(); // 다시 리스트 렌더링
+            }
+        }
     </script>
 </th:block>
 
