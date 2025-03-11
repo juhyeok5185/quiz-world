@@ -3,32 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <title>Login</title>
-    <style>
-        .google-btn {
-            display: inline-flex;
-            align-items: center;
-            background-color: #fff;
-            color: #000;
-            padding: 10px 20px;
-            border: 1px solid #dadce0;
-            border-radius: 4px;
-            text-decoration: none;
-            font-family: 'Roboto', sans-serif;
-        }
-        .google-btn img {
-            width: 18px;
-            margin-right: 10px;
-        }
-        .google-btn:hover {
-            background-color: #f8f9fa;
-        }
-    </style>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-<h1>Login</h1>
-<a href="/oauth2/authorization/google?deviceToken=aaa3" class="google-btn">
-    <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google Logo">
-    Login with Google
-</a>
+<body class="flex items-center justify-center min-h-screen bg-gray-100">
+
+<div class="bg-white shadow-2xl rounded-2xl p-24 w-[90%] max-w-[1200px] text-center">
+    <h1 class="text-6xl font-extrabold mb-16">LOGIN</h1>
+
+    <a href="/oauth2/authorization/google?deviceToken=aaa3"
+       class="flex items-center justify-center bg-white text-gray-700 border-4  rounded-2xl px-16 py-6 w-full shadow-2xl hover:bg-gray-200 transition text-3xl font-bold">
+        <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google Logo" class="w-16 mr-6">
+        Login with Google
+    </a>
+</div>
+
 </body>
 </html>

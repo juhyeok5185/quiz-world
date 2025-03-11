@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mobile Layout</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="flex flex-col min-h-screen">
+
+    <!-- Header -->
+    <header class="border-b p-4 text-lg font-semibold">
+        Header
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow p-4">
+        <div class="p-4 border rounded-lg">
+            <p>Main Content</p>
+        </div>
+    </main>
+
+    <!-- Footer / Bottom Navigation Bar -->
+    <footer class="fixed bottom-0 left-0 w-full border-t bg-white">
+        <nav class="flex justify-around p-4">
+            <button class="flex flex-col items-center">
+                <span class="text-xs">Home</span>
+            </button>
+            <button class="flex flex-col items-center">
+                <span class="text-xs">Offers</span>
+            </button>
+            <button class="flex flex-col items-center">
+                <span class="text-xs">Shop</span>
+            </button>
+            <button class="flex flex-col items-center">
+                <span class="text-xs">Stocks</span>
+            </button>
+            <button class="flex flex-col items-center" id="openAside">
+                <span class="text-xs">전체</span>
+            </button>
+        </nav>
+    </footer>
+
+    <!-- Aside Panel (Hidden by Default) -->
+    <aside id="asideMenu" class="fixed bottom-0 left-0 w-full bg-white border-t shadow-lg p-4 transition-transform transform translate-y-full">
+        <div class="flex justify-between items-center pb-2 border-b">
+            <h2 class="text-lg font-semibold">전체 메뉴</h2>
+            <button id="closeAside" class="text-lg font-bold">×</button>
+        </div>
+        <ul class="mt-4 space-y-2">
+            <li><a href="#" class="block p-2 border rounded">메뉴 1</a></li>
+            <li><a href="#" class="block p-2 border rounded">메뉴 2</a></li>
+            <li><a href="#" class="block p-2 border rounded">메뉴 3</a></li>
+            <li><a href="#" class="block p-2 border rounded">메뉴 4</a></li>
+        </ul>
+    </aside>
+
+    <script>
+        const asideMenu = document.getElementById('asideMenu');
+        const openAside = document.getElementById('openAside');
+        const closeAside = document.getElementById('closeAside');
+
+        openAside.addEventListener('click', () => {
+            asideMenu.classList.remove('translate-y-full');
+        });
+
+        closeAside.addEventListener('click', () => {
+            asideMenu.classList.add('translate-y-full');
+        });
+    </script>
+
+</body>
+</html>

@@ -4,12 +4,34 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="user/layout">
 
+<div layout:fragment="content" class="relative p-8">
 
-<div layout:fragment="content">
-    <input type="text" id="name">
-    <button onclick="save()">save</button>
-    <div class="listArea"></div>
+    <!-- 과목 추가 버튼 (우측 상단 고정) -->
+    <button onclick="find('#modal-div').classList.remove('hidden')"
+            class="absolute top-0 right-0 bg-blue-500 text-white px-6 py-2 rounded-md shadow-md hover:bg-blue-600 transition">
+        과목 추가
+    </button>
+
+    <!-- 리스트 출력 영역 -->
+    <div class="listArea grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-12"></div>
+
+    <!-- 모달 (숨김 상태) -->
+    <div id="modal-div" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+        <div class="bg-white p-6 rounded-lg shadow-lg w-96">
+            <h2 class="text-xl font-bold mb-4">새 과목 추가</h2>
+            <input type="text" id="name" class="w-full border p-2 rounded mb-4">
+            <div class="flex justify-end">
+                <button onclick="find('#modal-div').classList.add('hidden')" class="bg-gray-300 text-gray-700 px-4 py-2 rounded-md mr-2">취소</button>
+                <button onclick="save()" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition">
+                    저장
+                </button>
+            </div>
+        </div>
+    </div>
+
 </div>
+
+
 
 <th:block layout:fragment="script">
     <script th:inline="javascript">
@@ -26,20 +48,34 @@
         function drawList(response) {
             let html = ``;
             response.forEach(item => {
-                html += `<div><a href="/user/chapter?subjectId=${item.subjectId}">${item.name}</a></div>`
-            })
+                html += `
+                    <div class="bg-white shadow-lg rounded-lg p-6">
+                        <a href="/user/chapter?subjectId=${item.subjectId}"
+                           class="text-lg font-semibold text-blue-600 hover:underline">
+                            ${item.name}
+                        </a>
+                    </div>
+                `;
+            });
             find('.listArea').innerHTML = html;
         }
 
-
         async function save() {
             const url = `/api/subjects`;
-            const name = find('#name').value;
-            const json = {name}
-            const response = await fetchPostByJson(url, json);
-            location.reload();
-        }
+            const nameInput = find('#name');
+            const name = nameInput.value.trim();
 
+            if (!name) {
+                alert("과목명을 입력하세요!");
+                return;
+            }
+
+            const json = {name};
+            await fetchPostByJson(url, json);
+            find('#modal-div').classList.add('hidden'); // 모달 닫기
+            nameInput.value = ""; // 입력 필드 초기화
+            findAllByMemberId(); // 저장 후 리스트 새로고침
+        }
     </script>
 </th:block>
 

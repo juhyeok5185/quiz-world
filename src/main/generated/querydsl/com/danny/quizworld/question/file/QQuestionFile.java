@@ -26,7 +26,7 @@ public class QQuestionFile extends EntityPathBase<QuestionFile> {
 
     public final StringPath orgName = createString("orgName");
 
-    public final NumberPath<Long> QuestionFileId = createNumber("QuestionFileId", Long.class);
+    public final NumberPath<Long> questionFileId = createNumber("questionFileId", Long.class);
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> saveDtm = _super.saveDtm;

@@ -30,6 +30,11 @@ public class PageController {
         return "/" + firstUrl;
     }
 
+    @GetMapping("/design/{firstUrl}")
+    public String designFirstUrl(@PathVariable String firstUrl) {
+        return "/design/" + firstUrl;
+    }
+
     @GetMapping("/user/{firstUrl}")
     @PreAuthorize("hasRole('ROLE_USER')")
     public String userFirstUrl(@PathVariable String firstUrl) {

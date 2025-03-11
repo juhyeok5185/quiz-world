@@ -16,7 +16,7 @@ public class QuestionFile extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "question_file_id")
-    private Long QuestionFileId;
+    private Long questionFileId;
 
     @Column(name = "target")
     private QuestionFileTarget target;

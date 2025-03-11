@@ -2,29 +2,82 @@
 <!doctype html>
 <html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-<!--  <link rel="icon" type="image/x-icon" href="/static/common/images/favicon.ico">-->
-  <title>공통 레이아웃</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>공통 레이아웃</title>
 </head>
-<body>
-<header><button onclick="logout()">로그아웃</button>
+<body class="flex flex-col min-h-screen">
+<!-- Header -->
+<header class="border-b p-4 text-lg font-semibold">
+    Header
 </header>
-<content>
-  <div layout:fragment="content"></div> <!-- 페이지마다 콘텐츠가 다름 -->
+
+
+<content class="flex-grow p-4">
+    <div layout:fragment="content"></div> <!-- 페이지마다 콘텐츠가 다름 -->
 </content>
-<footer>푸터입니다</footer>
 
+<footer class="fixed bottom-0 left-0 w-full border-t bg-white">
+    <nav class="flex justify-around p-4">
+        <button class="flex flex-col items-center" onclick="location.href = '/user/main';">
+            <span class="text-xs">Home</span>
+        </button>
+        <button class="flex flex-col items-center" onclick="location.href='/user/subject'">
+            <span class="text-xs">내 과목</span>
+        </button>
+        <button class="flex flex-col items-center">
+            <span class="text-xs" onclick="alert('준비중입니다.')">구독 내역</span>
+        </button>
+        <button class="flex flex-col items-center">
+            <span class="text-xs" onclick="alert('준비중입니다.')">인기 과목</span>
+        </button>
+        <button class="flex flex-col items-center" onclick="openAside()">
+            <span class="text-xs">전체</span>
+        </button>
+    </nav>
+</footer>
 
+<!-- Aside Panel (Hidden by Default) -->
+<aside id="asideMenu"
+       class="fixed bottom-0 left-0 w-full bg-white border-t shadow-lg p-4 transition-transform transform translate-y-full">
+    <div class="flex justify-between items-center pb-2 border-b">
+        <h2 class="text-lg font-semibold">전체</h2>
+        <button class="text-lg font-bold" onclick="closeAside()">×</button>
+    </div>
+    <ul class="mt-4 space-y-2">
+        <li><a href="#" class="block p-2 border rounded" onclick="alert('준비중입니다.')">내 정보 수정</a></li>
+        <li><a href="#" class="block p-2 border rounded" onclick="logout()">로그아웃</a></li>
+    </ul>
+</aside>
+
+<script src="https://cdn.tailwindcss.com"></script>
 <script src="/static/common/js/fetchUtils.js" type="application/javascript"></script>
 <script>
-  async function logout() {
-    await fetchPostByLogout("/logout")
-    location.href = "/";
-  }
-</script>
-<th:block layout:fragment="script">
+    async function logout() {
+        await fetchPostByLogout("/logout")
+        location.href = "/";
+    }
 
-</th:block>
+    function openAside() {
+        find('#asideMenu').classList.remove('translate-y-full');
+    }
+
+    function closeAside() {
+        find('#asideMenu').classList.add('translate-y-full');
+    }
+
+    // const asideMenu = document.getElementById('asideMenu');
+    // const openAside = document.getElementById('openAside');
+    // const closeAside = document.getElementById('closeAside');
+    //
+    // openAside.addEventListener('click', () => {
+    //     asideMenu.classList.remove('translate-y-full');
+    // });
+
+    // closeAside.addEventListener('click', () => {
+    //     asideMenu.classList.add('translate-y-full');
+    // });
+</script>
+<th:block layout:fragment="script"></th:block>
 </body>
 </html>
