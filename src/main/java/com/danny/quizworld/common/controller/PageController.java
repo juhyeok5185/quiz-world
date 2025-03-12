@@ -16,15 +16,16 @@ public class PageController {
 
     @GetMapping("/")
     public String index(Authentication authentication) {
-        if(authentication == null){
-            return "/login";
-        }
-
-        if(Utils.getRole(authentication).equals("ROLE_ADMIN")){
-            return "redirect:/admin/main";
-        }
-
-        return "redirect:/user/main";
+        return "index";
+//        if(authentication == null){
+//            return "/login";
+//        }
+//
+//        if(Utils.getRole(authentication).equals("ROLE_ADMIN")){
+//            return "redirect:/admin/main";
+//        }
+//
+//        return "redirect:/user/main";
     }
 
     @GetMapping("/{firstUrl}")
