@@ -29,4 +29,8 @@ public class AnswerService {
     public AnswerResponse toResponse(Answer answer) {
         return answerMapper.toResponse(answer);
     }
+
+    public void deleteAll(List<Answer> answerList) {
+        answerStore.deleteAll(answerList);
+    }
 }

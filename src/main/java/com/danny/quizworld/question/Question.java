@@ -57,4 +57,10 @@ public class Question extends BaseTimeEntity {
     public void updateQuestionText(String questionText) {
         this.questionText = questionText;
     }
+
+    public void updateByUpdateRequest(QuestionRequest request) {
+        this.type = request.getType();
+        this.questionText = request.getQuestionText();
+        this.description = request.getDescription();
+    }
 }

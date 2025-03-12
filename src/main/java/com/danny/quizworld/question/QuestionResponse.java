@@ -1,5 +1,6 @@
 package com.danny.quizworld.question;
 
+import com.danny.quizworld.question.answer.AnswerResponse;
 import com.danny.quizworld.question.passage.Passage;
 import com.danny.quizworld.question.passage.PassageResponse;
 import com.danny.quizworld.subject.Subject;
@@ -11,6 +12,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Getter
 @Setter
@@ -22,4 +24,5 @@ public class QuestionResponse {
     private QuestionType type;
     private String questionText;
     private String description;
+    private List<AnswerResponse> answers;
 }

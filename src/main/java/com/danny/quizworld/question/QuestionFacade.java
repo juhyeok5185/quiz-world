@@ -91,11 +91,31 @@ public class QuestionFacade {
                 .toList();
     }
 
-
+    @Transactional
     public Long deleteKeyword(Long keywordId) {
         keywordService.deleteById(keywordId);
         return keywordId;
     }
 
 
+    @Transactional(readOnly = true)
+    public QuestionCommonResponse findByQuestionIdToResponse(Long questionId) {
+        QuestionResponse question = questionService.toResponse(questionService.findById(questionId));
+        List<AnswerResponse> answerResponseList = findAllAnswerByChapterIdToResponse(questionId);
+        return new QuestionCommonResponse(question, answerResponseList);
+    }
+
+    @Transactional
+    public void updateQuestion(Long questionId, QuestionUpdateRequest request) {
+        Question question = questionService.findById(questionId);
+        question.updateByUpdateRequest(request.getQuestionRequest());
+        questionService.save(question);
+
+        List<Answer> answerList = answerService.findAllByQuestionId(questionId);
+        answerService.deleteAll(answerList);
+        request.getAnswerRequest().forEach(answerRequest -> {
+            Answer answer = answerService.toEntity(question, answerRequest);
+            answerService.save(answer);
+        });
+    }
 }
