@@ -22,3 +22,7 @@ EXPOSE 80
 
 # 6️⃣ 컨테이너 실행 시 애플리케이션 실행
 ENTRYPOINT ["java", "-jar", "app.jar"]
+
+#docker build -t quiz-world:latest .
+#docker run -d -p 80:80 quiz-world:latest
+
