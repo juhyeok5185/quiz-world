@@ -2,12 +2,16 @@
 FROM gradle:8-jdk17 AS builder
 WORKDIR /app
 
-# 2️⃣ 프로젝트 전체 복사 후 빌드 실행
-COPY . .
+# 1.1 의존성 캐시를 위한 초기 복사
+COPY build.gradle settings.gradle ./
+RUN gradle build --no-daemon --parallel -x test -x classes || return 0
+
+# 2️⃣ 소스 코드 복사 후 빌드 실행
+COPY src ./src
 RUN gradle clean build --no-daemon --parallel -x test
 
-# 3️⃣ 실행 환경 (Slim JDK 사용)
-FROM openjdk:17-jdk-slim
+# 3️⃣ 실행 환경 (경량화된 JRE 사용)
+FROM eclipse-temurin:17-jre-jammy
 WORKDIR /app
 
 # 4️⃣ 빌드된 JAR 파일 복사
