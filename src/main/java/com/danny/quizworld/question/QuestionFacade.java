@@ -28,14 +28,11 @@ public class QuestionFacade {
     @Transactional
     public Long saveQuestion(Long chapterId, QuestionSaveRequest request) {
         Chapter chapter = chapterService.findById(chapterId);
-        // 문제 등록
         Question question = questionService.save(questionService.toEntity(chapter, request.getQuestionRequest()));
-        // 답 등록
         request.getAnswerRequest().forEach(answerRequest -> {
             Answer answer = answerService.toEntity(question, answerRequest);
             answerService.save(answer);
         });
-        // 키워드 등록
         if (request.getKeywordRequest() != null) {
             request.getKeywordRequest().forEach(keywordRequest -> {
                 Keyword keyword = keywordService.toEntity(question, keywordRequest.getName());
@@ -111,6 +108,7 @@ public class QuestionFacade {
         question.updateByUpdateRequest(request.getQuestionRequest());
         questionService.save(question);
 
+        //todo 시험기능이 생기면 찾아서 수정해야할수도있음
         List<Answer> answerList = answerService.findAllByQuestionId(questionId);
         answerService.deleteAll(answerList);
         request.getAnswerRequest().forEach(answerRequest -> {

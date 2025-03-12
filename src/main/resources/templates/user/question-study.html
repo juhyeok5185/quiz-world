@@ -39,8 +39,7 @@
         async function findAllByChapterId(){
             const chapterId = getParamValue('chapterId');
             const url = `/api/questions/chapters/${chapterId}`;
-            const response = await fetchGet(url);
-            questions = response; // 문제 리스트 저장
+            questions = await fetchGet(url); // 문제 리스트 저장
             drawList();
         }
 

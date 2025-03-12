@@ -7,7 +7,7 @@
 <div layout:fragment="content" class="relative p-8">
 
     <!-- 문제 추가 버튼 -->
-    <button onclick="find('#modal-div').classList.remove('hidden')"
+    <button onclick="find('#modal-save').classList.remove('hidden')"
             class="absolute top-0 right-0 bg-blue-500 text-white px-6 py-2 rounded-md shadow-md hover:bg-blue-600 transition">
         문제 추가
     </button>
@@ -128,8 +128,7 @@
             const formData = new FormData(find('#saveForm'));
             const url = `/api/questions/chapters/${chapterId}`;
             await fetchPostByFormData(url, formData);
-            find('#modal-div').classList.add('hidden'); // 모달 닫기
-            findAllByChapterId(); // 저장 후 리스트 새로고침
+            location.reload();
         }
 
         async function updateQuestion() {
