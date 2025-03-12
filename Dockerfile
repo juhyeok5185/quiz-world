@@ -1,23 +1,24 @@
-# 빌드 환경 설정 (Gradle 사용)
+# 1️⃣ 빌드 환경 설정 (Gradle 사용)
 FROM gradle:8-jdk17 AS builder
 WORKDIR /app
 
-# 프로젝트 코드 복사 및 빌드
-COPY --chown=gradle:gradle . .
-RUN gradle clean build -x test
+# 2️⃣ Gradle 캐시를 활용하기 위해 프로젝트에 필요한 파일만 먼저 복사
+COPY build.gradle settings.gradle gradle.properties ./
+COPY src/main src/main
+COPY src/test src/test
 
-# 실행 환경 (Slim JDK 사용)
+# 3️⃣ Gradle 빌드 실행 (캐시 활용, 빌드 속도 최적화)
+RUN gradle clean build --no-daemon --parallel -x test
+
+# 4️⃣ 실행 환경 (Slim JDK 사용)
 FROM openjdk:17-jdk-slim
 WORKDIR /app
 
-# 빌드된 JAR 파일 복사
+# 5️⃣ 빌드된 JAR 파일 복사
 COPY --from=builder /app/build/libs/*.jar app.jar
 
-# 포트 설정 (Spring Boot 기본값 8080)
+# 6️⃣ 포트 설정
 EXPOSE 80
 
-# 컨테이너 실행 시 애플리케이션 실행
+# 7️⃣ 컨테이너 실행 시 애플리케이션 실행
 ENTRYPOINT ["java", "-jar", "app.jar"]
-
-#docker build -t quiz-world:latest .
-#docker run -d -p 80:80 quiz-world:latest
