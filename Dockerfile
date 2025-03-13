@@ -25,4 +25,3 @@ ENTRYPOINT ["java", "-jar", "app.jar"]
 
 #docker build -t quiz-world:latest .
 #docker run -d -p 80:80 quiz-world:latest
-

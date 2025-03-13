@@ -14,46 +14,50 @@ import org.springframework.web.bind.annotation.PathVariable;
 @RequiredArgsConstructor
 public class PageController {
 
+
+
     @GetMapping("/")
     public String index(Authentication authentication) {
-        return "index";
-//        if(authentication == null){
-//            return "/login";
-//        }
-//
-//        if(Utils.getRole(authentication).equals("ROLE_ADMIN")){
-//            return "redirect:/admin/main";
-//        }
-//
-//        return "redirect:/user/main";
+        if(authentication == null){
+            return "redirect:login";
+        }
+
+        if(Utils.getRole(authentication).equals("ROLE_ADMIN")){
+            return "redirect:admin/main";
+        }
+
+        return "redirect:user/main";
     }
 
     @GetMapping("/{firstUrl}")
     public String firstUrl(@PathVariable String firstUrl , Authentication authentication) {
+
         if(firstUrl.equals("login")){
-            if(Utils.getRole(authentication).equals("ROLE_ADMIN")){
-                return "redirect:/admin/main";
+            if(authentication != null){
+                if(Utils.getRole(authentication).equals("ROLE_ADMIN")){
+                    return "redirect:admin/main";
+                }
+                return "redirect:user/main";
             }
-            return "redirect:/user/main";
         }
-        return "/" + firstUrl;
+        return firstUrl;
     }
 
     @GetMapping("/design/{firstUrl}")
     public String designFirstUrl(@PathVariable String firstUrl) {
-        return "/design/" + firstUrl;
+        return "design/" + firstUrl;
     }
 
     @GetMapping("/user/{firstUrl}")
     @PreAuthorize("hasRole('ROLE_USER')")
     public String userFirstUrl(@PathVariable String firstUrl) {
-        return "/user/" + firstUrl;
+        return "user/" + firstUrl;
     }
 
     @GetMapping("/admin/{firstUrl}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public String adminFirstUrl(@PathVariable String firstUrl) {
-        return "/admin/" + firstUrl;
+        return "admin/" + firstUrl;
     }
 
 }
