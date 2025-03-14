@@ -78,12 +78,6 @@
                         <div class="bg-white shadow-lg rounded-lg p-6">
                             <!-- 문제 -->
                             <span class="questionText text-lg font-semibold text-gray-900">${questionData.question.questionText}</span>
-
-                            <!-- 설명 -->
-                            <div class="descriptionText mt-2 text-sm text-gray-600 italic">
-                                ${questionData.question.description || "설명 없음"}
-                            </div>
-
                             <!-- 답변 리스트 -->
                             <div class="mt-2 text-gray-700">
                     `;
@@ -92,15 +86,19 @@
                             <div class="answerText mt-2 p-2 border-b">
                                 ${answer.answerText}
                             </div>
-                            <div class="mt-4  pt-3">
-                                     <textarea
-                                         class="practiceArea w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-300 resize-y min-h-24"
-                                         placeholder="자유롭게 연습하거나 메모를 작성하세요..."
-                                     ></textarea>
-                                 </div>
+
                         `;
                     });
-                    html += `</div></div>`;
+                    html += `
+                            <div class="descriptionText mt-2 text-sm text-gray-600 italic">
+                                ${questionData.question.description || "설명 없음"}
+                            </div>
+                            <div class="mt-4 pt-3">
+                                     <textarea class="practiceArea w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-300 resize-y min-h-24"
+        placeholder="자유롭게 연습하거나 메모를 작성하세요..."></textarea>
+
+                            </div>
+                            </div></div>`;
                 });
             }
             find('.listArea').innerHTML = html;
