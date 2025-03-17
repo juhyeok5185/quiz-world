@@ -167,7 +167,7 @@ async function fetchPatchByFormData(url, formData) {
     }
 }
 
-async function fetchGetExternal(url, params = {}) {
+async function fetchGetWithoutCsrf(url, params = {}) {
     try {
         // 쿼리 파라미터 추가
         if (Object.keys(params).length > 0) {

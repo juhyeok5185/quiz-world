@@ -160,7 +160,7 @@
 
         async function callDicApi() {
             const url = `https://api.dictionaryapi.dev/api/v2/entries/en/hello`;
-            const response = await fetchGetExternal(url);
+            const response = await fetchGetWithoutCsrf(url);
             console.log(response)
 
         }
