@@ -24,6 +24,8 @@ public class QSubject extends EntityPathBase<Subject> {
 
     public final com.danny.quizworld.common.entity.QBaseTimeEntity _super = new com.danny.quizworld.common.entity.QBaseTimeEntity(this);
 
+    public final StringPath description = createString("description");
+
     public final com.danny.quizworld.member.QMember member;
 
     //inherited

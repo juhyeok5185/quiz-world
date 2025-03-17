@@ -7,4 +7,5 @@ import lombok.Setter;
 @Setter
 public class SubjectRequest {
     private String name;
+    private String description;
 }

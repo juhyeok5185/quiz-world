@@ -2,6 +2,7 @@ package com.danny.quizworld.question.answer;
 
 import com.danny.quizworld.question.Question;
 import com.danny.quizworld.question.QuestionMapper;
+import com.danny.quizworld.question.QuestionService;
 import com.danny.quizworld.subject.Subject;
 import com.danny.quizworld.subject.chapter.Chapter;
 import com.danny.quizworld.subject.chapter.ChapterResponse;
@@ -13,8 +14,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class AnswerMapper {
 
-    private final ModelMapper modelMapper;
-    private final QuestionMapper questionMapper;
+    private final QuestionService questionService;
 
     public Answer toEntity(Question question ,AnswerRequest request){
         return Answer.builder()
@@ -27,7 +27,7 @@ public class AnswerMapper {
     public AnswerResponse toResponse(Answer answer) {
         return AnswerResponse.builder()
                 .answerId(answer.getAnswerId())
-                .question(questionMapper.toResponse(answer.getQuestion()))
+                .question(questionService.toResponse(answer.getQuestion()))
                 .answerYn(answer.getAnswerYn())
                 .answerText(answer.getAnswerText())
                 .build();

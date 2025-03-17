@@ -27,9 +27,13 @@ public class Subject extends BaseTimeEntity {
     @Column(name = "name")
     private String name;
 
+    @Column(name = "description")
+    private String description;
+
     @Builder
-    public Subject(Member member, String name) {
+    public Subject(Member member, String name , String description) {
         this.member = member;
         this.name = name;
+        this.description = description;
     }
 }

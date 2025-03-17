@@ -10,4 +10,5 @@ import lombok.Setter;
 public class SubjectResponse {
     private Long subjectId;
     private String name;
+    private String description;
 }

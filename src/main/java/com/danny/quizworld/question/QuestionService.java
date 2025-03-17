@@ -25,6 +25,11 @@ public class QuestionService {
         return questionReader.findAllByChapterId(chapterId);
     }
 
+    @Transactional(readOnly = true)
+    public Question findById(Long questionId) {
+        return questionReader.findById(questionId);
+    }
+
     public Question toEntity(Chapter chapter, QuestionRequest request) {
         return questionMapper.toEntity(chapter, request);
     }
@@ -33,8 +38,4 @@ public class QuestionService {
         return questionMapper.toResponse(question);
     }
 
-    @Transactional(readOnly = true)
-    public Question findById(Long questionId) {
-        return questionReader.findById(questionId);
-    }
 }

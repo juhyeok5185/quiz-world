@@ -14,8 +14,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 @RequiredArgsConstructor
 public class PageController {
 
-
-
     @GetMapping("/")
     public String index(Authentication authentication) {
         if(authentication == null){

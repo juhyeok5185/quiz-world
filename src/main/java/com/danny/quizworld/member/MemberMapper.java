@@ -9,8 +9,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Component
 @RequiredArgsConstructor
 public class MemberMapper {
-    private final ModelMapper modelMapper;
-    private final PasswordEncoder passwordEncoder;
 
     public Member toEntity(String name , String email) {
         return Member.builder()

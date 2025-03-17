@@ -15,6 +15,7 @@ CREATE TABLE t_subject (
                            subject_id BIGINT NOT NULL AUTO_INCREMENT COMMENT '과목 일련번호',
                            member_id BIGINT NOT NULL COMMENT '회원 일련번호',
                            name VARCHAR(255) NOT NULL COMMENT '과목명',
+                           description VARCHAR(1000) NOT NULL COMMENT '과목 설명',
                            use_yn TINYINT(1) NOT NULL DEFAULT 1 COMMENT '사용여부',
                            save_dtm DATETIME NOT NULL DEFAULT now() COMMENT '저장시간',
                            mod_dtm DATETIME NOT NULL DEFAULT now() COMMENT '수정시간',
@@ -143,7 +144,7 @@ CREATE TABLE t_question_keyword (
 
 작업예정
 1. 문제 추가하기에서 수정 추가하기 - 완료
-2. 연습장 만들어주기
+2. 연습장 만들어주기 - 완료
 2. div 형식으로 바꾸기 button 등 사용안하게
 3. subject 에 설명 및 소개 추가
 4. 버튼 누르면 하나씩 넘어가는 기능 - 완료

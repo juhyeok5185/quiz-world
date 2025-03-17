@@ -20,6 +20,7 @@ public class SubjectFacade {
     private final SubjectService subjectService;
     private final ChapterService chapterService;
 
+    @Transactional
     public SubjectResponse saveSubject(Long memberId, SubjectRequest request) {
         Member member = memberService.findById(memberId);
         Subject subject = subjectService.toEntity(member , request);
@@ -34,6 +35,7 @@ public class SubjectFacade {
                 .toList();
     }
 
+    @Transactional
     public ChapterResponse saveChapter(Long subjectId, ChapterRequest request) {
         Subject subject = subjectService.findById(subjectId);
         Chapter chapter = chapterService.toEntity(subject, request);

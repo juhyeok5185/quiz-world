@@ -13,6 +13,7 @@ public class SubjectMapper {
         return Subject.builder()
                 .member(member)
                 .name(request.getName())
+                .description(request.getDescription())
                 .build();
     }
 
