@@ -167,6 +167,37 @@ async function fetchPatchByFormData(url, formData) {
     }
 }
 
+async function fetchGetExternal(url, params = {}) {
+    try {
+        // 쿼리 파라미터 추가
+        if (Object.keys(params).length > 0) {
+            const queryString = new URLSearchParams(params).toString();
+            url += `?${queryString}`;
+        }
+
+        // API 요청
+        const response = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        });
+
+        // 응답 확인
+        if (!response.ok) {
+            const errorResponse = await response.json();
+            throw new Error(`API Error: ${errorResponse.message || response.statusText}`);
+        }
+
+        return await response.json(); // API 응답을 JSON으로 반환
+    } catch (error) {
+        console.error('fetchGetExternal Error:', error);
+        throw error;
+    }
+}
+
+
 /**
  * fetch delete
  * @param url api 주소(String)

@@ -31,6 +31,10 @@
                        class="w-full border p-2 rounded mb-4">
                 <input type="hidden" name="answerRequest[0].answerYn" value="true">
                 <div class="flex justify-end">
+                    <button type="button"
+                            class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition"
+                            onclick="callDicApi()">api 호출</button>
+
                     <button type="button" onclick="find('#modal-save').classList.add('hidden')"
                             class="bg-gray-300 text-gray-700 px-4 py-2 rounded-md mr-2">취소
                     </button>
@@ -152,6 +156,22 @@
             find('#answerText').value = response.answer[0].answerText;
             find('#description').value = response.question.description;
             find('#type').value = response.question.type;
+        }
+
+        async function callDicApi() {
+            const url = `https://api.dictionaryapi.dev/api/v2/entries/en/hello`;
+            const response = await fetchGetExternal(url);
+            console.log(response)
+            // try {
+            //     const response = await fetch(url);
+            //     if (!response.ok) {
+            //         throw new Error(`HTTP error! Status: ${response.status}`);
+            //     }
+            //     const data = await response.json();
+            //     console.log(data);
+            // } catch (error) {
+            //     console.error("Error fetching dictionary data:", error);
+            // }
         }
     </script>
 </th:block>
