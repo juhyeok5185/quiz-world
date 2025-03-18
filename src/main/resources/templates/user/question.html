@@ -154,6 +154,8 @@
             const chapterId = getParamValue('chapterId');
             const url = `/api/questions/chapters/${chapterId}`;
             questions = await fetchGet(url);
+            console.log()
+            changeLogoText(`${questions[0].question.chapter.subject.name} - ${questions[0].question.chapter.name}`)
             drawList();
         }
 
@@ -161,20 +163,24 @@
             let html = ``;
             questions.forEach((questionData, index) => {
                 html += `
-            <div class="bg-white shadow-lg rounded-lg p-6 cursor-pointer"
-                onclick="toggleHint(${index})" data-index="${index}">
-                <div class="flex justify-between items-center">
-                    <span class="questionText font-semibold text-gray-900">${questionData.question.questionText}</span>
-                </div>
-                <div class="answerText mt-2 p-2 border-b text-gray-700">${questionData.answer[0].answerText}</div>
-                <div id="hint-${index}" class="descriptionText mt-2 text-sm text-gray-600 italic hidden">
-                    ${questionData.question.description || "설명 없음"}
-                </div>
+        <div class="bg-white shadow-lg rounded-lg p-4 cursor-pointer flex flex-col"
+            onclick="toggleHint(${index})" data-index="${index}">
+            <div class="flex justify-between items-center">
+                <span class="questionText font-semibold text-gray-900 text-left flex-1">${questionData.question.questionText}</span>
+                <span class="answerText text-gray-700 text-right flex-1">${questionData.answer[0].answerText}</span>
             </div>
-        `;
+            <div id="hint-${index}" class="descriptionText mt-2 text-sm text-gray-600 italic hidden">
+                ${questionData.question.description || "설명 없음"}
+            </div>
+        </div>
+    `;
             });
             find('.listArea').innerHTML = html;
         }
+
+
+
+
 
         function toggleHint(index) {
             const hintElement = document.getElementById(`hint-${index}`);
