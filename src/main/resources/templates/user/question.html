@@ -36,14 +36,15 @@
                 <!-- 집중모드 선택 메뉴 (Popover) -->
                 <div id="focusModeMenu"
                      class="absolute top-full right-0 mt-2 bg-white shadow-lg rounded-md p-2 hidden flex flex-col w-32">
-                    <button onclick="startFocusMode()" class="w-full px-4 py-2 text-gray-800 hover:bg-gray-200 rounded-md">
+                    <button onclick="startFocusMode()"
+                            class="w-full px-4 py-2 text-gray-800 hover:bg-gray-200 rounded-md">
                         집중모드
                     </button>
-                    <button onclick="startFlashMode()" class="w-full px-4 py-2 text-gray-800 hover:bg-gray-200 rounded-md">
+                    <button onclick="startFlashMode()"
+                            class="w-full px-4 py-2 text-gray-800 hover:bg-gray-200 rounded-md">
                         깜빡이모드
                     </button>
                 </div>
-
 
 
             </div>
@@ -64,7 +65,7 @@
     </button>
 
     <!-- 문제 추가 모달 -->
-    <div id="modal-save" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+    <div id="modal-save" class="fixed inset-0 left-0 top-[-16px] bg-black bg-opacity-50 flex items-center justify-center hidden">
         <div class="bg-white p-6 rounded-lg shadow-lg w-96">
             <h2 class="text-xl font-bold mb-4">새 문제 추가</h2>
             <form id="saveForm">
@@ -92,7 +93,7 @@
     </div>
 
     <!-- 문제 수정 모달 -->
-    <div id="modal-update" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+    <div id="modal-update" class="fixed inset-0 left-0 top-[-16px] bg-black bg-opacity-50 flex items-center justify-center hidden">
         <div class="bg-white p-6 rounded-lg shadow-lg w-96">
             <h2 class="text-xl font-bold mb-4">문제 수정</h2>
             <form id="updateForm">
@@ -122,7 +123,7 @@
 
 
     <div id="specialModeContainer"
-         class="fixed top-[-20px] left-0 w-full h-full bg-white z-[9999] flex items-center justify-center hidden">
+         class="fixed top-[-16px] left-0 w-full h-full bg-white z-[9999] flex items-center justify-center hidden">
         <div class="absolute top-4 left-4">
             <button onclick="closeSpecialMode()" class="text-gray-700 hover:text-gray-900">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24"
@@ -154,7 +155,6 @@
             const chapterId = getParamValue('chapterId');
             const url = `/api/questions/chapters/${chapterId}`;
             questions = await fetchGet(url);
-            console.log()
             changeLogoText(`${questions[0].question.chapter.subject.name} - ${questions[0].question.chapter.name}`)
             drawList();
         }
@@ -163,23 +163,20 @@
             let html = ``;
             questions.forEach((questionData, index) => {
                 html += `
-        <div class="bg-white shadow-lg rounded-lg p-4 cursor-pointer flex flex-col"
-            onclick="toggleHint(${index})" data-index="${index}">
-            <div class="flex justify-between items-center">
-                <span class="questionText font-semibold text-gray-900 text-left flex-1">${questionData.question.questionText}</span>
-                <span class="answerText text-gray-700 text-right flex-1">${questionData.answer[0].answerText}</span>
-            </div>
-            <div id="hint-${index}" class="descriptionText mt-2 text-sm text-gray-600 italic hidden">
-                ${questionData.question.description || "설명 없음"}
-            </div>
-        </div>
-    `;
+                          <div class="bg-white shadow-lg rounded-lg p-4 cursor-pointer flex flex-col"
+                              onclick="toggleHint(${index})" data-index="${index}">
+                              <div class="flex justify-between items-center">
+                                  <span class="questionText font-semibold text-gray-900 text-left flex-1">${questionData.question.questionText}</span>
+                                  <span class="answerText text-gray-700 text-right flex-1">${questionData.answer[0].answerText}</span>
+                              </div>
+                              <div id="hint-${index}" class="descriptionText mt-2 text-sm text-gray-600 italic hidden">
+                                  ${questionData.question.description || "설명 없음"}
+                              </div>
+                          </div>
+                        `;
             });
             find('.listArea').innerHTML = html;
         }
-
-
-
 
 
         function toggleHint(index) {
@@ -187,27 +184,6 @@
             if (hintElement) {
                 hintElement.classList.toggle('hidden');
             }
-        }
-
-        function questionHideToggle() {
-            hiddenState.question = !hiddenState.question;
-            findAll('.questionText').forEach(el => {
-                hiddenState.question ? el.classList.add('hidden') : el.classList.remove('hidden');
-            });
-        }
-
-        function answerHideToggle() {
-            hiddenState.answer = !hiddenState.answer;
-            findAll('.answerText').forEach(el => {
-                hiddenState.answer ? el.classList.add('hidden') : el.classList.remove('hidden');
-            });
-        }
-
-        function descriptionHideToggle(fromState = false) {
-            if (!fromState) hiddenState.description = !hiddenState.description;
-            findAll('.descriptionText').forEach(el => {
-                hiddenState.description ? el.classList.add('hidden') : el.classList.remove('hidden');
-            });
         }
 
         function shuffleQuestions() {
