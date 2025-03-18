@@ -5,15 +5,6 @@
       layout:decorate="user/layout">
 
 <div layout:fragment="content" class="p-6 space-y-4">
-
-    <!-- 컨트롤 버튼 -->
-    <div class="flex flex-wrap space-x-4 mb-6">
-        <button onclick="descriptionHideToggle()"
-                class="bg-purple-500 text-white px-4 py-2 rounded-md hover:bg-purple-600 transition">
-            힌트 보기
-        </button>
-    </div>
-
     <div class="flex flex-wrap space-x-4 mb-6 items-center">
         <div class="flex space-x-4 items-center">
             <!-- 토글 버튼 그룹 -->
@@ -168,24 +159,28 @@
 
         function drawList() {
             let html = ``;
-            questions.forEach(questionData => {
+            questions.forEach((questionData, index) => {
                 html += `
-                    <div class="bg-white shadow-lg rounded-lg p-6">
-                        <div class="flex justify-between items-center">
-                            <span class="questionText font-semibold text-gray-900">${questionData.question.questionText}</span>
-<!--                            <div class="flex space-x-2">-->
-<!--                                <button onclick="updateMode(${questionData.question.questionId});"-->
-<!--                                        class="bg-yellow-500 text-white px-3 py-1 rounded-md hover:bg-yellow-600 transition">수정</button>-->
-<!--                                <button onclick="deleteByQuestionId(${questionData.question.questionId})"-->
-<!--                                        class="bg-red-500 text-white px-3 py-1 rounded-md hover:bg-red-600 transition">삭제</button>-->
-<!--                            </div>-->
-                        </div>
-                        <div class="answerText mt-2 p-2 border-b text-gray-700">${questionData.answer[0].answerText}</div>
-                <div class="descriptionText mt-2 text-sm text-gray-600 italic hidden">${questionData.question.description || "설명 없음"}</div>
-                    </div>
-                `;
+            <div class="bg-white shadow-lg rounded-lg p-6 cursor-pointer"
+                onclick="toggleHint(${index})" data-index="${index}">
+                <div class="flex justify-between items-center">
+                    <span class="questionText font-semibold text-gray-900">${questionData.question.questionText}</span>
+                </div>
+                <div class="answerText mt-2 p-2 border-b text-gray-700">${questionData.answer[0].answerText}</div>
+                <div id="hint-${index}" class="descriptionText mt-2 text-sm text-gray-600 italic hidden">
+                    ${questionData.question.description || "설명 없음"}
+                </div>
+            </div>
+        `;
             });
             find('.listArea').innerHTML = html;
+        }
+
+        function toggleHint(index) {
+            const hintElement = document.getElementById(`hint-${index}`);
+            if (hintElement) {
+                hintElement.classList.toggle('hidden');
+            }
         }
 
         function questionHideToggle() {
