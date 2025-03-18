@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="user/layout">
+
+<div layout:fragment="content" class="p-6 space-y-4">
+
+    <!-- 컨트롤 버튼 -->
+    <div class="flex flex-wrap space-x-4 mb-6">
+        <button onclick="descriptionHideToggle()"
+                class="bg-purple-500 text-white px-4 py-2 rounded-md hover:bg-purple-600 transition">
+            힌트 보기
+        </button>
+    </div>
+
+    <div class="flex flex-wrap space-x-4 mb-6 items-center">
+        <div class="flex space-x-4 items-center">
+            <!-- 토글 버튼 그룹 -->
+            <div class="bg-gray-200 p-2 rounded-lg flex space-x-2">
+                <button id="toggleAll" onclick="setToggle('all')"
+                        class="px-4 py-2 rounded-md transition bg-gradient-to-r from-blue-500 to-indigo-500 text-white">
+                    전체
+                </button>
+                <button id="toggleQuestion" onclick="setToggle('question')"
+                        class="px-4 py-2 rounded-md transition bg-gray-300 text-gray-800">문제
+                </button>
+                <button id="toggleAnswer" onclick="setToggle('answer')"
+                        class="px-4 py-2 rounded-md transition bg-gray-300 text-gray-800">답
+                </button>
+            </div>
+
+            <!-- 셔플 버튼 (클릭 시 그라데이션 후 원래 색상 복귀) -->
+            <button id="shuffleButton" onclick="shuffleEffect()"
+                    class="px-4 py-2 rounded-md transition bg-gray-300 text-gray-800 flex items-center">
+                🔀
+            </button>
+
+            <div class="relative">
+                <button id="focusModeButton" onclick="toggleFocusMenu()"
+                        class="px-4 py-2 rounded-md transition bg-gray-300 text-gray-800 flex items-center">
+                    ▶
+                </button>
+
+                <!-- 집중모드 선택 메뉴 (Popover) -->
+                <div id="focusModeMenu"
+                     class="absolute top-full right-0 mt-2 bg-white shadow-lg rounded-md p-2 hidden flex flex-col w-32">
+                    <button onclick="startFocusMode()" class="w-full px-4 py-2 text-gray-800 hover:bg-gray-200 rounded-md">
+                        집중모드
+                    </button>
+                    <button onclick="startFlashMode()" class="w-full px-4 py-2 text-gray-800 hover:bg-gray-200 rounded-md">
+                        깜빡이모드
+                    </button>
+                </div>
+
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- 리스트 출력 영역 -->
+    <div class="listArea grid grid-cols-1 gap-4 mt-4"></div>
+
+    <!-- 문제 추가 버튼 -->
+    <button onclick="find('#modal-save').classList.remove('hidden')"
+            class="fixed bottom-20 right-6 w-14 h-14 bg-gradient-to-r from-blue-500 to-indigo-500
+                   text-white text-[28px] font-bold rounded-full shadow-xl hover:opacity-90 transition
+                   flex items-center justify-center">
+        <span class="absolute top-[12px] right-[17.5px] leading-none">+</span>
+    </button>
+
+    <!-- 문제 추가 모달 -->
+    <div id="modal-save" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+        <div class="bg-white p-6 rounded-lg shadow-lg w-96">
+            <h2 class="text-xl font-bold mb-4">새 문제 추가</h2>
+            <form id="saveForm">
+                <select name="questionRequest.type" class="w-full border p-2 rounded mb-4">
+                    <option value="SHORT">단답형(영어단어에 적합)</option>
+                </select>
+                <input type="text" name="questionRequest.questionText" placeholder="문제 입력"
+                       class="w-full border p-2 rounded mb-4">
+                <input type="text" name="answerRequest[0].answerText" placeholder="정답 입력"
+                       class="w-full border p-2 rounded mb-4">
+                <input type="text" name="questionRequest.description" placeholder="설명 입력"
+                       class="w-full border p-2 rounded mb-4">
+                <input type="hidden" name="answerRequest[0].answerYn" value="true">
+                <div class="flex justify-end">
+                    <button type="button" onclick="find('#modal-save').classList.add('hidden')"
+                            class="bg-gray-300 text-gray-700 px-4 py-2 rounded-md mr-2">취소
+                    </button>
+                    <button type="button" onclick="saveQuestion()"
+                            class="bg-gradient-to-r from-blue-500 to-indigo-500 text-white px-4 py-2 rounded-md hover:opacity-90 transition">
+                        저장
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 문제 수정 모달 -->
+    <div id="modal-update" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+        <div class="bg-white p-6 rounded-lg shadow-lg w-96">
+            <h2 class="text-xl font-bold mb-4">문제 수정</h2>
+            <form id="updateForm">
+                <input type="hidden" id="questionId" name="questionId">
+                <select name="questionRequest.type" class="w-full border p-2 rounded mb-4">
+                    <option value="SHORT">단답형(영어단어에 적합)</option>
+                </select>
+                <input type="text" id="questionText" name="questionRequest.questionText" placeholder="문제 입력"
+                       class="w-full border p-2 rounded mb-4">
+                <input type="text" id="answerText" name="answerRequest[0].answerText" placeholder="정답 입력"
+                       class="w-full border p-2 rounded mb-4">
+                <input type="text" id="description" name="questionRequest.description" placeholder="설명 입력"
+                       class="w-full border p-2 rounded mb-4">
+                <input type="hidden" name="answerRequest[0].answerYn" value="true">
+                <div class="flex justify-end">
+                    <button type="button" onclick="find('#modal-update').classList.add('hidden')"
+                            class="bg-gray-300 text-gray-700 px-4 py-2 rounded-md mr-2">취소
+                    </button>
+                    <button type="button" onclick="updateQuestion()"
+                            class="bg-gradient-to-r from-blue-500 to-indigo-500 text-white px-4 py-2 rounded-md hover:opacity-90 transition">
+                        수정
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <div id="specialModeContainer"
+         class="fixed top-[-20px] left-0 w-full h-full bg-white z-[9999] flex items-center justify-center hidden">
+        <div class="absolute top-4 left-4">
+            <button onclick="closeSpecialMode()" class="text-gray-700 hover:text-gray-900">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24"
+                     stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+            </button>
+        </div>
+        <div id="specialModeContent" class="text-center">
+            <div id="specialModeQuestion" class="text-3xl font-bold mb-6"></div>
+            <div id="specialModeAnswer" class="text-2xl mt-4 hidden"></div>
+        </div>
+    </div>
+
+</div>
+
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+        let questions = [];
+        let hiddenState = {question: false, answer: false};
+        let flashInterval = null;
+
+
+        window.onload = () => {
+            findAllByChapterId();
+        };
+
+        async function findAllByChapterId() {
+            const chapterId = getParamValue('chapterId');
+            const url = `/api/questions/chapters/${chapterId}`;
+            questions = await fetchGet(url);
+            drawList();
+        }
+
+        function drawList() {
+            let html = ``;
+            questions.forEach(questionData => {
+                html += `
+                    <div class="bg-white shadow-lg rounded-lg p-6">
+                        <div class="flex justify-between items-center">
+                            <span class="questionText font-semibold text-gray-900">${questionData.question.questionText}</span>
+<!--                            <div class="flex space-x-2">-->
+<!--                                <button onclick="updateMode(${questionData.question.questionId});"-->
+<!--                                        class="bg-yellow-500 text-white px-3 py-1 rounded-md hover:bg-yellow-600 transition">수정</button>-->
+<!--                                <button onclick="deleteByQuestionId(${questionData.question.questionId})"-->
+<!--                                        class="bg-red-500 text-white px-3 py-1 rounded-md hover:bg-red-600 transition">삭제</button>-->
+<!--                            </div>-->
+                        </div>
+                        <div class="answerText mt-2 p-2 border-b text-gray-700">${questionData.answer[0].answerText}</div>
+                <div class="descriptionText mt-2 text-sm text-gray-600 italic hidden">${questionData.question.description || "설명 없음"}</div>
+                    </div>
+                `;
+            });
+            find('.listArea').innerHTML = html;
+        }
+
+        function questionHideToggle() {
+            hiddenState.question = !hiddenState.question;
+            findAll('.questionText').forEach(el => {
+                hiddenState.question ? el.classList.add('hidden') : el.classList.remove('hidden');
+            });
+        }
+
+        function answerHideToggle() {
+            hiddenState.answer = !hiddenState.answer;
+            findAll('.answerText').forEach(el => {
+                hiddenState.answer ? el.classList.add('hidden') : el.classList.remove('hidden');
+            });
+        }
+
+        function descriptionHideToggle(fromState = false) {
+            if (!fromState) hiddenState.description = !hiddenState.description;
+            findAll('.descriptionText').forEach(el => {
+                hiddenState.description ? el.classList.add('hidden') : el.classList.remove('hidden');
+            });
+        }
+
+        function shuffleQuestions() {
+            questions = questions.sort(() => Math.random() - 0.5);
+            drawList();
+        }
+
+        async function saveQuestion() {
+            const chapterId = getParamValue('chapterId');
+            const formData = new FormData(find('#saveForm'));
+            await fetchPostByFormData(`/api/questions/chapters/${chapterId}`, formData);
+            location.reload();
+        }
+
+        async function updateQuestion() {
+            const questionId = find('#questionId').value;
+            const formData = new FormData(find('#updateForm'));
+            await fetchPatchByFormData(`/api/questions/${questionId}`, formData);
+            location.reload();
+        }
+
+        async function deleteByQuestionId(questionId) {
+            await fetchDelete(`/api/questions/${questionId}`);
+            findAllByChapterId();
+        }
+
+        async function updateMode(questionId) {
+            const response = await fetchGet(`/api/questions/${questionId}`);
+            find('#questionId').value = response.question.questionId;
+            find('#questionText').value = response.question.questionText;
+            find('#answerText').value = response.answer[0].answerText;
+            find('#description').value = response.question.description;
+            find('#modal-update').classList.remove('hidden');
+        }
+
+        function setToggle(mode) {
+            // 모든 버튼 초기화
+            document.querySelectorAll("button[id^='toggle']").forEach(btn => {
+                btn.classList.remove('bg-gradient-to-r', 'from-blue-500', 'to-indigo-500', 'text-white');
+                btn.classList.add('bg-gray-300', 'text-gray-800');
+            });
+
+            // 선택된 버튼에 그라데이션 적용
+            document.getElementById(`toggle${mode.charAt(0).toUpperCase() + mode.slice(1)}`)
+                .classList.add('bg-gradient-to-r', 'from-blue-500', 'to-indigo-500', 'text-white');
+
+            // 문제/답 표시 로직 (전체, 문제, 답)
+            if (mode === 'all') {
+                findAll('.questionText').forEach(el => el.classList.remove('hidden'));
+                findAll('.answerText').forEach(el => el.classList.remove('hidden'));
+            } else if (mode === 'question') {
+                findAll('.questionText').forEach(el => el.classList.remove('hidden'));
+                findAll('.answerText').forEach(el => el.classList.add('hidden'));
+            } else if (mode === 'answer') {
+                findAll('.questionText').forEach(el => el.classList.add('hidden'));
+                findAll('.answerText').forEach(el => el.classList.remove('hidden'));
+            }
+        }
+
+        function shuffleEffect() {
+            const shuffleBtn = document.getElementById('shuffleButton');
+
+            // 0.5초 동안 그라데이션 적용
+            shuffleBtn.classList.add('bg-gradient-to-r', 'from-blue-500', 'to-indigo-500', 'text-white');
+            shuffleBtn.classList.remove('bg-gray-300', 'text-gray-800');
+
+            // 0.5초 후 원래 색상으로 복귀
+            setTimeout(() => {
+                shuffleBtn.classList.remove('bg-gradient-to-r', 'from-blue-500', 'to-indigo-500', 'text-white');
+                shuffleBtn.classList.add('bg-gray-300', 'text-gray-800');
+            }, 100);
+
+            // 셔플 실행
+            shuffleQuestions();
+        }
+
+        function toggleFocusMenu() {
+            const menu = document.getElementById("focusModeMenu");
+            menu.classList.toggle("hidden"); // 메뉴 보이기/숨기기 토글
+
+            document.removeEventListener("click", closeFocusMenu);
+            setTimeout(() => document.addEventListener("click", closeFocusMenu), 0);
+        }
+
+        function closeFocusMenu(event) {
+            const menu = document.getElementById("focusModeMenu");
+            const button = document.getElementById("focusModeButton");
+
+            // 버튼이나 팝오버 내부를 클릭한 경우 닫지 않음
+            if (menu.contains(event.target) || button.contains(event.target)) return;
+
+            // 팝오버 닫기
+            menu.classList.add("hidden");
+
+            // 이벤트 리스너 제거
+            document.removeEventListener("click", closeFocusMenu);
+        }
+
+        function startFocusMode() {
+            if (questions.length === 0) return;
+
+            currentIndex = 0;
+            isFocusMode = true;
+            isFlashMode = false;
+            clearInterval(flashInterval);
+
+            const specialModeContainer = document.getElementById('specialModeContainer');
+            const specialModeQuestion = document.getElementById('specialModeQuestion');
+            const specialModeAnswer = document.getElementById('specialModeAnswer');
+
+            specialModeContainer.style.display = 'flex';
+            updateSpecialModeContent();
+
+            // 집중모드: 화면 터치시 다음 내용 보여주기
+            specialModeContainer.onclick = function (event) {
+                // 닫기 버튼 클릭시에는 이벤트 처리 안함
+                if (event.target.closest('button')) return;
+
+                if (specialModeAnswer.style.display === 'none') {
+                    // 답변 보여주기
+                    specialModeAnswer.style.display = 'block';
+                } else {
+                    // 다음 문제로 이동
+                    currentIndex = (currentIndex + 1) % questions.length;
+                    updateSpecialModeContent();
+                }
+            };
+        }
+
+        // 깜빡이모드 실행 함수 (임시 로직)
+        function startFlashMode() {
+            if (questions.length === 0) return;
+
+            currentIndex = 0;
+            isFocusMode = false;
+            isFlashMode = true;
+
+            const specialModeContainer = document.getElementById('specialModeContainer');
+            specialModeContainer.style.display = 'flex';
+
+            // 깜빡이모드는 클릭 이벤트 제거 (자동으로 넘어가므로)
+            specialModeContainer.onclick = function (event) {
+                // 닫기 버튼만 작동하도록
+                if (!event.target.closest('button')) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+            };
+
+            updateSpecialModeContent();
+
+            // 5초마다 다음 내용으로 넘어가기
+            clearInterval(flashInterval);
+            flashInterval = setInterval(() => {
+                currentIndex = (currentIndex + 1) % questions.length;
+                updateSpecialModeContent();
+            }, 3000);
+        }
+
+        function closeSpecialMode() {
+            const specialModeContainer = document.getElementById('specialModeContainer');
+            specialModeContainer.style.display = 'none';
+
+            // 모드 해제
+            isFocusMode = false;
+            isFlashMode = false;
+            clearInterval(flashInterval);
+        }
+
+        function updateSpecialModeContent() {
+            if (questions.length === 0) return;
+
+            const currentQuestion = questions[currentIndex];
+            const specialModeQuestion = document.getElementById('specialModeQuestion');
+            const specialModeAnswer = document.getElementById('specialModeAnswer');
+
+            // 질문 설정
+            specialModeQuestion.textContent = currentQuestion.question.questionText;
+
+            // 답변 설정 (첫 번째 답변 사용)
+            let answerText = "";
+            if (currentQuestion.answer && currentQuestion.answer.length > 0) {
+                answerText = currentQuestion.answer[0].answerText;
+            }
+            specialModeAnswer.textContent = answerText;
+
+            // 깜빡이모드에서는 항상 답변 표시, 집중모드에서는 초기에 숨김
+            if (isFlashMode) {
+                specialModeAnswer.style.display = 'block';
+            } else {
+                specialModeAnswer.style.display = 'none';
+            }
+        }
+
+    </script>
+</th:block>
+
+</html>

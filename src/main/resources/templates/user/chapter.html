@@ -4,16 +4,18 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="user/layout">
 
-<div layout:fragment="content" class="relative p-8">
-
-    <!-- 챕터 추가 버튼 (우측 상단 고정) -->
-    <button onclick="find('#modal-div').classList.remove('hidden')"
-            class="absolute top-0 right-0 bg-blue-500 text-white px-6 py-2 rounded-md shadow-md hover:bg-blue-600 transition">
-        챕터 추가
-    </button>
+<div layout:fragment="content" class="p-6 space-y-4">
 
     <!-- 리스트 출력 영역 -->
-    <div class="listArea grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-12"></div>
+    <div class="listArea grid grid-cols-1 gap-4 mt-4"></div>
+
+    <!-- 챕터 추가 버튼 (우측 하단 고정) -->
+    <button onclick="find('#modal-div').classList.remove('hidden')"
+            class="fixed bottom-20 right-6 w-14 h-14 bg-gradient-to-r from-blue-500 to-indigo-500
+                   text-white text-[28px] font-bold rounded-full shadow-xl hover:opacity-90 transition
+                   flex items-center justify-center">
+        <span class="absolute top-[12px] right-[17.5px] leading-none">+</span>
+    </button>
 
     <!-- 모달 (숨김 상태) -->
     <div id="modal-div" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
@@ -21,8 +23,10 @@
             <h2 class="text-xl font-bold mb-4">새 챕터 추가</h2>
             <input type="text" id="name" class="w-full border p-2 rounded mb-4">
             <div class="flex justify-end">
-                <button onclick="find('#modal-div').classList.add('hidden')" class="bg-gray-300 text-gray-700 px-4 py-2 rounded-md mr-2">취소</button>
-                <button onclick="save()" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition">
+                <button onclick="find('#modal-div').classList.add('hidden')"
+                        class="bg-gray-300 text-gray-700 px-4 py-2 rounded-md mr-2">취소</button>
+                <button onclick="save()"
+                        class="bg-gradient-to-r from-blue-500 to-indigo-500 text-white px-4 py-2 rounded-md hover:opacity-90 transition">
                     저장
                 </button>
             </div>
@@ -57,18 +61,16 @@
             const url = `/api/subjects/${subjectId}/chapters`;
             const response = await fetchGet(url);
             drawList(response);
+            changeLogoText(response[0].subject.name);
         }
 
         function drawList(response) {
             let html = ``;
             response.forEach(item => {
                 html += `
-                    <div class="bg-white shadow-lg rounded-lg p-6">
-                        <h3 class="text-lg font-semibold text-gray-800">${item.name}</h3>
+                    <div class="bg-white shadow-lg rounded-lg p-6 cursor-pointer hover:bg-gray-100 transition" onclick="location.href = '/user/question?chapterId=${item.chapterId}'">
+                        <h3 class="text-lg font-semibold text-gray-900">${item.name}</h3>
                         <div class="mt-2 flex gap-3">
-                            <a href="/user/question-study?chapterId=${item.chapterId}" class="text-blue-500 hover:underline">공부하기</a>
-                            <a href="/user/question-test?chapterId=${item.chapterId}" class="text-green-500 hover:underline">시험보기</a>
-                            <a href="/user/question-add?chapterId=${item.chapterId}" class="text-red-500 hover:underline">문제추가하기</a>
                         </div>
                     </div>
                 `;
