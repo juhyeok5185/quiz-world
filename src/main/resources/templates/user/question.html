@@ -9,63 +9,62 @@
         <div class="flex space-x-4 items-center">
             <!-- 토글 버튼 그룹 -->
             <div class="bg-gray-200 p-2 rounded-lg flex space-x-2">
-                <button id="toggleAll" onclick="setToggle('all')"
-                        class="px-4 py-2 rounded-md transition bg-gradient-to-r from-blue-500 to-indigo-500 text-white">
+                <div id="toggleAll" onclick="setToggle('all')"
+                     class="px-4 py-2 rounded-md transition bg-gradient-to-r from-blue-500 to-indigo-500 text-white cursor-pointer">
                     전체
-                </button>
-                <button id="toggleQuestion" onclick="setToggle('question')"
-                        class="px-4 py-2 rounded-md transition bg-gray-300 text-gray-800">문제
-                </button>
-                <button id="toggleAnswer" onclick="setToggle('answer')"
-                        class="px-4 py-2 rounded-md transition bg-gray-300 text-gray-800">답
-                </button>
+                </div>
+                <div id="toggleQuestion" onclick="setToggle('question')"
+                     class="px-4 py-2 rounded-md transition bg-gray-300 text-gray-800 cursor-pointer">
+                    문제
+                </div>
+                <div id="toggleAnswer" onclick="setToggle('answer')"
+                     class="px-4 py-2 rounded-md transition bg-gray-300 text-gray-800 cursor-pointer">
+                    답
+                </div>
             </div>
 
             <!-- 셔플 버튼 (클릭 시 그라데이션 후 원래 색상 복귀) -->
-            <button id="shuffleButton" onclick="shuffleEffect()"
-                    class="px-4 py-2 rounded-md transition bg-gray-300 text-gray-800 flex items-center">
-                🔀
-            </button>
+            <div id="shuffleButton" onclick="shuffleEffect()"
+                 class="px-4 py-2 rounded-md transition bg-gray-300 text-gray-800 flex items-center cursor-pointer">
+                ⇄
+            </div>
 
             <div class="relative">
-                <button id="focusModeButton" onclick="toggleFocusMenu()"
-                        class="px-4 py-2 rounded-md transition bg-gray-300 text-gray-800 flex items-center">
+                <div id="focusModeButton" onclick="toggleFocusMenu()"
+                     class="px-4 py-2 rounded-md transition bg-gray-300 text-gray-800 flex items-center cursor-pointer">
                     ▶
-                </button>
+                </div>
 
                 <!-- 집중모드 선택 메뉴 (Popover) -->
                 <div id="focusModeMenu"
                      class="absolute top-full right-0 mt-2 bg-white shadow-lg rounded-md p-2 hidden flex flex-col w-32">
-                    <button onclick="startFocusMode()"
-                            class="w-full px-4 py-2 text-gray-800 hover:bg-gray-200 rounded-md">
+                    <div onclick="startFocusMode()"
+                         class="w-full px-4 py-2 text-gray-800 hover:bg-gray-200 rounded-md cursor-pointer">
                         집중모드
-                    </button>
-                    <button onclick="startFlashMode()"
-                            class="w-full px-4 py-2 text-gray-800 hover:bg-gray-200 rounded-md">
+                    </div>
+                    <div onclick="startFlashMode()"
+                         class="w-full px-4 py-2 text-gray-800 hover:bg-gray-200 rounded-md cursor-pointer">
                         깜빡이모드
-                    </button>
+                    </div>
                 </div>
-
-
             </div>
-
         </div>
-
     </div>
 
     <!-- 리스트 출력 영역 -->
     <div class="listArea grid grid-cols-1 gap-4 mt-4"></div>
 
     <!-- 문제 추가 버튼 -->
-    <button onclick="find('#modal-save').classList.remove('hidden')"
-            class="fixed bottom-20 right-6 w-14 h-14 bg-gradient-to-r from-blue-500 to-indigo-500
-                   text-white text-[28px] font-bold rounded-full shadow-xl hover:opacity-90 transition
-                   flex items-center justify-center">
+    <div onclick="find('#modal-save').classList.remove('hidden')"
+         class="fixed bottom-20 right-6 w-14 h-14 bg-gradient-to-r from-blue-500 to-indigo-500
+                text-white text-[28px] font-bold rounded-full shadow-xl hover:opacity-90 transition
+                flex items-center justify-center cursor-pointer">
         <span class="absolute top-[12px] right-[17.5px] leading-none">+</span>
-    </button>
+    </div>
 
     <!-- 문제 추가 모달 -->
-    <div id="modal-save" class="fixed inset-0 left-0 top-[-16px] bg-black bg-opacity-50 flex items-center justify-center hidden">
+    <div id="modal-save"
+         class="fixed inset-0 left-0 top-[-16px] bg-black bg-opacity-50 flex items-center justify-center hidden">
         <div class="bg-white p-6 rounded-lg shadow-lg w-96">
             <h2 class="text-xl font-bold mb-4">새 문제 추가</h2>
             <form id="saveForm">
@@ -80,20 +79,22 @@
                        class="w-full border p-2 rounded mb-4">
                 <input type="hidden" name="answerRequest[0].answerYn" value="true">
                 <div class="flex justify-end">
-                    <button type="button" onclick="find('#modal-save').classList.add('hidden')"
-                            class="bg-gray-300 text-gray-700 px-4 py-2 rounded-md mr-2">취소
-                    </button>
-                    <button type="button" onclick="saveQuestion()"
-                            class="bg-gradient-to-r from-blue-500 to-indigo-500 text-white px-4 py-2 rounded-md hover:opacity-90 transition">
+                    <div onclick="find('#modal-save').classList.add('hidden')"
+                         class="bg-gray-300 text-gray-700 px-4 py-2 rounded-md mr-2 cursor-pointer">
+                        취소
+                    </div>
+                    <div onclick="saveQuestion()"
+                         class="bg-gradient-to-r from-blue-500 to-indigo-500 text-white px-4 py-2 rounded-md hover:opacity-90 transition cursor-pointer">
                         저장
-                    </button>
+                    </div>
                 </div>
             </form>
         </div>
     </div>
 
     <!-- 문제 수정 모달 -->
-    <div id="modal-update" class="fixed inset-0 left-0 top-[-16px] bg-black bg-opacity-50 flex items-center justify-center hidden">
+    <div id="modal-update"
+         class="fixed inset-0 left-0 top-[-16px] bg-black bg-opacity-50 flex items-center justify-center hidden">
         <div class="bg-white p-6 rounded-lg shadow-lg w-96">
             <h2 class="text-xl font-bold mb-4">문제 수정</h2>
             <form id="updateForm">
@@ -109,28 +110,28 @@
                        class="w-full border p-2 rounded mb-4">
                 <input type="hidden" name="answerRequest[0].answerYn" value="true">
                 <div class="flex justify-end">
-                    <button type="button" onclick="find('#modal-update').classList.add('hidden')"
-                            class="bg-gray-300 text-gray-700 px-4 py-2 rounded-md mr-2">취소
-                    </button>
-                    <button type="button" onclick="updateQuestion()"
-                            class="bg-gradient-to-r from-blue-500 to-indigo-500 text-white px-4 py-2 rounded-md hover:opacity-90 transition">
+                    <div onclick="find('#modal-update').classList.add('hidden')"
+                         class="bg-gray-300 text-gray-700 px-4 py-2 rounded-md mr-2 cursor-pointer">
+                        취소
+                    </div>
+                    <div onclick="updateQuestion()"
+                         class="bg-gradient-to-r from-blue-500 to-indigo-500 text-white px-4 py-2 rounded-md hover:opacity-90 transition cursor-pointer">
                         수정
-                    </button>
+                    </div>
                 </div>
             </form>
         </div>
     </div>
 
-
     <div id="specialModeContainer"
          class="fixed top-[-16px] left-0 w-full h-full bg-white z-[9999] flex items-center justify-center hidden">
         <div class="absolute top-4 left-4">
-            <button onclick="closeSpecialMode()" class="text-gray-700 hover:text-gray-900">
+            <div onclick="closeSpecialMode()" class="text-gray-700 hover:text-gray-900 cursor-pointer">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24"
                      stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                 </svg>
-            </button>
+            </div>
         </div>
         <div id="specialModeContent" class="text-center">
             <div id="specialModeQuestion" class="text-3xl font-bold mb-6"></div>
@@ -145,11 +146,37 @@
         let questions = [];
         let hiddenState = {question: false, answer: false};
         let flashInterval = null;
+        let longPressTimers = {}; // 타이머 저장 객체
+        let currentToggleMode = 'all'; // ✅ 현재 토글 상태 저장
 
 
         window.onload = () => {
             findAllByChapterId();
         };
+
+        function startLongPress(event, index) {
+            event.preventDefault();
+            longPressTimers[index] = setTimeout(() => {
+                updateMode(questions[index].question.questionId);  // questionId 넘김
+                delete longPressTimers[index];
+            }, 1000); // 1초 동안 눌렀을 때 실행
+        }
+
+        function endLongPress(event, index) {
+            if (longPressTimers[index]) {
+                clearTimeout(longPressTimers[index]);
+                delete longPressTimers[index];
+                toggleHint(index); // 일반 클릭 처리
+            }
+        }
+
+        function cancelLongPress(event, index) {
+            if (longPressTimers[index]) {
+                clearTimeout(longPressTimers[index]);
+                delete longPressTimers[index];
+            }
+        }
+
 
         async function findAllByChapterId() {
             const chapterId = getParamValue('chapterId');
@@ -163,17 +190,23 @@
             let html = ``;
             questions.forEach((questionData, index) => {
                 html += `
-                          <div class="bg-white shadow-lg rounded-lg p-4 cursor-pointer flex flex-col"
-                              onclick="toggleHint(${index})" data-index="${index}">
-                              <div class="flex justify-between items-center">
-                                  <span class="questionText font-semibold text-gray-900 text-left flex-1">${questionData.question.questionText}</span>
-                                  <span class="answerText text-gray-700 text-right flex-1">${questionData.answer[0].answerText}</span>
-                              </div>
-                              <div id="hint-${index}" class="descriptionText mt-2 text-sm text-gray-600 italic hidden">
-                                  ${questionData.question.description || "설명 없음"}
-                              </div>
-                          </div>
-                        `;
+                     <div class="bg-white shadow-lg rounded-lg p-4 cursor-pointer flex flex-col user-select-none"
+                          data-index="${index}"
+                          onmousedown="startLongPress(event, ${index})"
+                          onmouseup="endLongPress(event, ${index})"
+                          onmouseleave="cancelLongPress(event, ${index})"
+                          ontouchstart="startLongPress(event, ${index})"
+                          ontouchend="endLongPress(event, ${index})"
+                          ontouchcancel="cancelLongPress(event, ${index})">
+                       <div class="flex justify-between items-center">
+                         <span class="questionText font-semibold text-gray-900 text-left flex-1">${questionData.question.questionText}</span>
+                         <span class="answerText font-semibold text-gray-900 text-right flex-1">${questionData.answer[0].answerText}</span>
+                       </div>
+                       <div id="hint-${index}" class="descriptionText mt-2 text-sm text-gray-600 hidden">
+                         ${questionData.question.description || "설명 없음"}
+                       </div>
+                     </div>
+                   `;
             });
             find('.listArea').innerHTML = html;
         }
@@ -187,9 +220,22 @@
         }
 
         function shuffleQuestions() {
-            questions = questions.sort(() => Math.random() - 0.5);
+            if (questions.length < 2) return; // 요소가 1개 이하라면 섞을 필요 없음
+
+            let shuffled;
+            let attempt = 0;
+            const maxAttempts = 10; // 동일한 배열 방지를 위한 최대 시도 횟수
+
+            do {
+                shuffled = [...questions].sort(() => Math.random() - 0.5);
+                attempt++;
+            } while (JSON.stringify(shuffled) === JSON.stringify(questions) && attempt < maxAttempts);
+
+            questions = shuffled;
             drawList();
+            setToggle(currentToggleMode); // ✅ 기존 토글 상태 유지
         }
+
 
         async function saveQuestion() {
             const chapterId = getParamValue('chapterId');
@@ -220,13 +266,15 @@
         }
 
         function setToggle(mode) {
+            currentToggleMode = mode; // ✅ 현재 토글 상태 저장
+
             // 모든 버튼 초기화
-            document.querySelectorAll("button[id^='toggle']").forEach(btn => {
+            document.querySelectorAll("div[id^='toggle']").forEach(btn => {
                 btn.classList.remove('bg-gradient-to-r', 'from-blue-500', 'to-indigo-500', 'text-white');
                 btn.classList.add('bg-gray-300', 'text-gray-800');
             });
 
-            // 선택된 버튼에 그라데이션 적용
+            // 선택된 버튼 스타일 변경
             document.getElementById(`toggle${mode.charAt(0).toUpperCase() + mode.slice(1)}`)
                 .classList.add('bg-gradient-to-r', 'from-blue-500', 'to-indigo-500', 'text-white');
 
@@ -243,20 +291,19 @@
             }
         }
 
+
         function shuffleEffect() {
             const shuffleBtn = document.getElementById('shuffleButton');
 
-            // 0.5초 동안 그라데이션 적용
+            // 0.5초 동안 그라데이션 효과
             shuffleBtn.classList.add('bg-gradient-to-r', 'from-blue-500', 'to-indigo-500', 'text-white');
             shuffleBtn.classList.remove('bg-gray-300', 'text-gray-800');
 
-            // 0.5초 후 원래 색상으로 복귀
             setTimeout(() => {
                 shuffleBtn.classList.remove('bg-gradient-to-r', 'from-blue-500', 'to-indigo-500', 'text-white');
                 shuffleBtn.classList.add('bg-gray-300', 'text-gray-800');
             }, 100);
 
-            // 셔플 실행
             shuffleQuestions();
         }
 
@@ -380,5 +427,4 @@
 
     </script>
 </th:block>
-
 </html>

@@ -10,29 +10,31 @@
     <div class="listArea grid grid-cols-1 gap-4 mt-4"></div>
 
     <!-- 과목 추가 버튼 (우측 하단 고정) -->
-    <button onclick="find('#modal-div').classList.remove('hidden')"
-            class="fixed bottom-20 right-6 w-14 h-14 bg-gradient-to-r from-blue-500 to-indigo-500
-                   text-white text-[28px] font-bold rounded-full shadow-xl hover:opacity-90 transition
-                   flex items-center justify-center">
+    <div onclick="find('#modal-div').classList.remove('hidden')"
+         class="fixed bottom-20 right-6 w-14 h-14 bg-gradient-to-r from-blue-500 to-indigo-500
+                text-white text-[28px] font-bold rounded-full shadow-xl hover:opacity-90 transition
+                flex items-center justify-center cursor-pointer">
         <span class="absolute top-[12px] right-[17.5px] leading-none">+</span>
-    </button>
+    </div>
 
     <!-- 모달 (숨김 상태) -->
-    <div id="modal-div" class="fixed left-0 top-[-16px] bg-black bg-opacity-50 flex items-center justify-center hidden">
+    <div id="modal-div" class="fixed left-0 top-[-16px] w-full h-full bg-black bg-opacity-50 flex items-center justify-center hidden">
         <div class="bg-white p-6 rounded-lg shadow-lg w-96">
             <h2 class="text-xl font-bold mb-4">새 과목 추가</h2>
-            <input type="text" id="name" class="w-full border p-2 rounded mb-4">
-            <div class="flex justify-end">
-                <button onclick="find('#modal-div').classList.add('hidden')"
-                        class="bg-gray-300 text-gray-700 px-4 py-2 rounded-md mr-2">취소</button>
-                <button onclick="save()"
-                        class="bg-gradient-to-r from-blue-500 to-indigo-500 text-white px-4 py-2 rounded-md shadow-md hover:opacity-90 transition">
+            <input type="text" id="name" class="w-full border p-2 rounded mb-4" placeholder="과목의 이름을 정해 주세요">
+            <input type="text" id="description" class="w-full border p-2 rounded mb-4" placeholder="과목을 설명해 주세요">
+            <div class="flex justify-end space-x-2">
+                <div onclick="find('#modal-div').classList.add('hidden')"
+                     class="bg-gray-300 text-gray-700 px-4 py-2 rounded-md cursor-pointer">
+                    취소
+                </div>
+                <div onclick="save()"
+                     class="bg-gradient-to-r from-blue-500 to-indigo-500 text-white px-4 py-2 rounded-md shadow-md hover:opacity-90 transition cursor-pointer">
                     저장
-                </button>
+                </div>
             </div>
         </div>
     </div>
-
 
 </div>
 
@@ -50,34 +52,37 @@
         }
 
         function drawList(response) {
-            let html = ``;
-            response.forEach(item => {
-                html += `
-                    <div class="bg-white shadow-lg rounded-lg p-6 cursor-pointer hover:bg-gray-100 transition">
-                        <a href="/user/chapter?subjectId=${item.subjectId}"
-                           class="text-lg font-semibold text-gray-900">
-                            ${item.name}
-                        </a>
-                    </div>
-                `;
-            });
+            let html = response.length
+                ? response.map(item => `
+            <div class="bg-white shadow-lg rounded-lg p-6 cursor-pointer hover:bg-gray-100 transition"
+                 onclick="location.href='/user/chapter?subjectId=${item.subjectId}'">
+                <div class="text-lg font-semibold text-gray-900">${item.name}</div>
+                <p class="text-sm text-gray-600 mt-1">소개: ${item.description}</p>
+                <p class="text-sm text-gray-600">총 문항: ${item.quizCount}</p>
+            </div>
+        `).join('')
+                : `<div class="text-center text-gray-500 py-10">
+                등록된 과목이 없습니다.<br>과목을 추가해 주세요!
+           </div>`;
+
             find('.listArea').innerHTML = html;
         }
 
         async function save() {
             const url = `/api/subjects`;
-            const nameInput = find('#name');
-            const name = nameInput.value.trim();
+            const name = find('#name').value.trim();
+            const description = find('#description').value.trim();
 
             if (!name) {
                 alert("과목명을 입력하세요!");
                 return;
             }
 
-            const json = {name};
+            const json = {name, description};
             await fetchPostByJson(url, json);
             find('#modal-div').classList.add('hidden'); // 모달 닫기
-            nameInput.value = ""; // 입력 필드 초기화
+            find('#name').value = ""; // 입력 필드 초기화
+            find('#description').value = ""; // 입력 필드 초기화
             findAllByMemberId(); // 저장 후 리스트 새로고침
         }
     </script>

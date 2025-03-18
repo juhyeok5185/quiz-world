@@ -19,4 +19,12 @@ public class QuestionReader {
     public Question findById(Long questionId) {
         return questionRepository.findById(questionId).orElseThrow(() -> new MyException("문제를 찾을 수 없습니다."));
     }
+
+    public Long countByChapterId(Long chapterId) {
+        return questionRepository.countByChapter_ChapterIdAndUseYnTrue(chapterId);
+    }
+
+    public Long countBySubjectId(Long subjectId) {
+        return questionRepository.countBySubject_SubjectIdAndUseYnTrue(subjectId);
+    }
 }

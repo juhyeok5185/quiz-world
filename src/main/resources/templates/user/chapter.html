@@ -10,25 +10,27 @@
     <div class="listArea grid grid-cols-1 gap-4 mt-4"></div>
 
     <!-- 챕터 추가 버튼 (우측 하단 고정) -->
-    <button onclick="find('#modal-div').classList.remove('hidden')"
-            class="fixed bottom-20 right-6 w-14 h-14 bg-gradient-to-r from-blue-500 to-indigo-500
-                   text-white text-[28px] font-bold rounded-full shadow-xl hover:opacity-90 transition
-                   flex items-center justify-center">
+    <div onclick="find('#modal-div').classList.remove('hidden')"
+         class="fixed bottom-20 right-6 w-14 h-14 bg-gradient-to-r from-blue-500 to-indigo-500
+                text-white text-[28px] font-bold rounded-full shadow-xl hover:opacity-90 transition
+                flex items-center justify-center cursor-pointer">
         <span class="absolute top-[12px] right-[17.5px] leading-none">+</span>
-    </button>
+    </div>
 
     <!-- 모달 (숨김 상태) -->
     <div id="modal-div" class="fixed top-[-16px] inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
         <div class="bg-white p-6 rounded-lg shadow-lg w-96">
             <h2 class="text-xl font-bold mb-4">새 챕터 추가</h2>
             <input type="text" id="name" class="w-full border p-2 rounded mb-4">
-            <div class="flex justify-end">
-                <button onclick="find('#modal-div').classList.add('hidden')"
-                        class="bg-gray-300 text-gray-700 px-4 py-2 rounded-md mr-2">취소</button>
-                <button onclick="save()"
-                        class="bg-gradient-to-r from-blue-500 to-indigo-500 text-white px-4 py-2 rounded-md hover:opacity-90 transition">
+            <div class="flex justify-end space-x-2">
+                <div onclick="find('#modal-div').classList.add('hidden')"
+                     class="bg-gray-300 text-gray-700 px-4 py-2 rounded-md cursor-pointer">
+                    취소
+                </div>
+                <div onclick="save()"
+                     class="bg-gradient-to-r from-blue-500 to-indigo-500 text-white px-4 py-2 rounded-md hover:opacity-90 transition cursor-pointer">
                     저장
-                </button>
+                </div>
             </div>
         </div>
     </div>
@@ -61,22 +63,25 @@
             const url = `/api/subjects/${subjectId}/chapters`;
             const response = await fetchGet(url);
             drawList(response);
-            changeLogoText(`${response[0].subject.name}`);
+            changeLogoText(`${response[0]?.subject?.name || "과목 이름 없음"}`);
         }
 
         function drawList(response) {
-            let html = ``;
-            response.forEach(item => {
-                html += `
-                    <div class="bg-white shadow-lg rounded-lg p-6 cursor-pointer hover:bg-gray-100 transition" onclick="location.href = '/user/question?chapterId=${item.chapterId}'">
-                        <h3 class="text-lg font-semibold text-gray-900">${item.name}</h3>
-                        <div class="mt-2 flex gap-3">
-                        </div>
-                    </div>
-                `;
-            });
+            let html = response.length
+                ? response.map(item => `
+            <div class="bg-white shadow-lg rounded-lg p-6 cursor-pointer hover:bg-gray-100 transition"
+                 onclick="location.href = '/user/question?chapterId=${item.chapterId}'">
+                <h3 class="text-lg font-semibold text-gray-900">${item.name}</h3>
+                <p class="text-sm text-gray-600 mt-1">총 문항: ${item.quizCount}문제</p>
+            </div>
+        `).join('')
+                : `<div class="text-center text-gray-500 py-10">
+                등록된 챕터가 없습니다.<br>챕터를 추가해 주세요!
+           </div>`;
+
             find('.listArea').innerHTML = html;
         }
+
     </script>
 </th:block>
 

@@ -11,4 +11,5 @@ public class SubjectResponse {
     private Long subjectId;
     private String name;
     private String description;
+    private Long quizCount;
 }

@@ -6,4 +6,8 @@ import java.util.List;
 
 public interface QuestionRepository extends JpaRepository<Question, Long> {
     List<Question> findAllByChapter_ChapterIdAndUseYnTrue(Long chapterId);
+
+    Long countByChapter_ChapterIdAndUseYnTrue(Long chapterId);
+
+    Long countBySubject_SubjectIdAndUseYnTrue(Long subjectId);
 }

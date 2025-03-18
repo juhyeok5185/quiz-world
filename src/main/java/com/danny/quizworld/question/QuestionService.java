@@ -16,18 +16,23 @@ public class QuestionService {
     private final QuestionStore questionStore;
 
     @Transactional
-    public Question save(Question question){
+    public Question save(Question question) {
         return questionStore.save(question);
     }
 
     @Transactional(readOnly = true)
-    public List<Question> findAllByChapterId(Long chapterId){
+    public List<Question> findAllByChapterId(Long chapterId) {
         return questionReader.findAllByChapterId(chapterId);
     }
 
     @Transactional(readOnly = true)
     public Question findById(Long questionId) {
         return questionReader.findById(questionId);
+    }
+
+    @Transactional(readOnly = true)
+    public Long countByChapterId(Long chapterId) {
+        return questionReader.countByChapterId(chapterId);
     }
 
     public Question toEntity(Chapter chapter, QuestionRequest request) {
@@ -38,4 +43,8 @@ public class QuestionService {
         return questionMapper.toResponse(question);
     }
 
+    @Transactional(readOnly = true)
+    public Long countBySubjectId(Long subjectId) {
+        return questionReader.countBySubjectId(subjectId);
+    }
 }

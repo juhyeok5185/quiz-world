@@ -24,5 +24,4 @@ public class QuestionResponse {
     private QuestionType type;
     private String questionText;
     private String description;
-    private List<AnswerResponse> answers;
 }
