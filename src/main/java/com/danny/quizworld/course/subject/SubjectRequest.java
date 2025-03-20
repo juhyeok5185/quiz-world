@@ -8,4 +8,6 @@ import lombok.Setter;
 public class SubjectRequest {
     private String name;
     private String description;
+    private Boolean publicYn;
+    private Long price;
 }

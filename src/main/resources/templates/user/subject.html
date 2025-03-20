@@ -19,10 +19,29 @@
 
     <!-- 모달 (숨김 상태) -->
     <div id="modal-div" class="fixed left-0 top-[-16px] w-full h-full bg-black bg-opacity-50 flex items-center justify-center hidden">
+        <form id="saveForm">
         <div class="bg-white p-6 rounded-lg shadow-lg w-96">
             <h2 class="text-xl font-bold mb-4">새 과목 추가</h2>
-            <input type="text" id="name" class="w-full border p-2 rounded mb-4" placeholder="과목의 이름을 정해 주세요">
-            <input type="text" id="description" class="w-full border p-2 rounded mb-4" placeholder="과목을 설명해 주세요">
+            <input type="text" id="name" name="name" class="w-full border p-2 rounded mb-4" placeholder="과목의 이름을 정해 주세요">
+            <input type="text" id="description" name="description" class="w-full border p-2 rounded mb-4" placeholder="과목을 설명해 주세요">
+            <div class="mb-4">
+                <label class="block font-semibold mb-2">공개 여부</label>
+                <div class="flex space-x-4">
+                    <label class="flex items-center space-x-2">
+                        <input type="radio" name="publicYn" value="true" class="form-radio text-blue-500" checked>
+                        <span>공개</span>
+                    </label>
+                    <label class="flex items-center space-x-2">
+                        <input type="radio" name="publicYn" value="false" class="form-radio text-red-500">
+                        <span>비공개</span>
+                    </label>
+                </div>
+            </div>
+            <div class="mb-4">
+                <label for="price" class="block font-semibold mb-2">가격</label>
+                <input type="text" id="price" class="w-full border p-2 rounded bg-gray-200 cursor-not-allowed"
+                       placeholder="판매자 신청 후 이용해주세요" disabled>
+            </div>
             <div class="flex justify-end space-x-2">
                 <div onclick="find('#modal-div').classList.add('hidden')"
                      class="bg-gray-300 text-gray-700 px-4 py-2 rounded-md cursor-pointer">
@@ -34,6 +53,7 @@
                 </div>
             </div>
         </div>
+        </form>
     </div>
 
 </div>
@@ -48,15 +68,8 @@
 
         async function save() {
             const url = `/api/courses/subjects`;
-            const name = find('#name').value.trim();
-            const description = find('#description').value.trim();
-
-            if (!name) {
-                alert("과목명을 입력하세요!");
-                return;
-            }
-
-            const json = {name, description};
+            const formData = new FormData(find('#saveForm'));
+            const json = changeFormDataToJson(formData)
             await fetchPostByJson(url, json);
             location.reload();
         }
@@ -75,7 +88,10 @@
                  onclick="location.href='/user/chapter?subjectId=${item.subjectId}'">
                 <div class="text-lg font-semibold text-gray-900">${item.name}</div>
                 <p class="text-sm text-gray-600 mt-1">소개: ${item.description}</p>
-                <p class="text-sm text-gray-600">총 문항: ${item.quizCount}</p>
+                <p class="text-sm text-gray-600">공개 여부: ${item.publicYn}</p>
+                <p class="text-sm text-gray-600">총 문항: ${item.quizCount} 문항</p>
+                <p class="text-sm text-gray-600">추천 : ${item.likeCount} 개</p>
+                <p class="text-sm text-gray-600">금액: ${item.price} 원</p>
             </div>
         `).join('')
                 : `<div class="text-center text-gray-500 py-10">

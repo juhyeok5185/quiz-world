@@ -13,6 +13,10 @@ public class SubjectMapper {
                 .member(member)
                 .name(request.getName())
                 .description(request.getDescription())
+                .likeCount(0)
+                .downloadCount(0)
+                .publicYn(request.getPublicYn())
+                .price(request.getPrice() == null ? 0 : request.getPrice())
                 .build();
     }
 
@@ -21,6 +25,10 @@ public class SubjectMapper {
                 .subjectId(subject.getSubjectId())
                 .name(subject.getName())
                 .description(subject.getDescription())
+                .publicYn(subject.getPublicYn())
+                .price(subject.getPrice())
+                .likeCount(subject.getLikeCount())
+                .downloadCount(subject.getDownloadCount())
                 .build();
     }
 }
