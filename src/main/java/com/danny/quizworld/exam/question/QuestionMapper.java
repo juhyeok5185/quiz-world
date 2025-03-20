@@ -15,7 +15,6 @@ public class QuestionMapper {
         return Question.builder()
                 .subject(chapter.getSubject())
                 .chapter(chapter)
-                .type(request.getType())
                 .questionText(request.getQuestionText())
                 .description(request.getDescription())
                 .build();
@@ -25,7 +24,6 @@ public class QuestionMapper {
         return QuestionResponse.builder()
                 .questionId(question.getQuestionId())
                 .chapter(chapterService.toResponse(question.getChapter()))
-                .type(question.getType())
                 .questionText(question.getQuestionText())
                 .description(question.getDescription())
                 .build();

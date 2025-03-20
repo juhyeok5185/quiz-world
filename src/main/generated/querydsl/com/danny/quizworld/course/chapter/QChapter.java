@@ -36,7 +36,8 @@ public class QChapter extends EntityPathBase<Chapter> {
 
     public final com.danny.quizworld.course.subject.QSubject subject;
 
-    public final BooleanPath useYn = createBoolean("useYn");
+    //inherited
+    public final BooleanPath useYn = _super.useYn;
 
     public QChapter(String variable) {
         this(Chapter.class, forVariable(variable), INITS);

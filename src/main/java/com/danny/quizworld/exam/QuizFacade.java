@@ -4,8 +4,6 @@ import com.danny.quizworld.common.entity.BaseTimeEntity;
 import com.danny.quizworld.exam.answer.Answer;
 import com.danny.quizworld.exam.answer.AnswerResponse;
 import com.danny.quizworld.exam.answer.AnswerService;
-import com.danny.quizworld.exam.keyword.Keyword;
-import com.danny.quizworld.exam.keyword.KeywordService;
 import com.danny.quizworld.exam.question.*;
 import com.danny.quizworld.course.chapter.Chapter;
 import com.danny.quizworld.course.chapter.ChapterService;
@@ -23,7 +21,6 @@ public class QuizFacade {
     private final QuestionService questionService;
     private final AnswerService answerService;
     private final ChapterService chapterService;
-    private final KeywordService keywordService;
 
     @Transactional
     public Long saveQuestion(Long chapterId, QuizSaveRequest request) {
@@ -33,12 +30,12 @@ public class QuizFacade {
             Answer answer = answerService.toEntity(question, answerRequest);
             answerService.save(answer);
         });
-        if (request.getKeywordRequest() != null) {
-            request.getKeywordRequest().forEach(keywordRequest -> {
-                Keyword keyword = keywordService.toEntity(question, keywordRequest.getName());
-                keywordService.save(keyword);
-            });
-        }
+//        if (request.getKeywordRequest() != null) {
+//            request.getKeywordRequest().forEach(keywordRequest -> {
+//                Keyword keyword = keywordService.toEntity(question, keywordRequest.getName());
+//                keywordService.save(keyword);
+//            });
+//        }
 
         return question.getQuestionId();
     }
@@ -90,7 +87,7 @@ public class QuizFacade {
     @Transactional
     public void updateQuestion(Long questionId, QuizUpdateRequest request) {
         Question question = questionService.findById(questionId);
-        question.updateByUpdateRequest(request.getQuestionRequest());
+//        question.updateByUpdateRequest(request.getQuestionRequest());
         questionService.save(question);
 
         List<Answer> answerList = answerService.findAllByQuestionId(questionId);

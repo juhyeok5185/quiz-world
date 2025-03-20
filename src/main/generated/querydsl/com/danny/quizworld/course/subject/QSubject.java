@@ -30,8 +30,6 @@ public class QSubject extends EntityPathBase<Subject> {
 
     public final NumberPath<Long> downloadId = createNumber("downloadId", Long.class);
 
-    public final BooleanPath downloadYn = createBoolean("downloadYn");
-
     public final NumberPath<Integer> likeCount = createNumber("likeCount", Integer.class);
 
     public final com.danny.quizworld.member.QMember member;
@@ -50,7 +48,8 @@ public class QSubject extends EntityPathBase<Subject> {
 
     public final NumberPath<Long> subjectId = createNumber("subjectId", Long.class);
 
-    public final BooleanPath useYn = createBoolean("useYn");
+    //inherited
+    public final BooleanPath useYn = _super.useYn;
 
     public QSubject(String variable) {
         this(Subject.class, forVariable(variable), INITS);

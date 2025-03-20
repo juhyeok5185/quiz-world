@@ -49,7 +49,8 @@ public class QMember extends EntityPathBase<Member> {
 
     public final BooleanPath subscribeYn = createBoolean("subscribeYn");
 
-    public final BooleanPath useYn = createBoolean("useYn");
+    //inherited
+    public final BooleanPath useYn = _super.useYn;
 
     public QMember(String variable) {
         super(Member.class, forVariable(variable));
