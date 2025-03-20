@@ -4,6 +4,8 @@ import com.danny.quizworld.common.response.ApiResponse;
 import com.danny.quizworld.common.util.Utils;
 import com.danny.quizworld.course.chapter.ChapterResponse;
 import com.danny.quizworld.course.chapter.ChapterRequest;
+import com.danny.quizworld.course.study.StudyRequest;
+import com.danny.quizworld.course.study.StudyResponse;
 import com.danny.quizworld.course.subject.SubjectRequest;
 import com.danny.quizworld.course.subject.SubjectResponse;
 import lombok.RequiredArgsConstructor;
@@ -40,6 +42,22 @@ public class CourseApiController {
     @GetMapping("/{subjectId}/chapters")
     public ResponseEntity<ApiResponse<List<ChapterResponse>>> findAllChapterBySubjectId(@PathVariable Long subjectId) {
         return ResponseEntity.ok(new ApiResponse<>(courseFacade.findAllChapterBySubjectId(subjectId)));
+    }
+
+    @GetMapping("/chapters/{chapterId}/study")
+    public ResponseEntity<ApiResponse<Long>> saveStudy(@PathVariable Long chapterId , @RequestBody StudyRequest request){
+        courseFacade.saveStudy(chapterId,request);
+        return ResponseEntity.status(201).body(new ApiResponse<>("생성 성공",201 , null));
+    }
+
+    @GetMapping("/chapters/{chapterId}/study")
+    public ResponseEntity<ApiResponse<List<StudyResponse>>> findAllStudyByChapterId(@PathVariable Long chapterId){
+        return ResponseEntity.ok(new ApiResponse<>(courseFacade.findAllStudyByChapterId(chapterId)));
+    }
+
+    @GetMapping("/chapters/study/{studyId}")
+    public ResponseEntity<ApiResponse<StudyResponse>> findStudyById(@PathVariable Long studyId){
+        return ResponseEntity.ok(new ApiResponse<>(courseFacade.findStudyById(studyId)));
     }
 
 }

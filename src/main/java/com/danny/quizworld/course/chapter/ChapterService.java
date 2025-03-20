@@ -20,6 +20,16 @@ public class ChapterService {
         return chapterStore.save(chapter);
     }
 
+    @Transactional(readOnly = true)
+    public List<Chapter> findAllBySubjectId(Long subjectId) {
+        return chapterReader.findAllBySubjectId(subjectId);
+    }
+
+    @Transactional
+    public Chapter findById(Long chapterId) {
+        return chapterReader.findById(chapterId);
+    }
+
     public Chapter toEntity(Subject subject , ChapterRequest request) {
         return chapterMapper.toEntity(subject, request);
     }
@@ -28,12 +38,5 @@ public class ChapterService {
         return chapterMapper.toResponse(chapter);
     }
 
-    @Transactional(readOnly = true)
-    public List<Chapter> findAllBySubjectId(Long subjectId) {
-        return chapterReader.findAllBySubjectId(subjectId);
-    }
 
-    public Chapter findById(Long chapterId) {
-        return chapterReader.findById(chapterId);
-    }
 }

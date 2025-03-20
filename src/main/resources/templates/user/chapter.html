@@ -70,7 +70,7 @@
             let html = chapters.length
                 ? chapters.map(item => `
             <div class="bg-white shadow-lg rounded-lg p-6 cursor-pointer hover:bg-gray-100 transition"
-                 onclick="location.href = '/user/question?chapterId=${item.chapterId}'">
+                 onclick="location.href = '/user/study?chapterId=${item.chapterId}'">
                 <h3 class="text-lg font-semibold text-gray-900">${item.name}</h3>
                 <p class="text-sm text-gray-600 mt-1">총 문항: ${item.quizCount}문제</p>
             </div>

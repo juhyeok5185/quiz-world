@@ -1,5 +1,9 @@
 package com.danny.quizworld.course;
 
+import com.danny.quizworld.course.study.Study;
+import com.danny.quizworld.course.study.StudyRequest;
+import com.danny.quizworld.course.study.StudyResponse;
+import com.danny.quizworld.course.study.StudyService;
 import com.danny.quizworld.course.subject.Subject;
 import com.danny.quizworld.course.subject.SubjectRequest;
 import com.danny.quizworld.course.subject.SubjectResponse;
@@ -26,6 +30,7 @@ public class CourseFacade {
     private final SubjectService subjectService;
     private final ChapterService chapterService;
     private final QuestionService questionService;
+    private final StudyService studyService;
 
     @Transactional
     public SubjectResponse saveSubject(Long memberId, SubjectRequest request) {
@@ -65,4 +70,21 @@ public class CourseFacade {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
+    public void saveStudy(Long chapterId, StudyRequest request) {
+        Chapter chapter = chapterService.findById(chapterId);
+        Study study = studyService.toEntity(chapter , request);
+        studyService.save(study);
+    }
+
+    public List<StudyResponse> findAllStudyByChapterId(Long chapterId) {
+        List<Study> studyList = studyService.findAllByChapterId(chapterId);
+        return studyList.stream()
+                .map(studyService::toResponse)
+                .collect(Collectors.toList());
+    }
+
+    public StudyResponse findStudyById(Long studyId) {
+        return studyService.toResponse(studyService.findById(studyId));
+    }
 }

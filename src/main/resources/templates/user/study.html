@@ -99,16 +99,15 @@
             <h2 class="text-xl font-bold mb-4">문제 수정</h2>
             <form id="updateForm">
                 <input type="hidden" id="questionId" name="questionId">
-                <select name="questionRequest.type" class="w-full border p-2 rounded mb-4">
-                    <option value="SHORT">단답형(영어단어에 적합)</option>
+                <select name="type" class="w-full border p-2 rounded mb-4">
+                    <option value="WORD">단답형(영어단어에 적합)</option>
                 </select>
-                <input type="text" id="questionText" name="questionRequest.questionText" placeholder="문제 입력"
+                <input type="text" id="questionText" name="questionText" placeholder="문제 입력"
                        class="w-full border p-2 rounded mb-4">
-                <input type="text" id="answerText" name="answerRequest[0].answerText" placeholder="정답 입력"
+                <input type="text" id="answerText" name="answerText" placeholder="정답 입력"
                        class="w-full border p-2 rounded mb-4">
-                <input type="text" id="description" name="questionRequest.description" placeholder="설명 입력"
+                <input type="text" id="description" name="description" placeholder="설명 입력"
                        class="w-full border p-2 rounded mb-4">
-                <input type="hidden" name="answerRequest[0].answerYn" value="true">
                 <div class="flex justify-end">
                     <div onclick="find('#modal-update').classList.add('hidden')"
                          class="bg-gray-300 text-gray-700 px-4 py-2 rounded-md mr-2 cursor-pointer">
@@ -192,8 +191,14 @@
 
         function drawList() {
             let html = ``;
-            questions.forEach((questionData, index) => {
+            if( questions.length === 0 ) {
                 html += `
+                        <div class="text-center text-gray-500 py-10">
+                            등록된 과목이 없습니다.<br>과목을 추가해 주세요!
+                        </div>`;
+            } else {
+                questions.forEach((questionData, index) => {
+                    html += `
                      <div class="bg-white shadow-lg rounded-lg p-4 cursor-pointer flex flex-col user-select-none"
                           data-index="${index}"
                           onmousedown="startLongPress(event, ${index})"
@@ -211,7 +216,9 @@
                        </div>
                      </div>
                    `;
-            });
+                });
+            }
+
             find('.listArea').innerHTML = html;
         }
 
