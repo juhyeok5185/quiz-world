@@ -47,4 +47,11 @@ public class Study extends BaseTimeEntity {
         this.answerText = answerText;
         this.description = description;
     }
+
+    public void update(StudyRequest request) {
+        this.questionText = request.getQuestionText();
+        this.answerText = request.getAnswerText();
+        this.description = request.getDescription();
+        this.type = request.getType();
+    }
 }

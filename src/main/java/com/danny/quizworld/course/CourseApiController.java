@@ -60,4 +60,10 @@ public class CourseApiController {
         return ResponseEntity.ok(new ApiResponse<>(courseFacade.findStudyById(studyId)));
     }
 
+    @PatchMapping("/chapters/study/{studyId}")
+    public ResponseEntity<ApiResponse<?>> updateStudy(@PathVariable Long studyId , @ModelAttribute StudyRequest request){
+        courseFacade.updateStudy(studyId , request);
+        return ResponseEntity.ok(new ApiResponse<>("변경 성공", 201, null));
+    }
+
 }

@@ -97,7 +97,7 @@
         <div class="bg-white p-6 rounded-lg shadow-lg w-96">
             <h2 class="text-xl font-bold mb-4">문제 수정</h2>
             <form id="updateForm">
-                <input type="hidden" id="questionId" name="questionId">
+                <input type="hidden" id="studyId" name="studyId">
                 <select name="type" class="w-full border p-2 rounded mb-4">
                     <option value="WORD">단답형(영어단어에 적합)</option>
                 </select>
@@ -169,9 +169,9 @@
         }
 
         async function updateQuestion() {
-            const questionId = find('#questionId').value;
+            const studyId = find('#studyId').value;
             const formData = new FormData(find('#updateForm'));
-            await fetchPatchByFormData(`/api/quizzes/questions/${questionId}`, formData);
+            await fetchPatchByFormData(`/api/courses/subjects/chapters/study/${studyId}`, formData);
             location.reload();
         }
 
@@ -180,12 +180,12 @@
             location.reload();
         }
 
-        async function updateMode(questionId) {
-            const response = await fetchGet(`/api/quizzes/questions/${questionId}`);
-            find('#questionId').value = response.question.questionId;
-            find('#questionText').value = response.question.questionText;
-            find('#answerText').value = response.answer[0].answerText;
-            find('#description').value = response.question.description;
+        async function updateMode(studyId) {
+            const response = await fetchGet(`/api/courses/subjects/chapters/study/${studyId}`);
+            find('#studyId').value = response.studyId;
+            find('#questionText').value = response.questionText;
+            find('#answerText').value = response.answerText;
+            find('#description').value = response.description;
             find('#modal-update').classList.remove('hidden');
         }
 

@@ -86,7 +86,15 @@ public class CourseFacade {
                 .collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
     public StudyResponse findStudyById(Long studyId) {
         return studyService.toResponse(studyService.findById(studyId));
+    }
+
+    @Transactional
+    public void updateStudy(Long studyId, StudyRequest request) {
+        Study study = studyService.findById(studyId);
+        study.update(request);
+        studyService.save(study);
     }
 }
