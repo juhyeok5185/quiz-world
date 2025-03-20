@@ -68,16 +68,15 @@
         <div class="bg-white p-6 rounded-lg shadow-lg w-96">
             <h2 class="text-xl font-bold mb-4">새 문제 추가</h2>
             <form id="saveForm">
-                <select name="questionRequest.type" class="w-full border p-2 rounded mb-4">
-                    <option value="SHORT">단답형(영어단어에 적합)</option>
+                <select name="type" class="w-full border p-2 rounded mb-4">
+                    <option value="WORD">단답형</option>
                 </select>
-                <input type="text" name="questionRequest.questionText" placeholder="문제 입력"
+                <input type="text" name="questionText" placeholder="문제 입력"
                        class="w-full border p-2 rounded mb-4">
-                <input type="text" name="answerRequest[0].answerText" placeholder="정답 입력"
+                <input type="text" name="answerText" placeholder="정답 입력"
                        class="w-full border p-2 rounded mb-4">
-                <input type="text" name="questionRequest.description" placeholder="설명 입력"
+                <input type="text" name="description" placeholder="설명 입력"
                        class="w-full border p-2 rounded mb-4">
-                <input type="hidden" name="answerRequest[0].answerYn" value="true">
                 <div class="flex justify-end">
                     <div onclick="find('#modal-save').classList.add('hidden')"
                          class="bg-gray-300 text-gray-700 px-4 py-2 rounded-md mr-2 cursor-pointer">
@@ -142,7 +141,7 @@
 
 <th:block layout:fragment="script">
     <script th:inline="javascript">
-        let questions = [];
+        let study = [];
         let flashInterval = null;
         let longPressTimers = {}; // 타이머 저장 객체
         let currentToggleMode = 'all'; // ✅ 현재 토글 상태 저장
@@ -155,16 +154,17 @@
         async function saveQuestion() {
             const chapterId = getParamValue('chapterId');
             const formData = new FormData(find('#saveForm'));
-            await fetchPostByFormData(`/api/quizzes/chapters/${chapterId}`, formData);
+            logFormData(formData)
+            await fetchPostByFormData(`/api/courses/subjects/chapters/${chapterId}/study`, formData);
             location.reload();
         }
 
 
         async function findAllByChapterId() {
             const chapterId = getParamValue('chapterId');
-            const url = `/api/quizzes/chapters/${chapterId}`;
-            questions = await fetchGet(url);
-            changeLogoText(`${questions[0].question.chapter.subject.name} - ${questions[0].question.chapter.name}`)
+            const url = `/api/courses/subjects/chapters/${chapterId}/study`;
+            study = await fetchGet(url);
+            changeLogoText(`${study[0].chapter.subject.name} - ${study[0].chapter.name}`)
             drawList();
         }
 
@@ -191,13 +191,13 @@
 
         function drawList() {
             let html = ``;
-            if( questions.length === 0 ) {
+            if( study.length === 0 ) {
                 html += `
                         <div class="text-center text-gray-500 py-10">
                             등록된 과목이 없습니다.<br>과목을 추가해 주세요!
                         </div>`;
             } else {
-                questions.forEach((questionData, index) => {
+                study.forEach((questionData, index) => {
                     html += `
                      <div class="bg-white shadow-lg rounded-lg p-4 cursor-pointer flex flex-col user-select-none"
                           data-index="${index}"
@@ -208,11 +208,11 @@
                           ontouchend="endLongPress(event, ${index})"
                           ontouchcancel="cancelLongPress(event, ${index})">
                        <div class="flex justify-between items-center">
-                         <span class="questionText font-semibold text-gray-900 text-left flex-1">${questionData.question.questionText}</span>
-                         <span class="answerText font-semibold text-gray-900 text-right flex-1">${questionData.answer[0].answerText}</span>
+                         <span class="questionText font-semibold text-gray-900 text-left flex-1">${questionData.questionText}</span>
+                         <span class="answerText font-semibold text-gray-900 text-right flex-1">${questionData.answerText}</span>
                        </div>
                        <div id="hint-${index}" class="descriptionText mt-2 text-sm text-gray-600 hidden">
-                         ${questionData.question.description || "설명 없음"}
+                         ${questionData.description || "설명 없음"}
                        </div>
                      </div>
                    `;
@@ -225,7 +225,7 @@
         function startLongPress(event, index) {
             event.preventDefault();
             longPressTimers[index] = setTimeout(() => {
-                updateMode(questions[index].question.questionId);  // questionId 넘김
+                updateMode(study[index].studyId);  // questionId 넘김
                 delete longPressTimers[index];
             }, 1000); // 1초 동안 눌렀을 때 실행
         }
@@ -253,18 +253,18 @@
         }
 
         function shuffleQuestions() {
-            if (questions.length < 2) return; // 요소가 1개 이하라면 섞을 필요 없음
+            if (study.length < 2) return; // 요소가 1개 이하라면 섞을 필요 없음
 
             let shuffled;
             let attempt = 0;
             const maxAttempts = 10; // 동일한 배열 방지를 위한 최대 시도 횟수
 
             do {
-                shuffled = [...questions].sort(() => Math.random() - 0.5);
+                shuffled = [...study].sort(() => Math.random() - 0.5);
                 attempt++;
-            } while (JSON.stringify(shuffled) === JSON.stringify(questions) && attempt < maxAttempts);
+            } while (JSON.stringify(shuffled) === JSON.stringify(study) && attempt < maxAttempts);
 
-            questions = shuffled;
+            study = shuffled;
             drawList();
             setToggle(currentToggleMode);
         }
@@ -333,7 +333,7 @@
         }
 
         function startFocusMode() {
-            if (questions.length === 0) return;
+            if (study.length === 0) return;
 
             currentIndex = 0;
             isFocusMode = true;
@@ -357,14 +357,14 @@
                     specialModeAnswer.style.display = 'block';
                 } else {
                     // 다음 문제로 이동
-                    currentIndex = (currentIndex + 1) % questions.length;
+                    currentIndex = (currentIndex + 1) % study.length;
                     updateSpecialModeContent();
                 }
             };
         }
 
         function startFlashMode() {
-            if (questions.length === 0) return;
+            if (study.length === 0) return;
 
             currentIndex = 0;
             isFocusMode = false;
@@ -387,7 +387,7 @@
             // 5초마다 다음 내용으로 넘어가기
             clearInterval(flashInterval);
             flashInterval = setInterval(() => {
-                currentIndex = (currentIndex + 1) % questions.length;
+                currentIndex = (currentIndex + 1) % study.length;
                 updateSpecialModeContent();
             }, 3000);
         }
@@ -403,21 +403,17 @@
         }
 
         function updateSpecialModeContent() {
-            if (questions.length === 0) return;
+            if (study.length === 0) return;
 
-            const currentQuestion = questions[currentIndex];
+            const currentQuestion = study[currentIndex];
             const specialModeQuestion = document.getElementById('specialModeQuestion');
             const specialModeAnswer = document.getElementById('specialModeAnswer');
 
             // 질문 설정
-            specialModeQuestion.textContent = currentQuestion.question.questionText;
+            specialModeQuestion.textContent = currentQuestion.questionText;
 
             // 답변 설정 (첫 번째 답변 사용)
-            let answerText = "";
-            if (currentQuestion.answer && currentQuestion.answer.length > 0) {
-                answerText = currentQuestion.answer[0].answerText;
-            }
-            specialModeAnswer.textContent = answerText;
+            specialModeAnswer.textContent = currentQuestion.answerText;
 
             // 깜빡이모드에서는 항상 답변 표시, 집중모드에서는 초기에 숨김
             if (isFlashMode) {

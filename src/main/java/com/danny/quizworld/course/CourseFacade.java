@@ -73,10 +73,12 @@ public class CourseFacade {
     @Transactional
     public void saveStudy(Long chapterId, StudyRequest request) {
         Chapter chapter = chapterService.findById(chapterId);
-        Study study = studyService.toEntity(chapter , request);
+        Subject subject = chapter.getSubject();
+        Study study = studyService.toEntity(chapter, request);
         studyService.save(study);
     }
 
+    @Transactional(readOnly = true)
     public List<StudyResponse> findAllStudyByChapterId(Long chapterId) {
         List<Study> studyList = studyService.findAllByChapterId(chapterId);
         return studyList.stream()

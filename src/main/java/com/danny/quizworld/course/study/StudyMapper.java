@@ -2,6 +2,7 @@ package com.danny.quizworld.course.study;
 
 import com.danny.quizworld.course.chapter.Chapter;
 import com.danny.quizworld.course.chapter.ChapterService;
+import com.danny.quizworld.course.subject.Subject;
 import com.danny.quizworld.course.subject.SubjectService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -13,9 +14,10 @@ public class StudyMapper {
     private final ChapterService chapterService;
     private final SubjectService subjectService;
 
-    public Study toEntity(Chapter chapter, StudyRequest request){
+    public Study toEntity(Chapter chapter,  StudyRequest request){
         return Study.builder()
                 .chapter(chapter)
+                .subject(chapter.getSubject())
                 .type(request.getType())
                 .questionText(request.getQuestionText())
                 .answerText(request.getAnswerText())

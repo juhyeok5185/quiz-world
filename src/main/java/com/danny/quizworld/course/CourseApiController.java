@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/courses/subjects")
 @RequiredArgsConstructor
+@RequestMapping("/api/courses/subjects")
 public class CourseApiController {
 
     private final CourseFacade courseFacade;
@@ -44,19 +44,19 @@ public class CourseApiController {
         return ResponseEntity.ok(new ApiResponse<>(courseFacade.findAllChapterBySubjectId(subjectId)));
     }
 
-    @GetMapping("/chapters/{chapterId}/study")
-    public ResponseEntity<ApiResponse<Long>> saveStudy(@PathVariable Long chapterId , @RequestBody StudyRequest request){
-        courseFacade.saveStudy(chapterId,request);
-        return ResponseEntity.status(201).body(new ApiResponse<>("생성 성공",201 , null));
+    @PostMapping("/chapters/{chapterId}/study")
+    public ResponseEntity<ApiResponse<Long>> saveStudy(@PathVariable Long chapterId, @ModelAttribute StudyRequest request) {
+        courseFacade.saveStudy(chapterId, request);
+        return ResponseEntity.status(201).body(new ApiResponse<>("생성 성공", 201, null));
     }
 
     @GetMapping("/chapters/{chapterId}/study")
-    public ResponseEntity<ApiResponse<List<StudyResponse>>> findAllStudyByChapterId(@PathVariable Long chapterId){
+    public ResponseEntity<ApiResponse<List<StudyResponse>>> findAllStudyByChapterId(@PathVariable Long chapterId) {
         return ResponseEntity.ok(new ApiResponse<>(courseFacade.findAllStudyByChapterId(chapterId)));
     }
 
     @GetMapping("/chapters/study/{studyId}")
-    public ResponseEntity<ApiResponse<StudyResponse>> findStudyById(@PathVariable Long studyId){
+    public ResponseEntity<ApiResponse<StudyResponse>> findStudyById(@PathVariable Long studyId) {
         return ResponseEntity.ok(new ApiResponse<>(courseFacade.findStudyById(studyId)));
     }
 

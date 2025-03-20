@@ -1,6 +1,7 @@
 package com.danny.quizworld.course.study;
 
 import com.danny.quizworld.course.chapter.Chapter;
+import com.danny.quizworld.course.subject.Subject;
 import com.danny.quizworld.course.subject.SubjectRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -31,7 +32,7 @@ public class StudyService {
         return studyReader.findById(studyId);
     }
 
-    public Study toEntity(Chapter chapter, StudyRequest request) {
+    public Study toEntity(Chapter chapter , StudyRequest request) {
         return studyMapper.toEntity(chapter , request);
     }
 
