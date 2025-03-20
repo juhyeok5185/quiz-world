@@ -14,6 +14,11 @@
     <div id="menuButton" class="text-2xl cursor-pointer">≡</div> <!-- 햄버거 메뉴 (작대기 3개) -->
 </header>
 
+<div id="adBanner" class="w-full bg-yellow-200 text-gray-800 text-center py-3">
+    <span class="font-semibold">🔥 지금 가입하면 30% 할인! 🔥</span>
+</div>
+
+
 <!-- 전체 화면 팝업 -->
 <!-- 전체 화면 팝업 -->
 <div id="fullScreenPopup" class="fixed inset-0 bg-white hidden flex flex-col z-50">
@@ -67,7 +72,26 @@
 <script src="/static/common/js/fetchUtils.js" type="application/javascript"></script>
 <script src="/static/common/js/common.js" type="application/javascript"></script>
 <script>
+    let memberInfo = [];
+
     window.onload = function () {
+        findMember()
+        hideBackButton();
+    }
+
+    async function findMember(){
+        const url = `/api/members`;
+        memberInfo = await fetchGet(url);
+        checkSubscribe();
+    }
+
+    function checkSubscribe(){
+        if(memberInfo.subscribeYn){
+            find('#adBanner').classList.add("hidden");
+        }
+    }
+
+    function hideBackButton(){
         const url = window.location.pathname;
         if (url === "/user/main") {
             document.querySelector("#backButton").classList.add("hidden"); // 뒤로가기 버튼 숨김

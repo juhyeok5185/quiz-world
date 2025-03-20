@@ -19,17 +19,8 @@ public class Member extends BaseTimeEntity {
     @Column(name = "role")
     private MemberRole role; // 0: USER, 1: ADMIN
 
-    @Column(name = "login_id")
-    private String loginId;
-
-    @Column(name = "password")
-    private String password;
-
     @Column(name = "name")
     private String name;
-
-    @Column(name = "phone")
-    private String phone;
 
     @Column(name = "email")
     private String email;
@@ -47,12 +38,9 @@ public class Member extends BaseTimeEntity {
     private Boolean businessYn;
 
     @Builder
-    public Member(MemberRole role, String loginId, String password, String name, String phone, String email, String deviceToken, Integer likeCount, Boolean subscribeYn, Boolean businessYn) {
+    public Member(MemberRole role,  String name, String email, String deviceToken, Integer likeCount, Boolean subscribeYn, Boolean businessYn) {
         this.role = role;
-        this.loginId = loginId;
-        this.password = password;
         this.name = name;
-        this.phone = phone;
         this.email = email;
         this.deviceToken = deviceToken;
         this.likeCount = likeCount;

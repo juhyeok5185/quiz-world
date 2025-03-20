@@ -16,14 +16,19 @@ public class MemberMapper {
                 .email(AES256Utils.encrypt(email))
                 .role(MemberRole.USER)
                 .deviceToken(null)
+                .likeCount(0)
+                .subscribeYn(false)
+                .businessYn(false)
                 .build();
     }
 
     public MemberResponse toResponse(Member member) {
         return MemberResponse.builder()
-                .memberId(member.getMemberId())
                 .email(AES256Utils.decrypt(member.getEmail()))
                 .name(AES256Utils.decrypt(member.getName()))
+                .likeCount(member.getLikeCount())
+                .subscribeYn(member.getSubscribeYn())
+                .businessYn(member.getBusinessYn())
                 .build();
     }
 }

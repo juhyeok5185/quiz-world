@@ -8,9 +8,9 @@ import lombok.Setter;
 @Setter
 @Builder
 public class MemberResponse {
-    private Long memberId; // 회원 일련번호
-    private String loginId; // 회원 로그인 아이디
-    private String name; // 회원 이름
-    private String phone; // 회원 전화번호
-    private String email; // 회원 이메일
+    private String name;
+    private String email;
+    private Integer likeCount;
+    private Boolean subscribeYn;
+    private Boolean businessYn;
 }

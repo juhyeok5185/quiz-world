@@ -29,18 +29,12 @@ public class QMember extends EntityPathBase<Member> {
 
     public final NumberPath<Integer> likeCount = createNumber("likeCount", Integer.class);
 
-    public final StringPath loginId = createString("loginId");
-
     public final NumberPath<Long> memberId = createNumber("memberId", Long.class);
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> modDtm = _super.modDtm;
 
     public final StringPath name = createString("name");
-
-    public final StringPath password = createString("password");
-
-    public final StringPath phone = createString("phone");
 
     public final EnumPath<MemberRole> role = createEnum("role", MemberRole.class);
 
