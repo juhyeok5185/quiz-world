@@ -6,7 +6,7 @@ import com.danny.quizworld.course.subject.SubjectResponse;
 import com.danny.quizworld.course.subject.SubjectService;
 import com.danny.quizworld.member.Member;
 import com.danny.quizworld.member.MemberService;
-import com.danny.quizworld.quiz.question.QuestionService;
+import com.danny.quizworld.exam.question.QuestionService;
 import com.danny.quizworld.course.chapter.Chapter;
 import com.danny.quizworld.course.chapter.ChapterResponse;
 import com.danny.quizworld.course.chapter.ChapterRequest;

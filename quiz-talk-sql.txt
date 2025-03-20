@@ -1,0 +1,126 @@
+create schema quiz-talk;
+
+CREATE TABLE `t_member` (
+    `member_id` BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '회원 일련번호',
+    `role` TINYINT(1) NOT NULL COMMENT '역할 (0: USER , 1: ADMIN)',
+    `login_id` VARCHAR(255) NOT NULL COMMENT '아이디',
+    `password` VARCHAR(255) NOT NULL COMMENT '비밀번호',
+    `phone` VARCHAR(30) NOT NULL COMMENT '휴대전화',
+    `email` VARCHAR(255) NOT NULL COMMENT '이메일',
+    `device_token` VARCHAR(100) NULL COMMENT '디바이스 토큰',
+    `like_count` INTEGER NOT NULL DEFAULT 0 COMMENT '좋아요',
+    `subscribe_yn` TINYINT(1) NOT NULL DEFAULT 0 COMMENT '구독여부',
+    `business_yn` TINYINT(1) NOT NULL DEFAULT 0 COMMENT '사업자 여부',
+    `use_yn` TINYINT(1) NOT NULL DEFAULT 1 COMMENT '사용여부',
+    `save_dtm` DATETIME NOT NULL DEFAULT now() COMMENT '저장시간',
+    `mod_dtm` DATETIME NOT NULL DEFAULT now() COMMENT '수정 시간'
+);
+
+CREATE TABLE `t_subject` (
+    `subject_id` BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '과목 일련번호',
+    `member_id` BIGINT NOT NULL COMMENT '회원 일련번호',
+    `name` VARCHAR(255) NOT NULL COMMENT '과목명',
+    `description` VARCHAR(1000) NULL COMMENT '설명',
+    `like_count` INTEGER NOT NULL DEFAULT 0 COMMENT '좋아요 수',
+    `download_count` INTEGER NOT NULL DEFAULT 0 COMMENT '다운로드 수',
+    `download_yn` TINYINT(1) NOT NULL COMMENT '다운로드 여부',
+    `download_id` BIGINT NULL COMMENT '다운로드 과목 일련번호',
+    `public_yn` TINYINT(1) NOT NULL COMMENT '공개 여부',
+    `price` BIGINT NOT NULL DEFAULT 0 COMMENT '가격',
+    `use_yn` TINYINT(1) NOT NULL DEFAULT 1 COMMENT '사용 여부',
+    `save_dtm` DATETIME NOT NULL DEFAULT now() COMMENT '저장 시간',
+    `mod_dtm` DATETIME NOT NULL DEFAULT now() COMMENT '수정 시간',
+    FOREIGN KEY (`member_id`) REFERENCES `t_member` (`member_id`)
+);
+
+CREATE TABLE `t_chapter` (
+    `chapter_id` BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '챕터 일련번호',
+    `subject_id` BIGINT NOT NULL COMMENT '과목 일련번호',
+    `name` VARCHAR(255) NOT NULL COMMENT '챕터명',
+    `use_yn` TINYINT(1) NOT NULL DEFAULT 1 COMMENT '사용 여부',
+    `save_dtm` DATETIME NOT NULL DEFAULT now() COMMENT '저장 시간',
+    `mod_dtm` DATETIME NOT NULL DEFAULT now() COMMENT '수정 시간',
+    FOREIGN KEY (`subject_id`) REFERENCES `t_subject` (`subject_id`)
+);
+
+CREATE TABLE `t_study` (
+    `study_id` BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '공부 일련번호',
+    `chapter_id` BIGINT NOT NULL COMMENT '챕터 일련번호',
+    `subject_id` BIGINT NOT NULL COMMENT '과목 일련번호',
+    `type` TINYINT(1) NOT NULL COMMENT '1:단어(10자 이하), 2:서술형(10자 이상)',
+    `question_text` TEXT NOT NULL COMMENT '텍스트 질문',
+    `answer_text` TEXT NOT NULL COMMENT '텍스트 답',
+    `description` VARCHAR(1000) NOT NULL COMMENT '설명',
+    `use_yn` TINYINT(1) NOT NULL DEFAULT 1 COMMENT '사용 여부',
+    `save_dtm` DATETIME NOT NULL DEFAULT now() COMMENT '저장 시간',
+    `mod_dtm` DATETIME NOT NULL DEFAULT now() COMMENT '수정 시간',
+    FOREIGN KEY (`chapter_id`) REFERENCES `t_chapter` (`chapter_id`),
+    FOREIGN KEY (`subject_id`) REFERENCES `t_subject` (`subject_id`)
+);
+
+CREATE TABLE `t_exam_question` (
+    `question_id` BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '문제 일련번호',
+    `chapter_id` BIGINT NOT NULL COMMENT '챕터 일련번호',
+    `subject_id` BIGINT NOT NULL COMMENT '과목 일련번호',
+    `question_text` TEXT NOT NULL COMMENT '문제 내용',
+    `description` TEXT NOT NULL COMMENT '문제 해석',
+    `use_yn` TINYINT(1) NOT NULL DEFAULT 1 COMMENT '사용여부',
+    `save_dtm` DATETIME NOT NULL DEFAULT now() COMMENT '저장 시간',
+    `mod_dtm` DATETIME NOT NULL DEFAULT now() COMMENT '수정 시간',
+    FOREIGN KEY (`chapter_id`) REFERENCES `t_chapter` (`chapter_id`),
+    FOREIGN KEY (`subject_id`) REFERENCES `t_subject` (`subject_id`)
+);
+
+CREATE TABLE `t_exam_answer` (
+    `answer_id` BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '답 일련번호',
+    `question_id` BIGINT NOT NULL COMMENT '문제 일련번호',
+    `answer_text` VARCHAR(1000) NOT NULL COMMENT '답 내용',
+    `answer_yn` TINYINT(1) NOT NULL COMMENT '정답 여부',
+    `use_yn` TINYINT(1) NOT NULL DEFAULT 1 COMMENT '사용여부',
+    `save_dtm` DATETIME NOT NULL DEFAULT now() COMMENT '저장 시간',
+    `mod_dtm` DATETIME NOT NULL DEFAULT now() COMMENT '수정 시간',
+    FOREIGN KEY (`question_id`) REFERENCES `t_exam_question` (`question_id`)
+);
+
+CREATE TABLE `t_member_answer` (
+    `member_answer_id` BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '사용자가 선택한 답 일련번호',
+    `member_id` BIGINT NOT NULL COMMENT '회원 일련번호',
+    `answer_id` BIGINT NOT NULL COMMENT '답 일련번호',
+    FOREIGN KEY (`member_id`) REFERENCES `t_member` (`member_id`),
+    FOREIGN KEY (`answer_id`) REFERENCES `t_exam_answer` (`answer_id`)
+);
+
+CREATE TABLE `t_member_subscribe` (
+    `member_subscribe_id` BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '구독 일련번호',
+    `member_id` BIGINT NOT NULL COMMENT '회원 일련번호',
+    `price` INTEGER NOT NULL COMMENT '결제 금액',
+    `pay_time` DATETIME NOT NULL COMMENT '결제 시간',
+    `subscribe_start_time` DATETIME NOT NULL COMMENT '구독 시작 시간',
+    `subscribe_end_time` DATETIME NOT NULL COMMENT '구독 끝나는 시간',
+    `use_yn` TINYINT(1) NOT NULL DEFAULT 1 COMMENT '사용여부',
+    `save_dtm` DATETIME NOT NULL DEFAULT now() COMMENT '저장시간',
+    `mod_dtm` DATETIME NOT NULL DEFAULT now() COMMENT '수정 시간',
+    FOREIGN KEY (`member_id`) REFERENCES `t_member` (`member_id`)
+);
+
+CREATE TABLE `t_member_business` (
+    `member_business_id` BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '회원 입금 정보 일련번호',
+    `member_id` BIGINT NOT NULL COMMENT '회원 일련번호',
+    `business_image` VARCHAR(300) NULL COMMENT '사업자등록증 사본',
+    `bankbook_image` VARCHAR(300) NULL COMMENT '통장 사본',
+    `use_yn` TINYINT(1) NOT NULL DEFAULT 1 COMMENT '사용 여부',
+    `save_dtm` DATETIME NOT NULL DEFAULT now() COMMENT '저장 시간',
+    `mod_dtm` DATETIME NOT NULL DEFAULT now() COMMENT '수정 시간',
+    FOREIGN KEY (`member_id`) REFERENCES `t_member` (`member_id`)
+);
+
+CREATE TABLE `t_subject_member` (
+    `subject_member_id` BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '구독 목록 일련번호',
+    `member_id` BIGINT NOT NULL COMMENT '회원 일련번호',
+    `subject_id` BIGINT NOT NULL COMMENT '과목 일련번호',
+    `use_yn` TINYINT(1) NOT NULL DEFAULT 1 COMMENT '사용여부',
+    `save_dtm` DATETIME NOT NULL DEFAULT now() COMMENT '저장 시간',
+    `mod_dtm` DATETIME NOT NULL DEFAULT now() COMMENT '수정 시간',
+    FOREIGN KEY (`member_id`) REFERENCES `t_member` (`member_id`),
+    FOREIGN KEY (`subject_id`) REFERENCES `t_subject` (`subject_id`)
+);

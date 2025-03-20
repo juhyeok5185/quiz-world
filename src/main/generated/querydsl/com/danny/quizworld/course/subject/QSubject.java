@@ -26,6 +26,14 @@ public class QSubject extends EntityPathBase<Subject> {
 
     public final StringPath description = createString("description");
 
+    public final NumberPath<Integer> downloadCount = createNumber("downloadCount", Integer.class);
+
+    public final NumberPath<Long> downloadId = createNumber("downloadId", Long.class);
+
+    public final BooleanPath downloadYn = createBoolean("downloadYn");
+
+    public final NumberPath<Integer> likeCount = createNumber("likeCount", Integer.class);
+
     public final com.danny.quizworld.member.QMember member;
 
     //inherited
@@ -33,13 +41,16 @@ public class QSubject extends EntityPathBase<Subject> {
 
     public final StringPath name = createString("name");
 
+    public final NumberPath<Long> price = createNumber("price", Long.class);
+
+    public final BooleanPath publicYn = createBoolean("publicYn");
+
     //inherited
     public final DateTimePath<java.time.LocalDateTime> saveDtm = _super.saveDtm;
 
     public final NumberPath<Long> subjectId = createNumber("subjectId", Long.class);
 
-    //inherited
-    public final BooleanPath useYn = _super.useYn;
+    public final BooleanPath useYn = createBoolean("useYn");
 
     public QSubject(String variable) {
         this(Subject.class, forVariable(variable), INITS);

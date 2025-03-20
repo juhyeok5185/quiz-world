@@ -21,9 +21,15 @@ public class QMember extends EntityPathBase<Member> {
 
     public final com.danny.quizworld.common.entity.QBaseTimeEntity _super = new com.danny.quizworld.common.entity.QBaseTimeEntity(this);
 
+    public final BooleanPath businessYn = createBoolean("businessYn");
+
     public final StringPath deviceToken = createString("deviceToken");
 
     public final StringPath email = createString("email");
+
+    public final NumberPath<Integer> likeCount = createNumber("likeCount", Integer.class);
+
+    public final StringPath loginId = createString("loginId");
 
     public final NumberPath<Long> memberId = createNumber("memberId", Long.class);
 
@@ -32,13 +38,18 @@ public class QMember extends EntityPathBase<Member> {
 
     public final StringPath name = createString("name");
 
+    public final StringPath password = createString("password");
+
+    public final StringPath phone = createString("phone");
+
     public final EnumPath<MemberRole> role = createEnum("role", MemberRole.class);
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> saveDtm = _super.saveDtm;
 
-    //inherited
-    public final BooleanPath useYn = _super.useYn;
+    public final BooleanPath subscribeYn = createBoolean("subscribeYn");
+
+    public final BooleanPath useYn = createBoolean("useYn");
 
     public QMember(String variable) {
         super(Member.class, forVariable(variable));

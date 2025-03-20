@@ -1,4 +1,4 @@
-package com.danny.quizworld.course.chapter;
+package com.danny.quizworld.exam.passage;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
@@ -11,51 +11,55 @@ import com.querydsl.core.types.dsl.PathInits;
 
 
 /**
- * QChapter is a Querydsl query type for Chapter
+ * QPassage is a Querydsl query type for Passage
  */
 @Generated("com.querydsl.codegen.DefaultEntitySerializer")
-public class QChapter extends EntityPathBase<Chapter> {
+public class QPassage extends EntityPathBase<Passage> {
 
-    private static final long serialVersionUID = -506900983L;
+    private static final long serialVersionUID = 628033295L;
 
     private static final PathInits INITS = PathInits.DIRECT2;
 
-    public static final QChapter chapter = new QChapter("chapter");
+    public static final QPassage passage = new QPassage("passage");
 
     public final com.danny.quizworld.common.entity.QBaseTimeEntity _super = new com.danny.quizworld.common.entity.QBaseTimeEntity(this);
 
-    public final NumberPath<Long> chapterId = createNumber("chapterId", Long.class);
+    public final com.danny.quizworld.course.chapter.QChapter chapter;
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> modDtm = _super.modDtm;
 
-    public final StringPath name = createString("name");
+    public final NumberPath<Long> passageId = createNumber("passageId", Long.class);
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> saveDtm = _super.saveDtm;
 
     public final com.danny.quizworld.course.subject.QSubject subject;
 
-    public final BooleanPath useYn = createBoolean("useYn");
+    public final StringPath text = createString("text");
 
-    public QChapter(String variable) {
-        this(Chapter.class, forVariable(variable), INITS);
+    //inherited
+    public final BooleanPath useYn = _super.useYn;
+
+    public QPassage(String variable) {
+        this(Passage.class, forVariable(variable), INITS);
     }
 
-    public QChapter(Path<? extends Chapter> path) {
+    public QPassage(Path<? extends Passage> path) {
         this(path.getType(), path.getMetadata(), PathInits.getFor(path.getMetadata(), INITS));
     }
 
-    public QChapter(PathMetadata metadata) {
+    public QPassage(PathMetadata metadata) {
         this(metadata, PathInits.getFor(metadata, INITS));
     }
 
-    public QChapter(PathMetadata metadata, PathInits inits) {
-        this(Chapter.class, metadata, inits);
+    public QPassage(PathMetadata metadata, PathInits inits) {
+        this(Passage.class, metadata, inits);
     }
 
-    public QChapter(Class<? extends Chapter> type, PathMetadata metadata, PathInits inits) {
+    public QPassage(Class<? extends Passage> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
+        this.chapter = inits.isInitialized("chapter") ? new com.danny.quizworld.course.chapter.QChapter(forProperty("chapter"), inits.get("chapter")) : null;
         this.subject = inits.isInitialized("subject") ? new com.danny.quizworld.course.subject.QSubject(forProperty("subject"), inits.get("subject")) : null;
     }
 
