@@ -39,6 +39,8 @@
 
 <th:block layout:fragment="script">
     <script th:inline="javascript">
+        let chapters = [];
+
         window.onload = () => {
             findAllBySubjectId();
         }
@@ -51,24 +53,22 @@
                 return;
             }
             const json = { name };
-            const url = `/api/subjects/${subjectId}/chapters`;
+            const url = `/api/courses/subjects/${subjectId}/chapters`;
             await fetchPostByJson(url, json);
-            find('#modal-div').classList.add('hidden'); // 모달 닫기
-            find('#name').value = ""; // 입력 필드 초기화
-            findAllBySubjectId(); // 저장 후 리스트 새로고침
+            location.reload();
         }
 
         async function findAllBySubjectId() {
             const subjectId = getParamValue('subjectId');
-            const url = `/api/subjects/${subjectId}/chapters`;
-            const response = await fetchGet(url);
-            drawList(response);
-            changeLogoText(`${response[0]?.subject?.name || "과목 이름 없음"}`);
+            const url = `/api/courses/subjects/${subjectId}/chapters`;
+            chapters = await fetchGet(url);
+            drawList();
+            changeLogoText(`${chapters[0]?.subject?.name || "과목 이름 없음"}`);
         }
 
-        function drawList(response) {
-            let html = response.length
-                ? response.map(item => `
+        function drawList() {
+            let html = chapters.length
+                ? chapters.map(item => `
             <div class="bg-white shadow-lg rounded-lg p-6 cursor-pointer hover:bg-gray-100 transition"
                  onclick="location.href = '/user/question?chapterId=${item.chapterId}'">
                 <h3 class="text-lg font-semibold text-gray-900">${item.name}</h3>

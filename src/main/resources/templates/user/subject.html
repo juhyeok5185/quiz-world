@@ -40,20 +40,37 @@
 
 <th:block layout:fragment="script">
     <script th:inline="javascript">
+        let subjects = [];
+
         window.onload = () => {
             findAllByMemberId();
         }
 
-        async function findAllByMemberId() {
-            const url = `/api/subjects`;
-            const response = await fetchGet(url);
-            changeLogoText('내 과목')
-            drawList(response);
+        async function save() {
+            const url = `/api/courses/subjects`;
+            const name = find('#name').value.trim();
+            const description = find('#description').value.trim();
+
+            if (!name) {
+                alert("과목명을 입력하세요!");
+                return;
+            }
+
+            const json = {name, description};
+            await fetchPostByJson(url, json);
+            location.reload();
         }
 
-        function drawList(response) {
-            let html = response.length
-                ? response.map(item => `
+        async function findAllByMemberId() {
+            const url = `/api/courses/subjects`;
+            subjects = await fetchGet(url);
+            changeLogoText('내 과목')
+            drawList();
+        }
+
+        function drawList() {
+            let html = subjects.length
+                ? subjects.map(item => `
             <div class="bg-white shadow-lg rounded-lg p-6 cursor-pointer hover:bg-gray-100 transition"
                  onclick="location.href='/user/chapter?subjectId=${item.subjectId}'">
                 <div class="text-lg font-semibold text-gray-900">${item.name}</div>
@@ -66,24 +83,6 @@
            </div>`;
 
             find('.listArea').innerHTML = html;
-        }
-
-        async function save() {
-            const url = `/api/subjects`;
-            const name = find('#name').value.trim();
-            const description = find('#description').value.trim();
-
-            if (!name) {
-                alert("과목명을 입력하세요!");
-                return;
-            }
-
-            const json = {name, description};
-            await fetchPostByJson(url, json);
-            find('#modal-div').classList.add('hidden'); // 모달 닫기
-            find('#name').value = ""; // 입력 필드 초기화
-            find('#description').value = ""; // 입력 필드 초기화
-            findAllByMemberId(); // 저장 후 리스트 새로고침
         }
     </script>
 </th:block>

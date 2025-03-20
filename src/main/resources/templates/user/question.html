@@ -144,7 +144,6 @@
 <th:block layout:fragment="script">
     <script th:inline="javascript">
         let questions = [];
-        let hiddenState = {question: false, answer: false};
         let flashInterval = null;
         let longPressTimers = {}; // 타이머 저장 객체
         let currentToggleMode = 'all'; // ✅ 현재 토글 상태 저장
@@ -154,36 +153,41 @@
             findAllByChapterId();
         };
 
-        function startLongPress(event, index) {
-            event.preventDefault();
-            longPressTimers[index] = setTimeout(() => {
-                updateMode(questions[index].question.questionId);  // questionId 넘김
-                delete longPressTimers[index];
-            }, 1000); // 1초 동안 눌렀을 때 실행
-        }
-
-        function endLongPress(event, index) {
-            if (longPressTimers[index]) {
-                clearTimeout(longPressTimers[index]);
-                delete longPressTimers[index];
-                toggleHint(index); // 일반 클릭 처리
-            }
-        }
-
-        function cancelLongPress(event, index) {
-            if (longPressTimers[index]) {
-                clearTimeout(longPressTimers[index]);
-                delete longPressTimers[index];
-            }
+        async function saveQuestion() {
+            const chapterId = getParamValue('chapterId');
+            const formData = new FormData(find('#saveForm'));
+            await fetchPostByFormData(`/api/quizzes/chapters/${chapterId}`, formData);
+            location.reload();
         }
 
 
         async function findAllByChapterId() {
             const chapterId = getParamValue('chapterId');
-            const url = `/api/questions/chapters/${chapterId}`;
+            const url = `/api/quizzes/chapters/${chapterId}`;
             questions = await fetchGet(url);
             changeLogoText(`${questions[0].question.chapter.subject.name} - ${questions[0].question.chapter.name}`)
             drawList();
+        }
+
+        async function updateQuestion() {
+            const questionId = find('#questionId').value;
+            const formData = new FormData(find('#updateForm'));
+            await fetchPatchByFormData(`/api/quizzes/questions/${questionId}`, formData);
+            location.reload();
+        }
+
+        async function deleteByQuestionId(questionId) {
+            await fetchDelete(`/api/quizzes/questions/${questionId}`);
+            location.reload();
+        }
+
+        async function updateMode(questionId) {
+            const response = await fetchGet(`/api/quizzes/questions/${questionId}`);
+            find('#questionId').value = response.question.questionId;
+            find('#questionText').value = response.question.questionText;
+            find('#answerText').value = response.answer[0].answerText;
+            find('#description').value = response.question.description;
+            find('#modal-update').classList.remove('hidden');
         }
 
         function drawList() {
@@ -211,6 +215,28 @@
             find('.listArea').innerHTML = html;
         }
 
+        function startLongPress(event, index) {
+            event.preventDefault();
+            longPressTimers[index] = setTimeout(() => {
+                updateMode(questions[index].question.questionId);  // questionId 넘김
+                delete longPressTimers[index];
+            }, 1000); // 1초 동안 눌렀을 때 실행
+        }
+
+        function endLongPress(event, index) {
+            if (longPressTimers[index]) {
+                clearTimeout(longPressTimers[index]);
+                delete longPressTimers[index];
+                toggleHint(index); // 일반 클릭 처리
+            }
+        }
+
+        function cancelLongPress(event, index) {
+            if (longPressTimers[index]) {
+                clearTimeout(longPressTimers[index]);
+                delete longPressTimers[index];
+            }
+        }
 
         function toggleHint(index) {
             const hintElement = document.getElementById(`hint-${index}`);
@@ -233,36 +259,7 @@
 
             questions = shuffled;
             drawList();
-            setToggle(currentToggleMode); // ✅ 기존 토글 상태 유지
-        }
-
-
-        async function saveQuestion() {
-            const chapterId = getParamValue('chapterId');
-            const formData = new FormData(find('#saveForm'));
-            await fetchPostByFormData(`/api/questions/chapters/${chapterId}`, formData);
-            location.reload();
-        }
-
-        async function updateQuestion() {
-            const questionId = find('#questionId').value;
-            const formData = new FormData(find('#updateForm'));
-            await fetchPatchByFormData(`/api/questions/${questionId}`, formData);
-            location.reload();
-        }
-
-        async function deleteByQuestionId(questionId) {
-            await fetchDelete(`/api/questions/${questionId}`);
-            findAllByChapterId();
-        }
-
-        async function updateMode(questionId) {
-            const response = await fetchGet(`/api/questions/${questionId}`);
-            find('#questionId').value = response.question.questionId;
-            find('#questionText').value = response.question.questionText;
-            find('#answerText').value = response.answer[0].answerText;
-            find('#description').value = response.question.description;
-            find('#modal-update').classList.remove('hidden');
+            setToggle(currentToggleMode);
         }
 
         function setToggle(mode) {
@@ -290,7 +287,6 @@
                 findAll('.answerText').forEach(el => el.classList.remove('hidden'));
             }
         }
-
 
         function shuffleEffect() {
             const shuffleBtn = document.getElementById('shuffleButton');
@@ -360,7 +356,6 @@
             };
         }
 
-        // 깜빡이모드 실행 함수 (임시 로직)
         function startFlashMode() {
             if (questions.length === 0) return;
 
