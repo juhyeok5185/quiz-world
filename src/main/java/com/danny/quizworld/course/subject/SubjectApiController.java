@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -18,7 +19,7 @@ public class SubjectApiController {
     private final CourseFacade courseFacade;
 
     @PostMapping
-    public ResponseEntity<ApiResponse<SubjectResponse>> saveSubject(Authentication authentication, @RequestBody SubjectCommand.save request) {
+    public ResponseEntity<ApiResponse<SubjectResponse>> saveSubject(Authentication authentication, @RequestBody @Valid SubjectCommand.save request) {
         Long memberId = Utils.getMemberId(authentication);
         courseFacade.saveSubject(memberId, request);
         return ResponseEntity.status(201).body(new ApiResponse<>("생성 완료" , 201 ,null));
@@ -48,7 +49,7 @@ public class SubjectApiController {
     }
 
     @PatchMapping("/{subjectId}")
-    public ResponseEntity<ApiResponse<SubjectResponse>> updateSubject(@PathVariable Long subjectId , @RequestBody SubjectCommand.update request){
+    public ResponseEntity<ApiResponse<SubjectResponse>> updateSubject(@PathVariable Long subjectId , @RequestBody @Valid SubjectCommand.update request){
         courseFacade.updateSubject(subjectId , request);
         return ResponseEntity.status(201).body(new ApiResponse<>("변경 완료" , 201 ,null));
     }

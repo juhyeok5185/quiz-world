@@ -14,6 +14,7 @@ public class SubjectService {
     private final SubjectMapper subjectMapper;
     private final SubjectStore subjectStore;
     private final SubjectReader subjectReader;
+    private final SubjectValidator subjectValidator;
 
     @Transactional
     public Subject save(Subject subject) {
@@ -40,6 +41,7 @@ public class SubjectService {
         return subjectReader.findAllSubjectBySearch(search);
     }
 
+
     public Subject toEntity(Member member, SubjectCommand.save request) {
         return subjectMapper.toEntity(member, request);
     }
@@ -50,5 +52,13 @@ public class SubjectService {
 
     public Subject copy(Subject targetSubject, Member member) {
         return subjectMapper.copy(targetSubject , member);
+    }
+
+    public void validateToSave(Member member,SubjectCommand.save request) {
+        subjectValidator.validateToSave(member , request);
+    }
+
+    public void validateToUpdate(Subject subject , SubjectCommand.update request) {
+        subjectValidator.validateToUpdate(subject ,request);
     }
 }

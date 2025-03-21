@@ -31,6 +31,7 @@ public class CourseFacade {
     @Transactional
     public void saveSubject(Long memberId, SubjectCommand.save request) {
         Member member = memberService.findById(memberId);
+        subjectService.validateToSave(member ,request);
         Subject subject = subjectService.toEntity(member, request);
         subjectService.save(subject);
     }
@@ -38,6 +39,7 @@ public class CourseFacade {
     @Transactional
     public void updateSubject(Long subjectId, SubjectCommand.update request) {
         Subject subject = subjectService.findById(subjectId);
+        subjectService.validateToUpdate(subject , request);
         subject.update(request);
         subjectService.save(subject);
     }
@@ -82,7 +84,6 @@ public class CourseFacade {
         subjectService.save(subject);
     }
 
-
     //Chapter 관련 API ---------------------------------------------------------------------------------------
     @Transactional
     public void saveChapter(Long subjectId, ChapterCommand.save request) {
@@ -122,8 +123,6 @@ public class CourseFacade {
     public ChapterResponse findChapterById(Long chapterId) {
         return chapterService.toResponse(chapterService.findById(chapterId));
     }
-
-
 
     //Study 관련 API ---------------------------------------------------------------------------------------
     @Transactional
