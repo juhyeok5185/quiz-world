@@ -18,52 +18,101 @@
     </div>
 
     <!-- 모달 (숨김 상태) -->
-    <div id="modal-div" class="fixed left-0 top-[-16px] w-full h-full bg-black bg-opacity-50 flex items-center justify-center hidden">
+    <div id="modal-div"
+         class="fixed left-0 top-[-16px] w-full h-full bg-black bg-opacity-50 flex items-center justify-center hidden">
         <form id="saveForm">
-        <div class="bg-white p-6 rounded-lg shadow-lg w-96">
-            <h2 class="text-xl font-bold mb-4">새 과목 추가</h2>
-            <input type="text" id="name" name="name" class="w-full border p-2 rounded mb-4" placeholder="과목의 이름을 정해 주세요">
-            <input type="text" id="description" name="description" class="w-full border p-2 rounded mb-4" placeholder="과목을 설명해 주세요">
-            <div class="mb-4">
-                <label class="block font-semibold mb-2">공개 여부</label>
-                <div class="flex space-x-4">
-                    <label class="flex items-center space-x-2">
-                        <input type="radio" name="publicYn" value="true" class="form-radio text-blue-500" checked>
-                        <span>공개</span>
-                    </label>
-                    <label class="flex items-center space-x-2">
-                        <input type="radio" name="publicYn" value="false" class="form-radio text-red-500">
-                        <span>비공개</span>
-                    </label>
+            <div class="bg-white p-6 rounded-lg shadow-lg w-96">
+                <h2 class="text-xl font-bold mb-4">새 과목 추가</h2>
+                <input type="text" id="name" name="name" class="w-full border p-2 rounded mb-4"
+                       placeholder="과목의 이름을 정해 주세요">
+                <input type="text" id="description" name="description" class="w-full border p-2 rounded mb-4"
+                       placeholder="과목을 설명해 주세요">
+                <div class="mb-4">
+                    <label class="block font-semibold mb-2">공개 여부</label>
+                    <div class="flex space-x-4">
+                        <label class="flex items-center space-x-2">
+                            <input type="radio" name="publicYn" value="true" class="form-radio text-blue-500" checked>
+                            <span>공개</span>
+                        </label>
+                        <label class="flex items-center space-x-2">
+                            <input type="radio" name="publicYn" value="false" class="form-radio text-red-500">
+                            <span>비공개</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="mb-4">
+                    <label for="price" class="block font-semibold mb-2">가격</label>
+                    <input type="text" id="price" class="w-full border p-2 rounded bg-gray-200 cursor-not-allowed"
+                           placeholder="판매자 신청 후 이용해주세요" disabled>
+                </div>
+                <div class="flex justify-end space-x-2">
+                    <div onclick="find('#modal-div').classList.add('hidden')"
+                         class="bg-gray-300 text-gray-700 px-4 py-2 rounded-md cursor-pointer">
+                        취소
+                    </div>
+                    <div onclick="save()"
+                         class="bg-gradient-to-r from-blue-500 to-indigo-500 text-white px-4 py-2 rounded-md shadow-md hover:opacity-90 transition cursor-pointer">
+                        저장
+                    </div>
                 </div>
             </div>
-            <div class="mb-4">
-                <label for="price" class="block font-semibold mb-2">가격</label>
-                <input type="text" id="price" class="w-full border p-2 rounded bg-gray-200 cursor-not-allowed"
-                       placeholder="판매자 신청 후 이용해주세요" disabled>
-            </div>
-            <div class="flex justify-end space-x-2">
-                <div onclick="find('#modal-div').classList.add('hidden')"
-                     class="bg-gray-300 text-gray-700 px-4 py-2 rounded-md cursor-pointer">
-                    취소
-                </div>
-                <div onclick="save()"
-                     class="bg-gradient-to-r from-blue-500 to-indigo-500 text-white px-4 py-2 rounded-md shadow-md hover:opacity-90 transition cursor-pointer">
-                    저장
-                </div>
-            </div>
-        </div>
         </form>
     </div>
+
+
+    <div id="modal-update" class="fixed inset-0 left-0 top-[-16px] bg-black bg-opacity-50 flex items-center justify-center hidden">
+        <div class="bg-white p-6 rounded-lg shadow-lg w-96">
+            <h2 class="text-xl font-bold mb-4">과목 수정</h2>
+            <form id="updateForm">
+                <input type="text" name="name" class="w-full border p-2 rounded mb-4"
+                       placeholder="과목의 이름을 정해 주세요">
+                <input type="text" name="description" class="w-full border p-2 rounded mb-4"
+                       placeholder="과목을 설명해 주세요">
+                <div class="mb-4">
+                    <label class="block font-semibold mb-2">공개 여부</label>
+                    <div class="flex space-x-4">
+                        <label class="flex items-center space-x-2">
+                            <input type="radio" name="publicYn" value="true" class="form-radio text-blue-500" checked>
+                            <span>공개</span>
+                        </label>
+                        <label class="flex items-center space-x-2">
+                            <input type="radio" name="publicYn" value="false" class="form-radio text-red-500">
+                            <span>비공개</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="mb-4">
+                    <label for="price" class="block font-semibold mb-2">가격</label>
+                    <input type="text" name="price" class="w-full border p-2 rounded bg-gray-200 cursor-not-allowed"
+                           placeholder="판매자 신청 후 이용해주세요" disabled>
+                </div>
+                <div class="flex justify-end">
+                    <div onclick="find('#modal-update').classList.add('hidden')"
+                         class="bg-gray-300 text-gray-700 px-4 py-2 rounded-md mr-2 cursor-pointer">
+                        취소
+                    </div>
+                    <div onclick="updateSubject();"
+                         class="bg-gradient-to-r from-blue-500 to-indigo-500 text-white px-4 py-2 rounded-md hover:opacity-90 transition cursor-pointer">
+                        수정
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
 
 </div>
 
 <th:block layout:fragment="script">
     <script th:inline="javascript">
         let subjects = [];
+        let activePopoverId = null; // 현재 열린 Popover ID 저장
+
 
         window.onload = () => {
             findAllByMemberId();
+            document.addEventListener("click", closePopoverOnOutsideClick);
+
         }
 
         async function save() {
@@ -81,25 +130,78 @@
             drawList();
         }
 
+
         function drawList() {
             let html = subjects.length
                 ? subjects.map(item => `
-            <div class="bg-white shadow-lg rounded-lg p-6 cursor-pointer hover:bg-gray-100 transition"
-                 onclick="location.href='/user/chapter?subjectId=${item.subjectId}'">
-                <div class="text-lg font-semibold text-gray-900">${item.name}</div>
-                <p class="text-sm text-gray-600 mt-1">소개: ${item.description}</p>
-                <p class="text-sm text-gray-600">공개 여부: ${item.publicYn}</p>
-                <p class="text-sm text-gray-600">총 문항: ${item.quizCount} 문항</p>
-                <p class="text-sm text-gray-600">추천 : ${item.likeCount} 개</p>
-                <p class="text-sm text-gray-600">금액: ${item.price} 원</p>
-            </div>
-        `).join('')
-                : `<div class="text-center text-gray-500 py-10">
-                등록된 과목이 없습니다.<br>과목을 추가해 주세요!
-           </div>`;
+                        <div class="bg-white shadow-lg rounded-lg p-6 relative cursor-pointer hover:bg-gray-100 transition"
+                             onclick="location.href='/user/chapter?subjectId=${item.subjectId}'">
+
+                            <!-- 설정 아이콘 (톱니바퀴) -->
+                            <div class="absolute top-3 right-3 cursor-pointer text-gray-500 hover:text-gray-700 text-xl"
+                                 onclick="openSettings(event, ${item.subjectId})">
+                                ⚙️
+                            </div>
+
+                            <!-- Popover 메뉴 -->
+                            <div id="popover-${item.subjectId}" class="popover-menu absolute right-3 top-10 bg-white border border-gray-300 shadow-lg rounded-md hidden">
+                                <ul class="text-sm text-gray-700">
+                                    <li class="p-2 cursor-pointer hover:bg-gray-100" onclick="updateMode(event, ${item.subjectId})">수정</li>
+                                    <li class="p-2 cursor-pointer hover:bg-red-100 text-red-500" onclick="deleteSubject(event, ${item.subjectId})">삭제</li>
+                                </ul>
+                            </div>
+
+                            <div class="text-lg font-semibold text-gray-900">${item.name}</div>
+                            <p class="text-sm text-gray-600 mt-1">소개: ${item.description}</p>
+                            <p class="text-sm text-gray-600">공개 여부: ${item.publicYn}</p>
+                            <p class="text-sm text-gray-600">총 문항: ${item.quizCount} 문항</p>
+                            <p class="text-sm text-gray-600">추천 : ${item.likeCount} 개</p>
+                            <p class="text-sm text-gray-600">금액: ${item.price} 원</p>
+                        </div>
+                    `).join('')
+                : `                    <div class="text-center text-gray-500 py-10">
+                                등록된 과목이 없습니다.<br>과목을 추가해 주세요!
+                           </div>`;
 
             find('.listArea').innerHTML = html;
         }
+
+        function openSettings(event, subjectId) {
+            event.stopPropagation(); // 리스트 클릭 이벤트 방지
+            const popover = document.querySelector(`#popover-${subjectId}`);
+            // 현재 열린 popover와 동일하면 닫기
+            if (activePopoverId === subjectId) {
+                popover.classList.add("hidden");
+                activePopoverId = null;
+            } else {
+                // 모든 popover 숨기기
+                document.querySelectorAll(".popover-menu").forEach(el => el.classList.add("hidden"));
+
+                // 현재 클릭한 톱니바퀴의 popover 보이기
+                popover.classList.remove("hidden");
+                activePopoverId = subjectId; // 현재 열린 popover ID 저장
+            }
+        }
+
+        function closePopoverOnOutsideClick(event) {
+            if (!event.target.closest(".popover-menu") && !event.target.closest(".text-xl")) {
+                document.querySelectorAll(".popover-menu").forEach(el => el.classList.add("hidden"));
+                activePopoverId = null;
+            }
+        }
+
+        function updateMode(event, subjectId) {
+            event.stopPropagation(); // 부모 div 클릭 이벤트 차단
+        }
+
+        function deleteSubject(event, subjectId) {
+            event.stopPropagation(); // 부모 div 클릭 이벤트 차단
+            if (confirm("정말 삭제하시겠습니까?")) {
+                alert(`과목 ${subjectId} 삭제 기능 구현 필요`);
+            }
+        }
+
+
     </script>
 </th:block>
 

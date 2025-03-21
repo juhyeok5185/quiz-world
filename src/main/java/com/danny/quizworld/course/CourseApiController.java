@@ -22,6 +22,8 @@ public class CourseApiController {
 
     private final CourseFacade courseFacade;
 
+
+    //Subject 관련 API ---------------------------------------------------------------------------------------
     @PostMapping
     public ResponseEntity<ApiResponse<SubjectResponse>> saveSubject(Authentication authentication, @RequestBody SubjectRequest request) {
         Long memberId = Utils.getMemberId(authentication);
@@ -34,6 +36,12 @@ public class CourseApiController {
         return ResponseEntity.ok(new ApiResponse<>(courseFacade.findAllByMemberId(memberId)));
     }
 
+    @GetMapping("/{subjectId}")
+    public ResponseEntity<ApiResponse<SubjectResponse>> findSubjectById(@PathVariable Long subjectId) {
+        return ResponseEntity.ok(new ApiResponse<>(courseFacade.findSubjectById(subjectId)));
+    }
+
+    //Chapter 관련 API ---------------------------------------------------------------------------------------
     @PostMapping("/{subjectId}/chapters")
     public ResponseEntity<ApiResponse<ChapterResponse>> saveChapter(@PathVariable Long subjectId, @RequestBody ChapterRequest request) {
         return ResponseEntity.status(201).body(new ApiResponse<>(courseFacade.saveChapter(subjectId, request)));
@@ -44,6 +52,12 @@ public class CourseApiController {
         return ResponseEntity.ok(new ApiResponse<>(courseFacade.findAllChapterBySubjectId(subjectId)));
     }
 
+    @GetMapping("/chapters/{chapterId}")
+    public ResponseEntity<ApiResponse<ChapterResponse>> findChapterById(@PathVariable Long chapterId) {
+        return ResponseEntity.ok(new ApiResponse<>(courseFacade.findChapterById(chapterId)));
+    }
+
+    //Study 관련 API ---------------------------------------------------------------------------------------
     @PostMapping("/chapters/{chapterId}/study")
     public ResponseEntity<ApiResponse<Long>> saveStudy(@PathVariable Long chapterId, @ModelAttribute StudyRequest request) {
         courseFacade.saveStudy(chapterId, request);

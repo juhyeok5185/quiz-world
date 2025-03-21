@@ -40,9 +40,11 @@
 <th:block layout:fragment="script">
     <script th:inline="javascript">
         let chapters = [];
+        let activePopoverId = null;
 
         window.onload = () => {
             findAllBySubjectId();
+            document.addEventListener("click", closePopoverOnOutsideClick);
         }
 
         async function save() {
@@ -69,19 +71,70 @@
         function drawList() {
             let html = chapters.length
                 ? chapters.map(item => `
-            <div class="bg-white shadow-lg rounded-lg p-6 cursor-pointer hover:bg-gray-100 transition"
-                 onclick="location.href = '/user/study?chapterId=${item.chapterId}'">
-                <h3 class="text-lg font-semibold text-gray-900">${item.name}</h3>
-                <p class="text-sm text-gray-600 mt-1">총 문항: ${item.quizCount}문제</p>
+        <div class="bg-white shadow-lg rounded-lg p-6 relative cursor-pointer hover:bg-gray-100 transition"
+             onclick="location.href = '/user/study?chapterId=${item.chapterId}'">
+            <!-- 설정 아이콘 (톱니바퀴) -->
+            <div class="absolute top-3 right-3 cursor-pointer text-gray-500 hover:text-gray-700 text-xl"
+                 onclick="openSettings(event, ${item.chapterId})">
+                ⚙️
             </div>
-        `).join('')
+
+            <!-- Popover 메뉴 -->
+            <div id="popover-${item.chapterId}" class="popover-menu absolute right-3 top-10 bg-white border border-gray-300 shadow-lg rounded-md hidden">
+                <ul class="text-sm text-gray-700">
+                    <li class="p-2 cursor-pointer hover:bg-gray-100" onclick="editChapter(event, ${item.chapterId})">수정</li>
+                    <li class="p-2 cursor-pointer hover:bg-red-100 text-red-500" onclick="deleteChapter(event, ${item.chapterId})">삭제</li>
+                </ul>
+            </div>
+
+            <h3 class="text-lg font-semibold text-gray-900">${item.name}</h3>
+            <p class="text-sm text-gray-600 mt-1">총 문항: ${item.quizCount}문제</p>
+        </div>
+    `).join('')
                 : `<div class="text-center text-gray-500 py-10">
-                등록된 챕터가 없습니다.<br>챕터를 추가해 주세요!
-           </div>`;
+            등록된 챕터가 없습니다.<br>챕터를 추가해 주세요!
+       </div>`;
 
             find('.listArea').innerHTML = html;
         }
 
+        function openSettings(event, chapterId) {
+            event.stopPropagation(); // 리스트 클릭 이벤트 방지
+
+            const popover = document.querySelector(`#popover-${chapterId}`);
+
+            // 현재 열린 popover와 동일하면 닫기
+            if (activePopoverId === chapterId) {
+                popover.classList.add("hidden");
+                activePopoverId = null;
+            } else {
+                // 모든 popover 숨기기
+                document.querySelectorAll(".popover-menu").forEach(el => el.classList.add("hidden"));
+
+                // 현재 클릭한 톱니바퀴의 popover 보이기
+                popover.classList.remove("hidden");
+                activePopoverId = chapterId; // 현재 열린 popover ID 저장
+            }
+        }
+
+        function closePopoverOnOutsideClick(event) {
+            if (!event.target.closest(".popover-menu") && !event.target.closest(".cursor-pointer.text-xl")) {
+                document.querySelectorAll(".popover-menu").forEach(el => el.classList.add("hidden"));
+                activePopoverId = null;
+            }
+        }
+
+        function editChapter(event, chapterId) {
+            event.stopPropagation(); // 부모 div 클릭 이벤트 차단
+            alert(`챕터 ${chapterId} 수정 기능 구현 필요`);
+        }
+
+        function deleteChapter(event, chapterId) {
+            event.stopPropagation(); // 부모 div 클릭 이벤트 차단
+            if (confirm("정말 삭제하시겠습니까?")) {
+                alert(`챕터 ${chapterId} 삭제 기능 구현 필요`);
+            }
+        }
     </script>
 </th:block>
 

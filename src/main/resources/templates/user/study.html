@@ -112,6 +112,9 @@
                          class="bg-gray-300 text-gray-700 px-4 py-2 rounded-md mr-2 cursor-pointer">
                         취소
                     </div>
+                    <div class="bg-gray-300 text-gray-700 px-4 py-2 rounded-md mr-2 cursor-pointer">
+                        삭제
+                    </div>
                     <div onclick="updateQuestion()"
                          class="bg-gradient-to-r from-blue-500 to-indigo-500 text-white px-4 py-2 rounded-md hover:opacity-90 transition cursor-pointer">
                         수정
@@ -154,7 +157,6 @@
         async function saveQuestion() {
             const chapterId = getParamValue('chapterId');
             const formData = new FormData(find('#saveForm'));
-            logFormData(formData)
             await fetchPostByFormData(`/api/courses/subjects/chapters/${chapterId}/study`, formData);
             location.reload();
         }

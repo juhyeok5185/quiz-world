@@ -32,6 +32,8 @@ public class CourseFacade {
     private final QuestionService questionService;
     private final StudyService studyService;
 
+    //Subject 관련 API ---------------------------------------------------------------------------------------
+
     @Transactional
     public SubjectResponse saveSubject(Long memberId, SubjectRequest request) {
         Member member = memberService.findById(memberId);
@@ -48,8 +50,15 @@ public class CourseFacade {
                     return subjectResponse;
                 })
                 .collect(Collectors.toList());
-
     }
+
+    @Transactional(readOnly = true)
+    public SubjectResponse findSubjectById(Long subjectId) {
+        return subjectService.toResponse(subjectService.findById(subjectId));
+    }
+
+
+    //Chapter 관련 API ---------------------------------------------------------------------------------------
 
     @Transactional
     public ChapterResponse saveChapter(Long subjectId, ChapterRequest request) {
@@ -69,6 +78,13 @@ public class CourseFacade {
                 })
                 .collect(Collectors.toList());
     }
+
+    @Transactional(readOnly = true)
+    public ChapterResponse findChapterById(Long chapterId) {
+        return chapterService.toResponse(chapterService.findById(chapterId));
+    }
+
+    //Study 관련 API ---------------------------------------------------------------------------------------
 
     @Transactional
     public void saveStudy(Long chapterId, StudyRequest request) {
@@ -97,4 +113,5 @@ public class CourseFacade {
         study.update(request);
         studyService.save(study);
     }
+
 }
