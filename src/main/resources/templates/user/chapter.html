@@ -82,8 +82,9 @@
             const subjectId = getParamValue('subjectId');
             const url = `/api/courses/subjects/${subjectId}/chapters`;
             chapters = await fetchGet(url);
+            console.log(chapters)
             drawList();
-            changeLogoText(`${chapters[0]?.subject?.name || "과목 이름 없음"}`);
+            changeLogoText(`${chapters[0]?.subject.name || "과목 이름 없음"}`);
         }
 
         function drawList() {
