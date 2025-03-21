@@ -12,5 +12,5 @@ public class ChapterResponse {
     private Long chapterId;
     private String name;
     private SubjectResponse subject;
-    private Long quizCount;
+    private Long studyCount;
 }

@@ -25,9 +25,9 @@ public class CourseApiController {
 
     //Subject 관련 API ---------------------------------------------------------------------------------------
     @PostMapping
-    public ResponseEntity<ApiResponse<SubjectResponse>> saveSubject(Authentication authentication, @RequestBody SubjectRequest request) {
+    public ResponseEntity<ApiResponse<?>> saveSubject(Authentication authentication, @RequestBody SubjectRequest request) {
         Long memberId = Utils.getMemberId(authentication);
-        return ResponseEntity.status(201).body(new ApiResponse<>(courseFacade.saveSubject(memberId, request)));
+        return ResponseEntity.status(201).body(new ApiResponse<>("생성 완료" , 201 ,courseFacade.saveSubject(memberId, request)));
     }
 
     @GetMapping
@@ -40,6 +40,13 @@ public class CourseApiController {
     public ResponseEntity<ApiResponse<SubjectResponse>> findSubjectById(@PathVariable Long subjectId) {
         return ResponseEntity.ok(new ApiResponse<>(courseFacade.findSubjectById(subjectId)));
     }
+
+    @DeleteMapping("/{subjectId}")
+    public ResponseEntity<ApiResponse<Long>> deleteSubjectById(@PathVariable Long subjectId) {
+        return ResponseEntity.status(201).body(new ApiResponse<>("삭제 완료" , 201 ,courseFacade.deleteSubjectById(subjectId)));
+    }
+
+
 
     //Chapter 관련 API ---------------------------------------------------------------------------------------
     @PostMapping("/{subjectId}/chapters")

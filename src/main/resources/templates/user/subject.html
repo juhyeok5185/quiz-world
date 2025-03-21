@@ -10,10 +10,7 @@
     <div class="listArea grid grid-cols-1 gap-4 mt-4"></div>
 
     <!-- 과목 추가 버튼 (우측 하단 고정) -->
-    <div onclick="find('#modal-div').classList.remove('hidden')"
-         class="fixed bottom-20 right-6 w-14 h-14 bg-gradient-to-r from-blue-500 to-indigo-500
-                text-white text-[28px] font-bold rounded-full shadow-xl hover:opacity-90 transition
-                flex items-center justify-center cursor-pointer">
+    <div onclick="find('#modal-div').classList.remove('hidden')" class="fixed bottom-20 right-6 w-14 h-14 bg-gradient-to-r from-blue-500 to-indigo-500 text-white text-[28px] font-bold rounded-full shadow-xl hover:opacity-90 transition flex items-center justify-center cursor-pointer">
         <span class="absolute top-[12px] right-[17.5px] leading-none">+</span>
     </div>
 
@@ -23,6 +20,46 @@
         <form id="saveForm">
             <div class="bg-white p-6 rounded-lg shadow-lg w-96">
                 <h2 class="text-xl font-bold mb-4">새 과목 추가</h2>
+                <input type="text" name="name" class="w-full border p-2 rounded mb-4"
+                       placeholder="과목의 이름을 정해 주세요">
+                <input type="text" name="description" class="w-full border p-2 rounded mb-4"
+                       placeholder="과목을 설명해 주세요">
+                <div class="mb-4">
+                    <label class="block font-semibold mb-2">공개 여부</label>
+                    <div class="flex space-x-4">
+                        <label class="flex items-center space-x-2">
+                            <input type="radio" name="publicYn" value="true" class="form-radio text-blue-500" checked>
+                            <span>공개</span>
+                        </label>
+                        <label class="flex items-center space-x-2">
+                            <input type="radio" name="publicYn" value="false" class="form-radio text-red-500">
+                            <span>비공개</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="mb-4">
+                    <label class="block font-semibold mb-2">가격</label>
+                    <input type="text"  class="w-full border p-2 rounded bg-gray-200 cursor-not-allowed" placeholder="판매자 신청 후 이용해주세요" disabled>
+                </div>
+                <div class="flex justify-end space-x-2">
+                    <div onclick="find('#modal-div').classList.add('hidden')" class="bg-gray-300 text-gray-700 px-4 py-2 rounded-md cursor-pointer">
+                        취소
+                    </div>
+                    <div onclick="save()"
+                         class="bg-gradient-to-r from-blue-500 to-indigo-500 text-white px-4 py-2 rounded-md shadow-md hover:opacity-90 transition cursor-pointer">
+                        저장
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+
+    <div id="modal-update" class="fixed inset-0 left-0 top-[-16px] bg-black bg-opacity-50 flex items-center justify-center hidden">
+        <div class="bg-white p-6 rounded-lg shadow-lg w-96">
+            <h2 class="text-xl font-bold mb-4">과목 수정</h2>
+            <form id="updateForm">
+                <input type="hidden" name="subjectId" id="subjectId">
                 <input type="text" id="name" name="name" class="w-full border p-2 rounded mb-4"
                        placeholder="과목의 이름을 정해 주세요">
                 <input type="text" id="description" name="description" class="w-full border p-2 rounded mb-4"
@@ -42,57 +79,13 @@
                 </div>
                 <div class="mb-4">
                     <label for="price" class="block font-semibold mb-2">가격</label>
-                    <input type="text" id="price" class="w-full border p-2 rounded bg-gray-200 cursor-not-allowed"
-                           placeholder="판매자 신청 후 이용해주세요" disabled>
-                </div>
-                <div class="flex justify-end space-x-2">
-                    <div onclick="find('#modal-div').classList.add('hidden')"
-                         class="bg-gray-300 text-gray-700 px-4 py-2 rounded-md cursor-pointer">
-                        취소
-                    </div>
-                    <div onclick="save()"
-                         class="bg-gradient-to-r from-blue-500 to-indigo-500 text-white px-4 py-2 rounded-md shadow-md hover:opacity-90 transition cursor-pointer">
-                        저장
-                    </div>
-                </div>
-            </div>
-        </form>
-    </div>
-
-
-    <div id="modal-update" class="fixed inset-0 left-0 top-[-16px] bg-black bg-opacity-50 flex items-center justify-center hidden">
-        <div class="bg-white p-6 rounded-lg shadow-lg w-96">
-            <h2 class="text-xl font-bold mb-4">과목 수정</h2>
-            <form id="updateForm">
-                <input type="text" name="name" class="w-full border p-2 rounded mb-4"
-                       placeholder="과목의 이름을 정해 주세요">
-                <input type="text" name="description" class="w-full border p-2 rounded mb-4"
-                       placeholder="과목을 설명해 주세요">
-                <div class="mb-4">
-                    <label class="block font-semibold mb-2">공개 여부</label>
-                    <div class="flex space-x-4">
-                        <label class="flex items-center space-x-2">
-                            <input type="radio" name="publicYn" value="true" class="form-radio text-blue-500" checked>
-                            <span>공개</span>
-                        </label>
-                        <label class="flex items-center space-x-2">
-                            <input type="radio" name="publicYn" value="false" class="form-radio text-red-500">
-                            <span>비공개</span>
-                        </label>
-                    </div>
-                </div>
-                <div class="mb-4">
-                    <label for="price" class="block font-semibold mb-2">가격</label>
-                    <input type="text" name="price" class="w-full border p-2 rounded bg-gray-200 cursor-not-allowed"
-                           placeholder="판매자 신청 후 이용해주세요" disabled>
+                    <input type="text" id="price" name="price" class="w-full border p-2 rounded bg-gray-200 cursor-not-allowed" placeholder="판매자 신청 후 이용해주세요" disabled>
                 </div>
                 <div class="flex justify-end">
-                    <div onclick="find('#modal-update').classList.add('hidden')"
-                         class="bg-gray-300 text-gray-700 px-4 py-2 rounded-md mr-2 cursor-pointer">
+                    <div onclick="find('#modal-update').classList.add('hidden')" class="bg-gray-300 text-gray-700 px-4 py-2 rounded-md mr-2 cursor-pointer">
                         취소
                     </div>
-                    <div onclick="updateSubject();"
-                         class="bg-gradient-to-r from-blue-500 to-indigo-500 text-white px-4 py-2 rounded-md hover:opacity-90 transition cursor-pointer">
+                    <div onclick="updateSubject();" class="bg-gradient-to-r from-blue-500 to-indigo-500 text-white px-4 py-2 rounded-md hover:opacity-90 transition cursor-pointer">
                         수정
                     </div>
                 </div>
@@ -134,12 +127,10 @@
         function drawList() {
             let html = subjects.length
                 ? subjects.map(item => `
-                        <div class="bg-white shadow-lg rounded-lg p-6 relative cursor-pointer hover:bg-gray-100 transition"
-                             onclick="location.href='/user/chapter?subjectId=${item.subjectId}'">
+                        <div class="bg-white shadow-lg rounded-lg p-6 relative cursor-pointer hover:bg-gray-100 transition" onclick="location.href='/user/chapter?subjectId=${item.subjectId}'">
 
                             <!-- 설정 아이콘 (톱니바퀴) -->
-                            <div class="absolute top-3 right-3 cursor-pointer text-gray-500 hover:text-gray-700 text-xl"
-                                 onclick="openSettings(event, ${item.subjectId})">
+                            <div class="absolute top-3 right-3 cursor-pointer text-gray-500 hover:text-gray-700 text-xl" onclick="openSettings(event, ${item.subjectId})">
                                 ⚙️
                             </div>
 
@@ -190,8 +181,13 @@
             }
         }
 
-        function updateMode(event, subjectId) {
+        async function updateMode(event, subjectId) {
             event.stopPropagation(); // 부모 div 클릭 이벤트 차단
+            const response = await fetchGet(`/api/courses/subjects/${subjectId}`);
+            find('#subjectId').value = response.subjectId;
+            find('#name').value = response.name;
+            find('#description').value = response.description;
+            find('#modal-update').classList.remove('hidden');
         }
 
         function deleteSubject(event, subjectId) {

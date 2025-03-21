@@ -10,7 +10,6 @@ import com.danny.quizworld.course.subject.SubjectResponse;
 import com.danny.quizworld.course.subject.SubjectService;
 import com.danny.quizworld.member.Member;
 import com.danny.quizworld.member.MemberService;
-import com.danny.quizworld.exam.question.QuestionService;
 import com.danny.quizworld.course.chapter.Chapter;
 import com.danny.quizworld.course.chapter.ChapterResponse;
 import com.danny.quizworld.course.chapter.ChapterRequest;
@@ -29,24 +28,24 @@ public class CourseFacade {
     private final MemberService memberService;
     private final SubjectService subjectService;
     private final ChapterService chapterService;
-    private final QuestionService questionService;
     private final StudyService studyService;
 
     //Subject 관련 API ---------------------------------------------------------------------------------------
 
     @Transactional
-    public SubjectResponse saveSubject(Long memberId, SubjectRequest request) {
+    public Long saveSubject(Long memberId, SubjectRequest request) {
         Member member = memberService.findById(memberId);
         Subject subject = subjectService.toEntity(member, request);
-        return subjectService.toResponse(subjectService.save(subject));
+        subjectService.save(subject);
+        return subject.getSubjectId();
     }
 
     @Transactional(readOnly = true)
     public List<SubjectResponse> findAllByMemberId(Long memberId) {
         return subjectService.findAllByMemberId(memberId).stream().map(subject -> {
-                    Long quizCount = questionService.countBySubjectId(subject.getSubjectId());
+                    Long studyCount = studyService.countBySubjectId(subject.getSubjectId());
                     SubjectResponse subjectResponse = subjectService.toResponse(subject);
-                    subjectResponse.setQuizCount(quizCount);
+                    subjectResponse.setStudyCount(studyCount);
                     return subjectResponse;
                 })
                 .collect(Collectors.toList());
@@ -55,6 +54,10 @@ public class CourseFacade {
     @Transactional(readOnly = true)
     public SubjectResponse findSubjectById(Long subjectId) {
         return subjectService.toResponse(subjectService.findById(subjectId));
+    }
+
+    public Long deleteSubjectById(Long subjectId) {
+        return null;
     }
 
 
@@ -71,9 +74,9 @@ public class CourseFacade {
     public List<ChapterResponse> findAllChapterBySubjectId(Long subjectId) {
         return chapterService.findAllBySubjectId(subjectId).stream()
                 .map(chapter -> {
-                    Long quizCount = questionService.countByChapterId(chapter.getChapterId());
+                    Long studyCount = studyService.countByChapterId(chapter.getChapterId());
                     ChapterResponse chapterResponse = chapterService.toResponse(chapter);
-                    chapterResponse.setQuizCount(quizCount);
+                    chapterResponse.setStudyCount(studyCount);
                     return chapterResponse;
                 })
                 .collect(Collectors.toList());
@@ -84,6 +87,7 @@ public class CourseFacade {
         return chapterService.toResponse(chapterService.findById(chapterId));
     }
 
+
     //Study 관련 API ---------------------------------------------------------------------------------------
 
     @Transactional
@@ -91,6 +95,13 @@ public class CourseFacade {
         Chapter chapter = chapterService.findById(chapterId);
         Subject subject = chapter.getSubject();
         Study study = studyService.toEntity(chapter, request);
+        studyService.save(study);
+    }
+
+    @Transactional
+    public void updateStudy(Long studyId, StudyRequest request) {
+        Study study = studyService.findById(studyId);
+        study.update(request);
         studyService.save(study);
     }
 
@@ -107,11 +118,5 @@ public class CourseFacade {
         return studyService.toResponse(studyService.findById(studyId));
     }
 
-    @Transactional
-    public void updateStudy(Long studyId, StudyRequest request) {
-        Study study = studyService.findById(studyId);
-        study.update(request);
-        studyService.save(study);
-    }
 
 }

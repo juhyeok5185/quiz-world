@@ -15,5 +15,5 @@ public class SubjectResponse {
     private Long price;
     private Integer likeCount;
     private Integer downloadCount;
-    private Long quizCount;
+    private Long studyCount;
 }

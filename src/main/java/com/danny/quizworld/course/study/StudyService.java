@@ -32,6 +32,14 @@ public class StudyService {
         return studyReader.findById(studyId);
     }
 
+    @Transactional(readOnly = true)
+    public Long countBySubjectId(Long subjectId) {return studyReader.countBySubjectId(subjectId);}
+
+    @Transactional
+    public Long countByChapterId(Long chapterId) {
+        return studyReader.countByChapterId(chapterId);
+    }
+
     public Study toEntity(Chapter chapter , StudyRequest request) {
         return studyMapper.toEntity(chapter , request);
     }
@@ -39,6 +47,7 @@ public class StudyService {
     public StudyResponse toResponse(Study study) {
         return studyMapper.toResponse(study);
     }
+
 
 
 }

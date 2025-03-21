@@ -18,4 +18,12 @@ public class StudyReader {
     public Study findById(Long studyId) {
         return studyRepository.findById(studyId).orElseThrow(() -> new MyException("학습을 찾을 수 없습니다."));
     }
+
+    public Long countBySubjectId(Long subjectId) {
+        return studyRepository.countBySubject_SubjectId(subjectId);
+    }
+
+    public Long countByChapterId(Long chapterId) {
+        return studyRepository.countByChapter_ChapterId(chapterId);
+    }
 }
