@@ -20,12 +20,22 @@ public class ChapterService {
         return chapterStore.save(chapter);
     }
 
+    @Transactional
+    public void deleteAll(List<Chapter> chapterList) {
+        chapterStore.deleteAll(chapterList);
+    }
+
+    @Transactional
+    public void delete(Chapter chapter) {
+        chapterStore.delete(chapter);
+    }
+
     @Transactional(readOnly = true)
     public List<Chapter> findAllBySubjectId(Long subjectId) {
         return chapterReader.findAllBySubjectId(subjectId);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public Chapter findById(Long chapterId) {
         return chapterReader.findById(chapterId);
     }
@@ -37,6 +47,5 @@ public class ChapterService {
     public ChapterResponse toResponse(Chapter chapter) {
         return chapterMapper.toResponse(chapter);
     }
-
 
 }

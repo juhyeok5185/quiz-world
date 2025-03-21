@@ -25,9 +25,10 @@ public class CourseApiController {
 
     //Subject 관련 API ---------------------------------------------------------------------------------------
     @PostMapping
-    public ResponseEntity<ApiResponse<?>> saveSubject(Authentication authentication, @RequestBody SubjectRequest request) {
+    public ResponseEntity<ApiResponse<SubjectResponse>> saveSubject(Authentication authentication, @RequestBody SubjectRequest request) {
         Long memberId = Utils.getMemberId(authentication);
-        return ResponseEntity.status(201).body(new ApiResponse<>("생성 완료" , 201 ,courseFacade.saveSubject(memberId, request)));
+        courseFacade.saveSubject(memberId, request);
+        return ResponseEntity.status(201).body(new ApiResponse<>("생성 완료" , 201 ,null));
     }
 
     @GetMapping
@@ -42,8 +43,9 @@ public class CourseApiController {
     }
 
     @DeleteMapping("/{subjectId}")
-    public ResponseEntity<ApiResponse<Long>> deleteSubjectById(@PathVariable Long subjectId) {
-        return ResponseEntity.status(201).body(new ApiResponse<>("삭제 완료" , 201 ,courseFacade.deleteSubjectById(subjectId)));
+    public ResponseEntity<ApiResponse<SubjectResponse>> deleteSubjectById(@PathVariable Long subjectId) {
+        courseFacade.deleteSubjectById(subjectId);
+        return ResponseEntity.status(201).body(new ApiResponse<>("삭제 완료" , 201 ,null));
     }
 
 
@@ -51,7 +53,8 @@ public class CourseApiController {
     //Chapter 관련 API ---------------------------------------------------------------------------------------
     @PostMapping("/{subjectId}/chapters")
     public ResponseEntity<ApiResponse<ChapterResponse>> saveChapter(@PathVariable Long subjectId, @RequestBody ChapterRequest request) {
-        return ResponseEntity.status(201).body(new ApiResponse<>(courseFacade.saveChapter(subjectId, request)));
+        courseFacade.saveChapter(subjectId, request);
+        return ResponseEntity.status(201).body(new ApiResponse<>("생성 완료" , 201 ,null));
     }
 
     @GetMapping("/{subjectId}/chapters")
@@ -64,9 +67,15 @@ public class CourseApiController {
         return ResponseEntity.ok(new ApiResponse<>(courseFacade.findChapterById(chapterId)));
     }
 
+    @DeleteMapping("/chapters/{chapterId}")
+    public ResponseEntity<ApiResponse<ChapterResponse>> deleteChapterById(@PathVariable Long chapterId) {
+        courseFacade.deleteChapterById(chapterId);
+        return ResponseEntity.status(201).body(new ApiResponse<>("삭제 완료" , 201 ,null));
+    }
+
     //Study 관련 API ---------------------------------------------------------------------------------------
     @PostMapping("/chapters/{chapterId}/study")
-    public ResponseEntity<ApiResponse<Long>> saveStudy(@PathVariable Long chapterId, @ModelAttribute StudyRequest request) {
+    public ResponseEntity<ApiResponse<StudyResponse>> saveStudy(@PathVariable Long chapterId, @ModelAttribute StudyRequest request) {
         courseFacade.saveStudy(chapterId, request);
         return ResponseEntity.status(201).body(new ApiResponse<>("생성 성공", 201, null));
     }
@@ -82,9 +91,15 @@ public class CourseApiController {
     }
 
     @PatchMapping("/chapters/study/{studyId}")
-    public ResponseEntity<ApiResponse<?>> updateStudy(@PathVariable Long studyId , @ModelAttribute StudyRequest request){
+    public ResponseEntity<ApiResponse<StudyResponse>> updateStudy(@PathVariable Long studyId , @ModelAttribute StudyRequest request){
         courseFacade.updateStudy(studyId , request);
         return ResponseEntity.ok(new ApiResponse<>("변경 성공", 201, null));
+    }
+
+    @DeleteMapping("/chapters/study/{studyId}")
+    public ResponseEntity<ApiResponse<StudyResponse>> deleteStudyById(@PathVariable Long studyId) {
+        courseFacade.deleteStudyById(studyId);
+        return ResponseEntity.status(201).body(new ApiResponse<>("삭제 완료" , 201 ,null));
     }
 
 }

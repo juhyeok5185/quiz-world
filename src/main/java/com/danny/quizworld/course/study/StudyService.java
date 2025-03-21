@@ -22,6 +22,16 @@ public class StudyService {
         studyStore.save(study);
     }
 
+    @Transactional
+    public void deleteAll(List<Study> studyList) {
+        studyStore.deleteAll(studyList);
+    }
+
+    @Transactional
+    public void delete(Study study) {
+        studyStore.delete(study);
+    }
+
     @Transactional(readOnly = true)
     public List<Study> findAllByChapterId(Long chapterId) {
         return studyReader.findAllByChapterId(chapterId);
@@ -33,15 +43,22 @@ public class StudyService {
     }
 
     @Transactional(readOnly = true)
-    public Long countBySubjectId(Long subjectId) {return studyReader.countBySubjectId(subjectId);}
+    public Long countBySubjectId(Long subjectId) {
+        return studyReader.countBySubjectId(subjectId);
+    }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public Long countByChapterId(Long chapterId) {
         return studyReader.countByChapterId(chapterId);
     }
 
-    public Study toEntity(Chapter chapter , StudyRequest request) {
-        return studyMapper.toEntity(chapter , request);
+    @Transactional(readOnly = true)
+    public List<Study> findAllBySubjectId(Long subjectId) {
+        return studyReader.findAllBySubjectId(subjectId);
+    }
+
+    public Study toEntity(Chapter chapter, StudyRequest request) {
+        return studyMapper.toEntity(chapter, request);
     }
 
     public StudyResponse toResponse(Study study) {

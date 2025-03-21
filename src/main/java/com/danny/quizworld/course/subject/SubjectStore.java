@@ -11,4 +11,8 @@ public class SubjectStore {
     public Subject save(Subject subject) {
         return subjectRepository.save(subject);
     }
+
+    public void delete(Subject subject) {
+        subjectRepository.delete(subject);
+    }
 }

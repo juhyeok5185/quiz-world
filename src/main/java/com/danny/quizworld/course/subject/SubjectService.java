@@ -20,6 +20,11 @@ public class SubjectService {
         return subjectStore.save(subject);
     }
 
+    @Transactional
+    public void delete(Subject subject) {
+        subjectStore.delete(subject);
+    }
+
     @Transactional(readOnly = true)
     public List<Subject> findAllByMemberId(Long memberId) {
         return subjectReader.findAllByMemberId(memberId);
@@ -38,4 +43,6 @@ public class SubjectService {
     public SubjectResponse toResponse(Subject subject) {
         return subjectMapper.toResponse(subject);
     }
+
+
 }

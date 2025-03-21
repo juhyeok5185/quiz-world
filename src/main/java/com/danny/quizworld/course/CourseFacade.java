@@ -33,11 +33,20 @@ public class CourseFacade {
     //Subject 관련 API ---------------------------------------------------------------------------------------
 
     @Transactional
-    public Long saveSubject(Long memberId, SubjectRequest request) {
+    public void saveSubject(Long memberId, SubjectRequest request) {
         Member member = memberService.findById(memberId);
         Subject subject = subjectService.toEntity(member, request);
         subjectService.save(subject);
-        return subject.getSubjectId();
+    }
+
+    @Transactional
+    public void deleteSubjectById(Long subjectId) {
+        List<Study> studyList = studyService.findAllBySubjectId(subjectId);
+        studyService.deleteAll(studyList);
+        List<Chapter> chapterList = chapterService.findAllBySubjectId(subjectId);
+        chapterService.deleteAll(chapterList);
+        Subject subject = subjectService.findById(subjectId);
+        subjectService.delete(subject);
     }
 
     @Transactional(readOnly = true)
@@ -56,18 +65,21 @@ public class CourseFacade {
         return subjectService.toResponse(subjectService.findById(subjectId));
     }
 
-    public Long deleteSubjectById(Long subjectId) {
-        return null;
-    }
-
-
     //Chapter 관련 API ---------------------------------------------------------------------------------------
 
     @Transactional
-    public ChapterResponse saveChapter(Long subjectId, ChapterRequest request) {
+    public void saveChapter(Long subjectId, ChapterRequest request) {
         Subject subject = subjectService.findById(subjectId);
         Chapter chapter = chapterService.toEntity(subject, request);
-        return chapterService.toResponse(chapterService.save(chapter));
+        chapterService.save(chapter);
+    }
+
+    @Transactional
+    public void deleteChapterById(Long chapterId) {
+        List<Study> studyList = studyService.findAllByChapterId(chapterId);
+        studyService.deleteAll(studyList);
+        Chapter chapter = chapterService.findById(chapterId);
+        chapterService.delete(chapter);
     }
 
     @Transactional(readOnly = true)
@@ -87,13 +99,11 @@ public class CourseFacade {
         return chapterService.toResponse(chapterService.findById(chapterId));
     }
 
-
     //Study 관련 API ---------------------------------------------------------------------------------------
 
     @Transactional
     public void saveStudy(Long chapterId, StudyRequest request) {
         Chapter chapter = chapterService.findById(chapterId);
-        Subject subject = chapter.getSubject();
         Study study = studyService.toEntity(chapter, request);
         studyService.save(study);
     }
@@ -103,6 +113,12 @@ public class CourseFacade {
         Study study = studyService.findById(studyId);
         study.update(request);
         studyService.save(study);
+    }
+
+    @Transactional
+    public void deleteStudyById(Long studyId) {
+        Study study = studyService.findById(studyId);
+        studyService.delete(study);
     }
 
     @Transactional(readOnly = true)

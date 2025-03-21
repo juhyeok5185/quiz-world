@@ -12,4 +12,6 @@ public interface StudyRepository extends JpaRepository<Study, Long> {
     Long countBySubject_SubjectId(Long subjectId);
 
     Long countByChapter_ChapterId(Long chapterId);
+
+    List<Study> findAllBySubject_SubjectId(Long subjectId);
 }

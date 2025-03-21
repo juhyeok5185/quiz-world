@@ -26,4 +26,8 @@ public class StudyReader {
     public Long countByChapterId(Long chapterId) {
         return studyRepository.countByChapter_ChapterId(chapterId);
     }
+
+    public List<Study> findAllBySubjectId(Long subjectId) {
+        return studyRepository.findAllBySubject_SubjectId(subjectId);
+    }
 }
