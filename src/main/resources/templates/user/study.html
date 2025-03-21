@@ -108,14 +108,13 @@
                 <input type="text" id="description" name="description" placeholder="설명 입력"
                        class="w-full border p-2 rounded mb-4">
                 <div class="flex justify-end">
-                    <div onclick="find('#modal-update').classList.add('hidden')"
-                         class="bg-gray-300 text-gray-700 px-4 py-2 rounded-md mr-2 cursor-pointer">
+                    <div onclick="find('#modal-update').classList.add('hidden')" class="bg-gray-300 text-gray-700 px-4 py-2 rounded-md mr-2 cursor-pointer">
                         취소
                     </div>
-                    <div class="bg-gray-300 text-gray-700 px-4 py-2 rounded-md mr-2 cursor-pointer">
+                    <div onclick="deleteByStudyId();" class="bg-gray-300 text-gray-700 px-4 py-2 rounded-md mr-2 cursor-pointer">
                         삭제
                     </div>
-                    <div onclick="updateQuestion()"
+                    <div onclick="updateStudy()"
                          class="bg-gradient-to-r from-blue-500 to-indigo-500 text-white px-4 py-2 rounded-md hover:opacity-90 transition cursor-pointer">
                         수정
                     </div>
@@ -157,36 +156,37 @@
         async function saveQuestion() {
             const chapterId = getParamValue('chapterId');
             const formData = new FormData(find('#saveForm'));
-            await fetchPostByFormData(`/api/courses/subjects/chapters/${chapterId}/study`, formData);
+            await fetchPostByFormData(`/api/courses/subjects/chapters/${chapterId}/studies`, formData);
             location.reload();
         }
 
         async function findAllByChapterId() {
             const chapterId = getParamValue('chapterId');
-            const url = `/api/courses/subjects/chapters/${chapterId}/study`;
+            const url = `/api/courses/subjects/chapters/${chapterId}/studies`;
             studys = await fetchGet(url);
             changeLogoText(`${studys[0].chapter.subject.name} - ${studys[0].chapter.name}`)
             drawList();
         }
 
-        async function updateQuestion() {
+        async function updateStudy() {
             const studyId = find('#studyId').value;
             const formData = new FormData(find('#updateForm'));
-            await fetchPatchByFormData(`/api/courses/subjects/chapters/study/${studyId}`, formData);
+            await fetchPatchByFormData(`/api/courses/subjects/chapters/studies/${studyId}`, formData);
             location.reload();
         }
 
-        async function deleteByQuestionId(questionId) {
-            await fetchDelete(`/api/quizzes/questions/${questionId}`);
+        async function deleteByStudyId() {
+            const studyId = find('#studyId').value;
+            await fetchDelete(`/api/courses/subjects/chapters/studies/${studyId}`);
             location.reload();
         }
 
         async function updateMode(studyId) {
-            const response = await fetchGet(`/api/courses/subjects/chapters/study/${studyId}`);
-            find('#studyId').value = response.studyId;
-            find('#questionText').value = response.questionText;
-            find('#answerText').value = response.answerText;
-            find('#description').value = response.description;
+            const study = await fetchGet(`/api/courses/subjects/chapters/studies/${studyId}`);
+            find('#studyId').value = study.studyId;
+            find('#questionText').value = study.questionText;
+            find('#answerText').value = study.answerText;
+            find('#description').value = study.description;
             find('#modal-update').classList.remove('hidden');
         }
 
