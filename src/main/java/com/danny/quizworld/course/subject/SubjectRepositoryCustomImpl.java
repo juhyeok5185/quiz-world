@@ -20,7 +20,8 @@ public class SubjectRepositoryCustomImpl extends QuerydslRepositorySupport imple
     public List<Subject> findAllSubjectBySearch(SubjectSearch search) {
         return queryFactory
                 .selectFrom(subject)
-                .where(searchCondition(search))
+                .where(searchCondition(search),
+                        subject.publicYn.eq(true))
                 .fetch();
     }
 
