@@ -55,7 +55,7 @@ public class Subject extends BaseTimeEntity {
         this.price = price;
     }
 
-    public void update(SubjectRequest request) {
+    public void update(SubjectCommand.update request) {
         this.name = request.getName();
         this.description = request.getDescription();
         this.publicYn = request.getPublicYn();

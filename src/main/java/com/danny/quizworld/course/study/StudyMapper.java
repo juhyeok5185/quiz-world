@@ -14,7 +14,7 @@ public class StudyMapper {
     private final ChapterService chapterService;
     private final SubjectService subjectService;
 
-    public Study toEntity(Chapter chapter,  StudyRequest request){
+    public Study toEntity(Chapter chapter,  StudyCommand.save request){
         return Study.builder()
                 .chapter(chapter)
                 .subject(chapter.getSubject())

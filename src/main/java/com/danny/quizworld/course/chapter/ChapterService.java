@@ -40,7 +40,7 @@ public class ChapterService {
         return chapterReader.findById(chapterId);
     }
 
-    public Chapter toEntity(Subject subject , ChapterRequest request) {
+    public Chapter toEntity(Subject subject , ChapterCommand.save request) {
         return chapterMapper.toEntity(subject, request);
     }
 

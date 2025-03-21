@@ -48,7 +48,7 @@ public class Study extends BaseTimeEntity {
         this.description = description;
     }
 
-    public void update(StudyRequest request) {
+    public void update(StudyCommand.update request) {
         this.questionText = request.getQuestionText();
         this.answerText = request.getAnswerText();
         this.description = request.getDescription();

@@ -1,7 +1,8 @@
 package com.danny.quizworld.course;
 
+import com.danny.quizworld.course.chapter.ChapterCommand;
 import com.danny.quizworld.course.study.Study;
-import com.danny.quizworld.course.study.StudyRequest;
+import com.danny.quizworld.course.study.StudyCommand;
 import com.danny.quizworld.course.study.StudyResponse;
 import com.danny.quizworld.course.study.StudyService;
 import com.danny.quizworld.course.subject.*;
@@ -9,7 +10,6 @@ import com.danny.quizworld.member.Member;
 import com.danny.quizworld.member.MemberService;
 import com.danny.quizworld.course.chapter.Chapter;
 import com.danny.quizworld.course.chapter.ChapterResponse;
-import com.danny.quizworld.course.chapter.ChapterRequest;
 import com.danny.quizworld.course.chapter.ChapterService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -29,14 +29,14 @@ public class CourseFacade {
 
     //Subject 관련 API ---------------------------------------------------------------------------------------
     @Transactional
-    public void saveSubject(Long memberId, SubjectRequest request) {
+    public void saveSubject(Long memberId, SubjectCommand.save request) {
         Member member = memberService.findById(memberId);
         Subject subject = subjectService.toEntity(member, request);
         subjectService.save(subject);
     }
 
     @Transactional
-    public void updateSubject(Long subjectId, SubjectRequest request) {
+    public void updateSubject(Long subjectId, SubjectCommand.update request) {
         Subject subject = subjectService.findById(subjectId);
         subject.update(request);
         subjectService.save(subject);
@@ -85,14 +85,14 @@ public class CourseFacade {
 
     //Chapter 관련 API ---------------------------------------------------------------------------------------
     @Transactional
-    public void saveChapter(Long subjectId, ChapterRequest request) {
+    public void saveChapter(Long subjectId, ChapterCommand.save request) {
         Subject subject = subjectService.findById(subjectId);
         Chapter chapter = chapterService.toEntity(subject, request);
         chapterService.save(chapter);
     }
 
     @Transactional
-    public void updateChapter(Long chapterId, ChapterRequest request) {
+    public void updateChapter(Long chapterId, ChapterCommand.update request) {
         Chapter chapter = chapterService.findById(chapterId);
         chapter.update(request);
         chapterService.save(chapter);
@@ -127,14 +127,14 @@ public class CourseFacade {
 
     //Study 관련 API ---------------------------------------------------------------------------------------
     @Transactional
-    public void saveStudy(Long chapterId, StudyRequest request) {
+    public void saveStudy(Long chapterId, StudyCommand.save request) {
         Chapter chapter = chapterService.findById(chapterId);
         Study study = studyService.toEntity(chapter, request);
         studyService.save(study);
     }
 
     @Transactional
-    public void updateStudy(Long studyId, StudyRequest request) {
+    public void updateStudy(Long studyId, StudyCommand.update request) {
         Study study = studyService.findById(studyId);
         study.update(request);
         studyService.save(study);

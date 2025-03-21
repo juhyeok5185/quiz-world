@@ -30,7 +30,7 @@ public class Chapter extends BaseTimeEntity {
         this.name = name;
     }
 
-    public void update(ChapterRequest request) {
+    public void update(ChapterCommand.update request) {
         this.name = request.getName();
     }
 }

@@ -40,7 +40,7 @@ public class SubjectService {
         return subjectReader.findAllSubjectBySearch(search);
     }
 
-    public Subject toEntity(Member member, SubjectRequest request) {
+    public Subject toEntity(Member member, SubjectCommand.save request) {
         return subjectMapper.toEntity(member, request);
     }
 

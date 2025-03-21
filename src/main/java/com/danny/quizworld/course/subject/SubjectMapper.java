@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class SubjectMapper {
 
-    public Subject toEntity(Member member, SubjectRequest request) {
+    public Subject toEntity(Member member, SubjectCommand.save request) {
         return Subject.builder()
                 .member(member)
                 .name(request.getName())

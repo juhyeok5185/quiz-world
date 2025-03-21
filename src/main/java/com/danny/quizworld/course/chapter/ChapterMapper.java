@@ -11,7 +11,7 @@ public class ChapterMapper {
 
     private final SubjectService subjectService;
 
-    public Chapter toEntity(Subject subject, ChapterRequest request){
+    public Chapter toEntity(Subject subject, ChapterCommand.save request){
         return Chapter.builder()
                 .subject(subject)
                 .name(request.getName())
