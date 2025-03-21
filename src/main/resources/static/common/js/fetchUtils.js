@@ -117,7 +117,7 @@ async function fetchPatchByJson(url, jsonData) {
             method: "PATCH",
             headers: {
                 "Content-Type": "application/json",
-                headers: {'X-XSRF-TOKEN': getCsrfToken()},
+                "X-XSRF-TOKEN": getCsrfToken(), // CSRF 토큰 추가
             },
             body: JSON.stringify(jsonData),
         });

@@ -18,7 +18,7 @@ public class StudyApiController {
 
 
     @PostMapping("/{chapterId}/studies")
-    public ResponseEntity<ApiResponse<StudyResponse>> saveStudy(@PathVariable Long chapterId, @ModelAttribute @Valid StudyCommand.save request) {
+    public ResponseEntity<ApiResponse<StudyResponse>> saveStudy(@PathVariable Long chapterId, @ModelAttribute StudyCommand.save request) {
         courseFacade.saveStudy(chapterId, request);
         return ResponseEntity.status(201).body(new ApiResponse<>("생성 성공", 201, null));
     }

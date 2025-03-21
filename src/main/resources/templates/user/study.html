@@ -156,6 +156,7 @@
         async function saveQuestion() {
             const chapterId = getParamValue('chapterId');
             const formData = new FormData(find('#saveForm'));
+            logFormData(formData)
             await fetchPostByFormData(`/api/courses/subjects/chapters/${chapterId}/studies`, formData);
             location.reload();
         }
@@ -164,7 +165,7 @@
             const chapterId = getParamValue('chapterId');
             const url = `/api/courses/subjects/chapters/${chapterId}/studies`;
             studys = await fetchGet(url);
-            changeLogoText(`${studys[0].chapter.subject.name} - ${studys[0].chapter.name}`)
+            // changeLogoText(`${studys[0].chapter.subject.name} - ${studys[0].chapter.name}`)
             drawList();
         }
 
@@ -192,7 +193,8 @@
 
         function drawList() {
             let html = ``;
-            if( studys.length === 0 ) {
+            console.log(studys.length)
+            if(studys.length === 0 ) {
                 html += `
                         <div class="text-center text-gray-500 py-10">
                             등록된 과목이 없습니다.<br>과목을 추가해 주세요!

@@ -10,8 +10,10 @@ import org.springframework.stereotype.Component;
 public class SubjectValidator {
 
     public void validateToSave(Member member, SubjectCommand.save request) {
-        if (request.getPrice() != 0 && !member.getBusinessYn()) {
-            throw new MyException("사업자 계정이 아닙니다.");
+        if (request.getPrice() != null){
+            if (request.getPrice() != 0 && !member.getBusinessYn()) {
+                throw new MyException("사업자 계정이 아닙니다.");
+            }
         }
     }
 

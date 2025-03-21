@@ -32,7 +32,7 @@ public class SubjectApiController {
         return ResponseEntity.status(201).body(new ApiResponse<>("생성 완료" , 201 ,null));
     }
 
-    @GetMapping
+    @GetMapping("/search")
     public ResponseEntity<ApiResponse<List<SubjectResponse>>> findAllSubjectBySearch(@ModelAttribute SubjectSearch search) {
         return ResponseEntity.ok(new ApiResponse<>(courseFacade.findAllSubjectBySearch(search)));
     }

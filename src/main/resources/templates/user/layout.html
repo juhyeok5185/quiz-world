@@ -74,9 +74,70 @@
 <script>
     let memberInfo = [];
 
+
     window.onload = function () {
         findMember()
         hideBackButton();
+        makeAdLocalStorage();
+    }
+
+    function makeAdLocalStorage(){
+        const keys = [
+            'postCount',
+            'getCount',
+            'shuffleCount',
+            'toggleCount',
+            'specialModeCount',
+            'viewAnswerCount'
+        ];
+
+        keys.forEach((key) => {
+            if (localStorage.getItem(key) === null) {
+                localStorage.setItem(key, '0'); // 최초 실행일 때만 세팅됨
+            }
+        });
+    }
+
+    function increaseAdCount(key) {
+        if(memberInfo.subscribeYn) return
+        const value = parseInt(localStorage.getItem(key) || '0');
+        localStorage.setItem(key, (value + 1).toString());
+        switch (key) {
+            case 'postCount':
+                if (value >= 5) {
+                    alert('광고');
+                    localStorage.setItem(key, '0');
+                }
+                break;
+
+            case 'getCount':
+                if (value >= 20) {
+                    alert('광고');
+                    localStorage.setItem(key, '0');
+                }
+                break;
+
+            case 'shuffleCount':
+                if (value >= 100) {
+                    alert('광고');
+                    localStorage.setItem(key, '0');
+                }
+                break;
+
+            case 'specialModeCount':
+                if (value >= 10) {
+                    alert('광고');
+                    localStorage.setItem(key, '0');
+                }
+                break;
+
+            case 'viewAnswerCount':
+                if (value >= 100) {
+                    alert('광고');
+                    localStorage.setItem(key, '0');
+                }
+                break;
+        }
     }
 
     async function findMember(){
