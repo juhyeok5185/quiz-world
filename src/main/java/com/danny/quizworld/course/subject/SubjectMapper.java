@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class SubjectMapper {
 
-    public Subject toEntity(Member member, SubjectRequest request){
+    public Subject toEntity(Member member, SubjectRequest request) {
         return Subject.builder()
                 .member(member)
                 .name(request.getName())
@@ -29,6 +29,19 @@ public class SubjectMapper {
                 .price(subject.getPrice())
                 .likeCount(subject.getLikeCount())
                 .downloadCount(subject.getDownloadCount())
+                .build();
+    }
+
+    public Subject copy(Subject targetSubject, Member member) {
+        return Subject.builder()
+                .member(member)
+                .name(targetSubject.getName())
+                .description(targetSubject.getDescription())
+                .likeCount(0)
+                .downloadCount(0)
+                .publicYn(false)
+                .price(0L)
+                .downloadId(targetSubject.getSubjectId())
                 .build();
     }
 }

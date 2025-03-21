@@ -4,10 +4,7 @@ import com.danny.quizworld.course.study.Study;
 import com.danny.quizworld.course.study.StudyRequest;
 import com.danny.quizworld.course.study.StudyResponse;
 import com.danny.quizworld.course.study.StudyService;
-import com.danny.quizworld.course.subject.Subject;
-import com.danny.quizworld.course.subject.SubjectRequest;
-import com.danny.quizworld.course.subject.SubjectResponse;
-import com.danny.quizworld.course.subject.SubjectService;
+import com.danny.quizworld.course.subject.*;
 import com.danny.quizworld.member.Member;
 import com.danny.quizworld.member.MemberService;
 import com.danny.quizworld.course.chapter.Chapter;
@@ -56,6 +53,12 @@ public class CourseFacade {
     }
 
     @Transactional(readOnly = true)
+    public List<SubjectResponse> findAllSubjectBySearch(SubjectSearch search) {
+        List<Subject> subjectList = subjectService.findAllSubjectBySearch(search);
+        return subjectList.stream().map(subjectService::toResponse).collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
     public List<SubjectResponse> findAllByMemberId(Long memberId) {
         return subjectService.findAllByMemberId(memberId).stream().map(subject -> {
                     Long studyCount = studyService.countBySubjectId(subject.getSubjectId());
@@ -69,6 +72,14 @@ public class CourseFacade {
     @Transactional(readOnly = true)
     public SubjectResponse findSubjectById(Long subjectId) {
         return subjectService.toResponse(subjectService.findById(subjectId));
+    }
+
+    @Transactional(readOnly = true)
+    public void downloadSubject(Long subjectId, Long memberId) {
+        Subject targetSubject = subjectService.findById(subjectId);
+        Member member = memberService.findById(memberId);
+        Subject subject = subjectService.copy(targetSubject , member);
+        subjectService.save(subject);
     }
 
 

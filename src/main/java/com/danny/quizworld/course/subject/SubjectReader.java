@@ -18,4 +18,8 @@ public class SubjectReader {
     public Subject findById(Long subjectId) {
         return subjectRepository.findById(subjectId).orElseThrow(() -> new MyException("과목을 찾을수 없습니다."));
     }
+
+    public List<Subject> findAllSubjectBySearch(SubjectSearch search) {
+        return subjectRepository.findAllSubjectBySearch(search);
+    }
 }

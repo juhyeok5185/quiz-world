@@ -35,6 +35,10 @@ public class SubjectService {
         return subjectReader.findById(subjectId);
     }
 
+    @Transactional(readOnly = true)
+    public List<Subject> findAllSubjectBySearch(SubjectSearch search) {
+        return subjectReader.findAllSubjectBySearch(search);
+    }
 
     public Subject toEntity(Member member, SubjectRequest request) {
         return subjectMapper.toEntity(member, request);
@@ -44,5 +48,7 @@ public class SubjectService {
         return subjectMapper.toResponse(subject);
     }
 
-
+    public Subject copy(Subject targetSubject, Member member) {
+        return subjectMapper.copy(targetSubject , member);
+    }
 }

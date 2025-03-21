@@ -28,6 +28,18 @@ public class SubjectApiController {
         return ResponseEntity.status(201).body(new ApiResponse<>("생성 완료" , 201 ,null));
     }
 
+    @PostMapping("/{subjectId}/download")
+    public ResponseEntity<ApiResponse<SubjectResponse>> downloadSubject(@PathVariable Long subjectId , Authentication authentication) {
+        Long memberId = Utils.getMemberId(authentication);
+        courseFacade.downloadSubject(subjectId , memberId);
+        return ResponseEntity.status(201).body(new ApiResponse<>("생성 완료" , 201 ,null));
+    }
+
+    @GetMapping
+    public ResponseEntity<ApiResponse<List<SubjectResponse>>> findAllSubjectBySearch(@ModelAttribute SubjectSearch search) {
+        return ResponseEntity.ok(new ApiResponse<>(courseFacade.findAllSubjectBySearch(search)));
+    }
+
     @GetMapping
     public ResponseEntity<ApiResponse<List<SubjectResponse>>> findAllSubjectByMemberId(Authentication authentication) {
         Long memberId = Utils.getMemberId(authentication);
