@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class MemberService {
@@ -27,6 +29,11 @@ public class MemberService {
         return memberReader.findByEmail(email);
     }
 
+    @Transactional(readOnly = true)
+    public List<Member> findAllBySubscribeYnTrue() {
+        return memberReader.findAllBySubscribeYnTrue();
+    }
+
     public Member toEntity(String name , String email){
         return memberMapper.toEntity(name ,email);
     }
@@ -34,5 +41,6 @@ public class MemberService {
     public MemberResponse toResponse(Member member){
         return memberMapper.toResponse(member);
     }
+
 
 }

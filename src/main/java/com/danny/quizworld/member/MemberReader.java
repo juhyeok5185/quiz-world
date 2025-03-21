@@ -5,6 +5,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.List;
+
 @Component
 @RequiredArgsConstructor
 public class MemberReader {
@@ -17,5 +19,9 @@ public class MemberReader {
 
     public Member findByEmail(String email) {
         return memberRepository.findByEmail(email);
+    }
+
+    public List<Member> findAllBySubscribeYnTrue() {
+        return memberRepository.findAllBySubscribeYnTrue();
     }
 }

@@ -1,11 +1,14 @@
 package com.danny.quizworld.course;
 
+import com.danny.quizworld.common.config.MyException;
 import com.danny.quizworld.course.chapter.ChapterCommand;
 import com.danny.quizworld.course.study.Study;
 import com.danny.quizworld.course.study.StudyCommand;
 import com.danny.quizworld.course.study.StudyResponse;
 import com.danny.quizworld.course.study.StudyService;
 import com.danny.quizworld.course.subject.*;
+import com.danny.quizworld.course.subject.member.SubjectMember;
+import com.danny.quizworld.course.subject.member.SubjectMemberService;
 import com.danny.quizworld.member.Member;
 import com.danny.quizworld.member.MemberService;
 import com.danny.quizworld.course.chapter.Chapter;
@@ -26,6 +29,7 @@ public class CourseFacade {
     private final SubjectService subjectService;
     private final ChapterService chapterService;
     private final StudyService studyService;
+    private final SubjectMemberService subjectMemberService;
 
     //Subject 관련 API ---------------------------------------------------------------------------------------
     @Transactional
@@ -79,6 +83,14 @@ public class CourseFacade {
     @Transactional(readOnly = true)
     public void downloadSubject(Long subjectId, Long memberId) {
         Subject targetSubject = subjectService.findById(subjectId);
+
+        if (targetSubject.getPrice() != 0){
+            SubjectMember subjectMember = subjectMemberService.findBySubjectIdAndMemberId(targetSubject.getSubjectId() , memberId);
+            if(subjectMember == null){
+                throw new MyException("결제 후에 다운로드 가능합니다.");
+            }
+        }
+
         Member member = memberService.findById(memberId);
         Subject subject = subjectService.copy(targetSubject , member);
         subjectService.save(subject);
@@ -158,4 +170,10 @@ public class CourseFacade {
         return studyService.toResponse(studyService.findById(studyId));
     }
 
+    public void saveSubjectMember(String subjectId, Long memberId) {
+        Member member = memberService.findById(memberId);
+        Subject subject = subjectService.findById(Long.parseLong(subjectId));
+        SubjectMember subjectMember = subjectMemberService.toEntity(subject , member);
+        subjectMemberService.save(subjectMember);
+    }
 }
