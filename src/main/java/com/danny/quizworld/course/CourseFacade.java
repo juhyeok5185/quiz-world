@@ -31,11 +31,17 @@ public class CourseFacade {
     private final StudyService studyService;
 
     //Subject 관련 API ---------------------------------------------------------------------------------------
-
     @Transactional
     public void saveSubject(Long memberId, SubjectRequest request) {
         Member member = memberService.findById(memberId);
         Subject subject = subjectService.toEntity(member, request);
+        subjectService.save(subject);
+    }
+
+    @Transactional
+    public void updateSubject(Long subjectId, SubjectRequest request) {
+        Subject subject = subjectService.findById(subjectId);
+        subject.update(request);
         subjectService.save(subject);
     }
 
@@ -65,12 +71,19 @@ public class CourseFacade {
         return subjectService.toResponse(subjectService.findById(subjectId));
     }
 
-    //Chapter 관련 API ---------------------------------------------------------------------------------------
 
+    //Chapter 관련 API ---------------------------------------------------------------------------------------
     @Transactional
     public void saveChapter(Long subjectId, ChapterRequest request) {
         Subject subject = subjectService.findById(subjectId);
         Chapter chapter = chapterService.toEntity(subject, request);
+        chapterService.save(chapter);
+    }
+
+    @Transactional
+    public void updateChapter(Long chapterId, ChapterRequest request) {
+        Chapter chapter = chapterService.findById(chapterId);
+        chapter.update(request);
         chapterService.save(chapter);
     }
 
@@ -99,8 +112,9 @@ public class CourseFacade {
         return chapterService.toResponse(chapterService.findById(chapterId));
     }
 
-    //Study 관련 API ---------------------------------------------------------------------------------------
 
+
+    //Study 관련 API ---------------------------------------------------------------------------------------
     @Transactional
     public void saveStudy(Long chapterId, StudyRequest request) {
         Chapter chapter = chapterService.findById(chapterId);
@@ -133,6 +147,5 @@ public class CourseFacade {
     public StudyResponse findStudyById(Long studyId) {
         return studyService.toResponse(studyService.findById(studyId));
     }
-
 
 }
