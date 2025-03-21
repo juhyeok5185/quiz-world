@@ -92,8 +92,7 @@
     </div>
 
     <!-- 문제 수정 모달 -->
-    <div id="modal-update"
-         class="fixed inset-0 left-0 top-[-16px] bg-black bg-opacity-50 flex items-center justify-center hidden">
+    <div id="modal-update" class="fixed inset-0 left-0 top-[-16px] bg-black bg-opacity-50 flex items-center justify-center hidden">
         <div class="bg-white p-6 rounded-lg shadow-lg w-96">
             <h2 class="text-xl font-bold mb-4">문제 수정</h2>
             <form id="updateForm">
@@ -145,7 +144,7 @@
 
 <th:block layout:fragment="script">
     <script th:inline="javascript">
-        let study = [];
+        let studys = [];
         let flashInterval = null;
         let longPressTimers = {}; // 타이머 저장 객체
         let currentToggleMode = 'all'; // ✅ 현재 토글 상태 저장
@@ -162,12 +161,11 @@
             location.reload();
         }
 
-
         async function findAllByChapterId() {
             const chapterId = getParamValue('chapterId');
             const url = `/api/courses/subjects/chapters/${chapterId}/study`;
-            study = await fetchGet(url);
-            changeLogoText(`${study[0].chapter.subject.name} - ${study[0].chapter.name}`)
+            studys = await fetchGet(url);
+            changeLogoText(`${studys[0].chapter.subject.name} - ${studys[0].chapter.name}`)
             drawList();
         }
 
@@ -194,13 +192,13 @@
 
         function drawList() {
             let html = ``;
-            if( study.length === 0 ) {
+            if( studys.length === 0 ) {
                 html += `
                         <div class="text-center text-gray-500 py-10">
                             등록된 과목이 없습니다.<br>과목을 추가해 주세요!
                         </div>`;
             } else {
-                study.forEach((questionData, index) => {
+                studys.forEach((study, index) => {
                     html += `
                      <div class="bg-white shadow-lg rounded-lg p-4 cursor-pointer flex flex-col user-select-none"
                           data-index="${index}"
@@ -211,11 +209,11 @@
                           ontouchend="endLongPress(event, ${index})"
                           ontouchcancel="cancelLongPress(event, ${index})">
                        <div class="flex justify-between items-center">
-                         <span class="questionText font-semibold text-gray-900 text-left flex-1">${questionData.questionText}</span>
-                         <span class="answerText font-semibold text-gray-900 text-right flex-1">${questionData.answerText}</span>
+                         <span class="questionText font-semibold text-gray-900 text-left flex-1">${study.questionText}</span>
+                         <span class="answerText font-semibold text-gray-900 text-right flex-1">${study.answerText}</span>
                        </div>
                        <div id="hint-${index}" class="descriptionText mt-2 text-sm text-gray-600 hidden">
-                         ${questionData.description || "설명 없음"}
+                         ${study.description || "설명 없음"}
                        </div>
                      </div>
                    `;
@@ -228,7 +226,7 @@
         function startLongPress(event, index) {
             event.preventDefault();
             longPressTimers[index] = setTimeout(() => {
-                updateMode(study[index].studyId);  // questionId 넘김
+                updateMode(studys[index].studyId);  // questionId 넘김
                 delete longPressTimers[index];
             }, 1000); // 1초 동안 눌렀을 때 실행
         }
@@ -256,18 +254,18 @@
         }
 
         function shuffleQuestions() {
-            if (study.length < 2) return; // 요소가 1개 이하라면 섞을 필요 없음
+            if (studys.length < 2) return; // 요소가 1개 이하라면 섞을 필요 없음
 
             let shuffled;
             let attempt = 0;
             const maxAttempts = 10; // 동일한 배열 방지를 위한 최대 시도 횟수
 
             do {
-                shuffled = [...study].sort(() => Math.random() - 0.5);
+                shuffled = [...studys].sort(() => Math.random() - 0.5);
                 attempt++;
-            } while (JSON.stringify(shuffled) === JSON.stringify(study) && attempt < maxAttempts);
+            } while (JSON.stringify(shuffled) === JSON.stringify(studys) && attempt < maxAttempts);
 
-            study = shuffled;
+            studys = shuffled;
             drawList();
             setToggle(currentToggleMode);
         }
@@ -336,7 +334,7 @@
         }
 
         function startFocusMode() {
-            if (study.length === 0) return;
+            if (studys.length === 0) return;
 
             currentIndex = 0;
             isFocusMode = true;
@@ -360,14 +358,14 @@
                     specialModeAnswer.style.display = 'block';
                 } else {
                     // 다음 문제로 이동
-                    currentIndex = (currentIndex + 1) % study.length;
+                    currentIndex = (currentIndex + 1) % studys.length;
                     updateSpecialModeContent();
                 }
             };
         }
 
         function startFlashMode() {
-            if (study.length === 0) return;
+            if (studys.length === 0) return;
 
             currentIndex = 0;
             isFocusMode = false;
@@ -390,7 +388,7 @@
             // 5초마다 다음 내용으로 넘어가기
             clearInterval(flashInterval);
             flashInterval = setInterval(() => {
-                currentIndex = (currentIndex + 1) % study.length;
+                currentIndex = (currentIndex + 1) % studys.length;
                 updateSpecialModeContent();
             }, 3000);
         }
@@ -406,9 +404,9 @@
         }
 
         function updateSpecialModeContent() {
-            if (study.length === 0) return;
+            if (studys.length === 0) return;
 
-            const currentQuestion = study[currentIndex];
+            const currentQuestion = studys[currentIndex];
             const specialModeQuestion = document.getElementById('specialModeQuestion');
             const specialModeAnswer = document.getElementById('specialModeAnswer');
 

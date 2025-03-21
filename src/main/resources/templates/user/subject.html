@@ -111,8 +111,7 @@
         async function save() {
             const url = `/api/courses/subjects`;
             const formData = new FormData(find('#saveForm'));
-            const json = changeFormDataToJson(formData)
-            await fetchPostByJson(url, json);
+            await fetchPostByJson(url, changeFormDataToJson(formData));
             location.reload();
         }
 
@@ -123,40 +122,70 @@
             drawList();
         }
 
-
         function drawList() {
-            let html = subjects.length
-                ? subjects.map(item => `
-                        <div class="bg-white shadow-lg rounded-lg p-6 relative cursor-pointer hover:bg-gray-100 transition" onclick="location.href='/user/chapter?subjectId=${item.subjectId}'">
-
-                            <!-- 설정 아이콘 (톱니바퀴) -->
-                            <div class="absolute top-3 right-3 cursor-pointer text-gray-500 hover:text-gray-700 text-xl" onclick="openSettings(event, ${item.subjectId})">
-                                ⚙️
-                            </div>
-
-                            <!-- Popover 메뉴 -->
-                            <div id="popover-${item.subjectId}" class="popover-menu absolute right-3 top-10 bg-white border border-gray-300 shadow-lg rounded-md hidden">
-                                <ul class="text-sm text-gray-700">
-                                    <li class="p-2 cursor-pointer hover:bg-gray-100" onclick="updateMode(event, ${item.subjectId})">수정</li>
-                                    <li class="p-2 cursor-pointer hover:bg-red-100 text-red-500" onclick="deleteSubject(event, ${item.subjectId})">삭제</li>
-                                </ul>
-                            </div>
-
-                            <div class="text-lg font-semibold text-gray-900">${item.name}</div>
-                            <p class="text-sm text-gray-600 mt-1">소개: ${item.description}</p>
-                            <p class="text-sm text-gray-600">공개 여부: ${item.publicYn}</p>
-                            <p class="text-sm text-gray-600">총 문항: ${item.quizCount} 문항</p>
-                            <p class="text-sm text-gray-600">추천 : ${item.likeCount} 개</p>
-                            <p class="text-sm text-gray-600">금액: ${item.price} 원</p>
-                        </div>
-                    `).join('')
-                : `                    <div class="text-center text-gray-500 py-10">
-                                등록된 과목이 없습니다.<br>과목을 추가해 주세요!
-                           </div>`;
-
+            let html = ``;
+            if(subjects.length === 0) {
+                html += `
+                <div class="text-center text-gray-500 py-10">등록된 과목이 없습니다.<br>과목을 추가해 주세요!</div>
+                `;
+            } else {
+                subjects.forEach((subject , index) => {
+                    html += `
+                          <div class="bg-white shadow-lg rounded-lg p-6 relative cursor-pointer hover:bg-gray-100 transition" onclick="location.href='/user/chapter?subjectId=${item.subjectId}'">
+                              <!-- 설정 아이콘 (톱니바퀴) -->
+                              <div class="absolute top-3 right-3 cursor-pointer text-gray-500 hover:text-gray-700 text-xl" onclick="openSettings(event, ${item.subjectId})">
+                                  ⚙️
+                              </div>
+                              <!-- Popover 메뉴 -->
+                              <div id="popover-${item.subjectId}" class="popover-menu absolute right-3 top-10 bg-white border border-gray-300 shadow-lg rounded-md hidden">
+                                  <ul class="text-sm text-gray-700">
+                                      <li class="p-2 cursor-pointer hover:bg-gray-100" onclick="updateMode(event, ${item.subjectId})">수정</li>
+                                      <li class="p-2 cursor-pointer hover:bg-red-100 text-red-500" onclick="deleteSubject(event, ${item.subjectId})">삭제</li>
+                                  </ul>
+                              </div>
+                              <div class="text-lg font-semibold text-gray-900">${item.name}</div>
+                              <p class="text-sm text-gray-600 mt-1">소개: ${item.description}</p>
+                              <p class="text-sm text-gray-600">공개 여부: ${item.publicYn}</p>
+                              <p class="text-sm text-gray-600">총 문항: ${item.quizCount} 문항</p>
+                              <p class="text-sm text-gray-600">추천 : ${item.likeCount} 개</p>
+                              <p class="text-sm text-gray-600">금액: ${item.price} 원</p>
+                          </div>
+                `;
+                })
+            }
             find('.listArea').innerHTML = html;
         }
 
+        async function updateMode(event, subjectId) {
+            event.stopPropagation(); // 부모 div 클릭 이벤트 차단
+            const url = `/api/courses/subjects/${subjectId}`
+            const subject = await fetchGet(url);
+            find('#subjectId').value = subject.subjectId;
+            find('#name').value = subject.name;
+            find('#description').value = subject.description;
+            find('#modal-update').classList.remove('hidden');
+        }
+
+        async function deleteSubject(event, subjectId) {
+            event.stopPropagation(); // 부모 div 클릭 이벤트 차단
+            if (confirm("정말 삭제하시겠습니까?")) {
+                const url = `/api/courses/subjects/${subjectId}`;
+                await fetchDelete(url);
+                location.reload();
+            }
+        }
+
+        async function updateSubject() {
+            const subjectId = find('#subjectId').value;
+            const url = `/api/courses/subjects/${subjectId}`;
+            const formData = new FormData(find('#updateForm'));
+            await fetchPatchByJson(url, changeFormDataToJson(formData));
+            location.reload();
+        }
+
+
+
+        //디자인요소 ----------------------------------------------------------------------
         function openSettings(event, subjectId) {
             event.stopPropagation(); // 리스트 클릭 이벤트 방지
             const popover = document.querySelector(`#popover-${subjectId}`);
@@ -181,21 +210,9 @@
             }
         }
 
-        async function updateMode(event, subjectId) {
-            event.stopPropagation(); // 부모 div 클릭 이벤트 차단
-            const response = await fetchGet(`/api/courses/subjects/${subjectId}`);
-            find('#subjectId').value = response.subjectId;
-            find('#name').value = response.name;
-            find('#description').value = response.description;
-            find('#modal-update').classList.remove('hidden');
-        }
 
-        function deleteSubject(event, subjectId) {
-            event.stopPropagation(); // 부모 div 클릭 이벤트 차단
-            if (confirm("정말 삭제하시겠습니까?")) {
-                alert(`과목 ${subjectId} 삭제 기능 구현 필요`);
-            }
-        }
+
+
 
 
     </script>
