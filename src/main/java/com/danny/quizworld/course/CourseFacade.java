@@ -74,9 +74,14 @@ public class CourseFacade {
                 .toList();
 
         return Stream.concat(purchasedSubjects.stream(), mySubjects.stream())
-                .map(subjectService::toResponse)
+                .map(subject -> {
+                    SubjectResponse response = subjectService.toResponse(subject);
+                    response.setStudyCount(studyService.countBySubjectId(subject.getSubjectId()));
+                    return response;
+                })
                 .collect(Collectors.toList());
     }
+
 
 
 

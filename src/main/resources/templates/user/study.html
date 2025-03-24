@@ -261,6 +261,7 @@
         function revealHidden(index) {
             const questionEl = document.querySelectorAll('.questionText')[index];
             const answerEl = document.querySelectorAll('.answerText')[index];
+            const hintEl = document.getElementById(`hint-${index}`);
 
             if (currentToggleMode === 'question') {
                 // 답이 보이면 숨기고, 숨겨져 있으면 보이게
@@ -268,8 +269,16 @@
             } else if (currentToggleMode === 'answer') {
                 // 질문이 보이면 숨기고, 숨겨져 있으면 보이게
                 questionEl.style.visibility = (questionEl.style.visibility === 'visible') ? 'hidden' : 'visible';
+            } else if (currentToggleMode === 'all') {
+                // hint 블록 show/hide toggle
+                if (hintEl.classList.contains('hidden')) {
+                    hintEl.classList.remove('hidden');
+                } else {
+                    hintEl.classList.add('hidden');
+                }
             }
         }
+
 
 
 
@@ -303,13 +312,20 @@
             document.getElementById(`toggle${mode.charAt(0).toUpperCase() + mode.slice(1)}`)
                 .classList.add('bg-gradient-to-r', 'from-blue-500', 'to-indigo-500', 'text-white');
 
-            // 텍스트 영역 표시/숨김 (공간 유지)
+            // 질문/답 표시
             findAll('.questionText').forEach(el => {
                 el.style.visibility = (mode === 'answer') ? 'hidden' : 'visible';
             });
 
             findAll('.answerText').forEach(el => {
                 el.style.visibility = (mode === 'question') ? 'hidden' : 'visible';
+            });
+
+            // 💡 힌트 숨기기 처리
+            findAll('.descriptionText').forEach(hint => {
+                if (!hint.classList.contains('hidden')) {
+                    hint.classList.add('hidden');
+                }
             });
         }
 

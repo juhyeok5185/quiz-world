@@ -1,35 +1,20 @@
 package com.danny.quizworld.course.subject;
 
 import com.danny.quizworld.member.Member;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
+import org.mapstruct.*;
 
-@Component
-@RequiredArgsConstructor
-public class SubjectMapper {
+@Mapper(componentModel = "spring")
+public interface SubjectMapper {
 
-    public Subject toEntity(Member member, SubjectCommand.save request) {
-        return Subject.builder()
-                .member(member)
-                .name(request.getName())
-                .description(request.getDescription())
-                .likeCount(0)
-                .downloadCount(0)
-                .publicYn(request.getPublicYn())
-                .price(request.getPrice() == null ? 0 : request.getPrice())
-                .build();
-    }
+    @Mapping(target = "name", source = "request.name")
+    @Mapping(target = "description", source = "request.description")
+    @Mapping(target = "likeCount", constant = "0")
+    @Mapping(target = "downloadCount", constant = "0")
+    @Mapping(target = "member", source = "member")
+    @Mapping(target = "price", expression = "java(request.getPrice() == null ? 0L : request.getPrice())")
+    Subject toEntity(Member member, SubjectCommand.save request);
 
-    public SubjectResponse toResponse(Subject subject) {
-        return SubjectResponse.builder()
-                .subjectId(subject.getSubjectId())
-                .name(subject.getName())
-                .description(subject.getDescription())
-                .publicYn(subject.getPublicYn())
-                .price(subject.getPrice())
-                .likeCount(subject.getLikeCount())
-                .downloadCount(subject.getDownloadCount())
-                .build();
-    }
+
+    SubjectResponse toResponse(Subject subject);
 
 }
