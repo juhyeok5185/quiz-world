@@ -37,8 +37,9 @@
 
                 <!-- 집중모드 선택 메뉴 (Popover) -->
                 <div id="focusModeMenu"
-                     class="absolute top-full right-0 mt-2 bg-white shadow-lg rounded-md p-2 hidden flex flex-col w-32">
-                    <div onclick="startFocusMode()"
+                     class="absolute top-full right-0 mt-2 bg-white shadow-lg rounded-md p-2 hidden flex flex-col w-32 z-50">
+
+                <div onclick="startFocusMode()"
                          class="w-full px-4 py-2 text-gray-800 hover:bg-gray-200 rounded-md cursor-pointer">
                         집중모드
                     </div>
@@ -142,8 +143,9 @@
     <script th:inline="javascript">
         let studys = [];
         let flashInterval = null;
-        let longPressTimers = {}; // 타이머 저장 객체
         let currentToggleMode = 'all'; // ✅ 현재 토글 상태 저장
+        let activePopoverId = null;
+
 
 
         window.onload = () => {
@@ -182,11 +184,11 @@
             location.reload();
         }
 
-        function openSettings(event, subjectId) {
+        function openSettings(event, studyId) {
             event.stopPropagation(); // 리스트 클릭 이벤트 방지
-            const popover = document.querySelector(`#popover-${subjectId}`);
+            const popover = document.querySelector(`#popover-${studyId}`);
             // 현재 열린 popover와 동일하면 닫기
-            if (activePopoverId === subjectId) {
+            if (activePopoverId === studyId) {
                 popover.classList.add("hidden");
                 activePopoverId = null;
             } else {
@@ -195,7 +197,7 @@
 
                 // 현재 클릭한 톱니바퀴의 popover 보이기
                 popover.classList.remove("hidden");
-                activePopoverId = subjectId; // 현재 열린 popover ID 저장
+                activePopoverId = studyId; // 현재 열린 popover ID 저장
             }
         }
 
@@ -220,42 +222,56 @@
             } else {
                 studys.forEach((study, index) => {
                     html += `
-                     <div class="bg-white shadow-lg rounded-lg p-4 cursor-pointer flex flex-col user-select-none">
-                                <!-- 설정 아이콘 (톱니바퀴) -->
-                              <div class="absolute top-3 right-3 cursor-pointer text-gray-500 hover:text-gray-700 text-xl" onclick="openSettings(event, ${study.studyId})">
-                                  ⚙️
-                              </div>
-                              <!-- Popover 메뉴 -->
-                              <div id="popover-${study.studyId}" class="popover-menu absolute right-3 top-10 bg-white border border-gray-300 shadow-lg rounded-md hidden">
-                                  <ul class="text-sm text-gray-700">
-                                      <li class="p-2 cursor-pointer hover:bg-gray-100" onclick="updateMode(event, ${study.studyId})">수정</li>
-                                      <li class="p-2 cursor-pointer hover:bg-red-100 text-red-500" onclick="deleteById(event, ${study.studyId})">삭제</li>
-                                  </ul>
-                              </div>
+                          <div onclick="revealHidden(${index})" class="bg-white shadow-lg rounded-lg p-4 cursor-pointer flex flex-col user-select-none relative">
 
-                       <div class="flex justify-between items-center">
-                         <span class="questionText font-semibold text-gray-900 text-left flex-1">${study.questionText}</span>
-                         <span class="answerText font-semibold text-gray-900 text-right flex-1">${study.answerText}</span>
-                       </div>
-                       <div id="hint-${index}" class="descriptionText mt-2 text-sm text-gray-600 hidden">
-                         ${study.description || "설명 없음"}
-                       </div>
-                     </div>
-                   `;
+                            <!-- 1. 톱니바퀴 영역 (오른쪽 상단) -->
+                            <div class="flex justify-end mb-2">
+                              <div class="cursor-pointer text-gray-500 hover:text-gray-700 text-xl"
+                                   onclick="openSettings(event, ${study.studyId})">
+                                ⚙️
+                              </div>
+                            </div>
+
+                            <!-- 2. 질문/답변 영역 -->
+                            <div class="flex justify-between items-center px-2">
+                              <span class="questionText font-semibold text-gray-900 text-left">${study.questionText}</span>
+                              <span class="answerText font-semibold text-gray-900 text-right">${study.answerText}</span>
+                            </div>
+
+                            <!-- 3. 설명 (hint) -->
+                            <div id="hint-${index}" class="descriptionText mt-2 text-sm text-gray-600 hidden">
+                              ${study.description || "설명 없음"}
+                            </div>
+
+                            <!-- 4. Popover 메뉴 -->
+                            <div id="popover-${study.studyId}" class="popover-menu absolute right-3 top-10 bg-white border border-gray-300 shadow-lg rounded-md hidden z-20">
+                              <ul class="text-sm text-gray-700">
+                                <li class="p-2 cursor-pointer hover:bg-gray-100" onclick="updateMode(event, ${study.studyId})">수정</li>
+                                <li class="p-2 cursor-pointer hover:bg-red-100 text-red-500" onclick="deleteById(event, ${study.studyId})">삭제</li>
+                              </ul>
+                            </div>
+
+                          </div>`;
                 });
             }
 
             find('.listArea').innerHTML = html;
         }
 
-        function toggleHint(index) {
-            const hintElement = document.getElementById(`hint-${index}`);
-            if (hintElement) {
-                hintElement.classList.toggle('hidden');
-            }
-            increaseAdCount('useModeCount');
+        function revealHidden(index) {
+            const questionEl = document.querySelectorAll('.questionText')[index];
+            const answerEl = document.querySelectorAll('.answerText')[index];
 
+            if (currentToggleMode === 'question') {
+                // 답이 보이면 숨기고, 숨겨져 있으면 보이게
+                answerEl.style.visibility = (answerEl.style.visibility === 'visible') ? 'hidden' : 'visible';
+            } else if (currentToggleMode === 'answer') {
+                // 질문이 보이면 숨기고, 숨겨져 있으면 보이게
+                questionEl.style.visibility = (questionEl.style.visibility === 'visible') ? 'hidden' : 'visible';
+            }
         }
+
+
 
         function shuffleQuestions() {
             if (studys.length < 2) return; // 요소가 1개 이하라면 섞을 필요 없음
@@ -275,30 +291,26 @@
         }
 
         function setToggle(mode) {
-            currentToggleMode = mode; // ✅ 현재 토글 상태 저장
+            currentToggleMode = mode;
 
-            // 모든 버튼 초기화
+            // 버튼 스타일 초기화
             document.querySelectorAll("div[id^='toggle']").forEach(btn => {
                 btn.classList.remove('bg-gradient-to-r', 'from-blue-500', 'to-indigo-500', 'text-white');
                 btn.classList.add('bg-gray-300', 'text-gray-800');
             });
 
-            // 선택된 버튼 스타일 변경
+            // 선택된 버튼 스타일 적용
             document.getElementById(`toggle${mode.charAt(0).toUpperCase() + mode.slice(1)}`)
                 .classList.add('bg-gradient-to-r', 'from-blue-500', 'to-indigo-500', 'text-white');
 
-            // 문제/답 표시 로직 (전체, 문제, 답)
-            if (mode === 'all') {
-                findAll('.questionText').forEach(el => el.classList.remove('hidden'));
-                findAll('.answerText').forEach(el => el.classList.remove('hidden'));
-            } else if (mode === 'question') {
-                findAll('.questionText').forEach(el => el.classList.remove('hidden'));
-                findAll('.answerText').forEach(el => el.classList.add('hidden'));
-            } else if (mode === 'answer') {
-                findAll('.questionText').forEach(el => el.classList.add('hidden'));
-                findAll('.answerText').forEach(el => el.classList.remove('hidden'));
-            }
+            // 텍스트 영역 표시/숨김 (공간 유지)
+            findAll('.questionText').forEach(el => {
+                el.style.visibility = (mode === 'answer') ? 'hidden' : 'visible';
+            });
 
+            findAll('.answerText').forEach(el => {
+                el.style.visibility = (mode === 'question') ? 'hidden' : 'visible';
+            });
         }
 
         function shuffleEffect() {
