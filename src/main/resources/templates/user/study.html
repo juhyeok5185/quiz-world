@@ -111,9 +111,6 @@
                     <div onclick="find('#modal-update').classList.add('hidden')" class="bg-gray-300 text-gray-700 px-4 py-2 rounded-md mr-2 cursor-pointer">
                         취소
                     </div>
-                    <div onclick="deleteByStudyId();" class="bg-gray-300 text-gray-700 px-4 py-2 rounded-md mr-2 cursor-pointer">
-                        삭제
-                    </div>
                     <div onclick="updateStudy()"
                          class="bg-gradient-to-r from-blue-500 to-indigo-500 text-white px-4 py-2 rounded-md hover:opacity-90 transition cursor-pointer">
                         수정
@@ -151,12 +148,15 @@
 
         window.onload = () => {
             findAllByChapterId();
+            document.addEventListener("click", closePopoverOnOutsideClick);
+
         };
 
         async function saveQuestion() {
             const chapterId = getParamValue('chapterId');
             const formData = new FormData(find('#saveForm'));
             await fetchPostByFormData(`/api/courses/subjects/chapters/${chapterId}/studies`, formData);
+            increaseAdCount('postCount')
             location.reload();
         }
 
@@ -166,23 +166,44 @@
             studys = await fetchGet(url);
             changeLogoText(`${studys[0].chapter.subject.name} - ${studys[0].chapter.name}`)
             drawList();
+            increaseAdCount('getCount')
         }
 
         async function updateStudy() {
             const studyId = find('#studyId').value;
             const formData = new FormData(find('#updateForm'));
             await fetchPatchByFormData(`/api/courses/subjects/chapters/studies/${studyId}`, formData);
+            increaseAdCount('updateCount')
             location.reload();
         }
 
-        async function deleteByStudyId() {
+        async function deleteById() {
             const studyId = find('#studyId').value;
             await fetchDelete(`/api/courses/subjects/chapters/studies/${studyId}`);
             location.reload();
         }
 
-        async function updateMode(studyId) {
-            const study = await fetchGet(`/api/courses/subjects/chapters/studies/${studyId}`);
+        function openSettings(event, subjectId) {
+            event.stopPropagation(); // 리스트 클릭 이벤트 방지
+            const popover = document.querySelector(`#popover-${subjectId}`);
+            // 현재 열린 popover와 동일하면 닫기
+            if (activePopoverId === subjectId) {
+                popover.classList.add("hidden");
+                activePopoverId = null;
+            } else {
+                // 모든 popover 숨기기
+                document.querySelectorAll(".popover-menu").forEach(el => el.classList.add("hidden"));
+
+                // 현재 클릭한 톱니바퀴의 popover 보이기
+                popover.classList.remove("hidden");
+                activePopoverId = subjectId; // 현재 열린 popover ID 저장
+            }
+        }
+
+        async function updateMode(event, studyId) {
+            event.stopPropagation(); // 부모 div 클릭 이벤트 차단
+            const url = `/api/courses/subjects/chapters/studies/${studyId}`;
+            const study = await fetchGet(url);
             find('#studyId').value = study.studyId;
             find('#questionText').value = study.questionText;
             find('#answerText').value = study.answerText;
@@ -192,7 +213,6 @@
 
         function drawList() {
             let html = ``;
-            console.log(studys.length)
             if(studys.length === 0 ) {
                 html += `
                         <div class="text-center text-gray-500 py-10">
@@ -201,14 +221,19 @@
             } else {
                 studys.forEach((study, index) => {
                     html += `
-                     <div class="bg-white shadow-lg rounded-lg p-4 cursor-pointer flex flex-col user-select-none"
-                          data-index="${index}"
-                          onmousedown="startLongPress(event, ${index})"
-                          onmouseup="endLongPress(event, ${index})"
-                          onmouseleave="cancelLongPress(event, ${index})"
-                          ontouchstart="startLongPress(event, ${index})"
-                          ontouchend="endLongPress(event, ${index})"
-                          ontouchcancel="cancelLongPress(event, ${index})">
+                     <div class="bg-white shadow-lg rounded-lg p-4 cursor-pointer flex flex-col user-select-none">
+                                <!-- 설정 아이콘 (톱니바퀴) -->
+                              <div class="absolute top-3 right-3 cursor-pointer text-gray-500 hover:text-gray-700 text-xl" onclick="openSettings(event, ${study.studyId})">
+                                  ⚙️
+                              </div>
+                              <!-- Popover 메뉴 -->
+                              <div id="popover-${study.studyId}" class="popover-menu absolute right-3 top-10 bg-white border border-gray-300 shadow-lg rounded-md hidden">
+                                  <ul class="text-sm text-gray-700">
+                                      <li class="p-2 cursor-pointer hover:bg-gray-100" onclick="updateMode(event, ${study.studyId})">수정</li>
+                                      <li class="p-2 cursor-pointer hover:bg-red-100 text-red-500" onclick="deleteById(event, ${study.studyId})">삭제</li>
+                                  </ul>
+                              </div>
+
                        <div class="flex justify-between items-center">
                          <span class="questionText font-semibold text-gray-900 text-left flex-1">${study.questionText}</span>
                          <span class="answerText font-semibold text-gray-900 text-right flex-1">${study.answerText}</span>
@@ -224,34 +249,15 @@
             find('.listArea').innerHTML = html;
         }
 
-        function startLongPress(event, index) {
-            event.preventDefault();
-            longPressTimers[index] = setTimeout(() => {
-                updateMode(studys[index].studyId);  // questionId 넘김
-                delete longPressTimers[index];
-            }, 1000); // 1초 동안 눌렀을 때 실행
-        }
 
-        function endLongPress(event, index) {
-            if (longPressTimers[index]) {
-                clearTimeout(longPressTimers[index]);
-                delete longPressTimers[index];
-                toggleHint(index); // 일반 클릭 처리
-            }
-        }
-
-        function cancelLongPress(event, index) {
-            if (longPressTimers[index]) {
-                clearTimeout(longPressTimers[index]);
-                delete longPressTimers[index];
-            }
-        }
 
         function toggleHint(index) {
             const hintElement = document.getElementById(`hint-${index}`);
             if (hintElement) {
                 hintElement.classList.toggle('hidden');
             }
+            increaseAdCount('useModeCount');
+
         }
 
         function shuffleQuestions() {
@@ -295,6 +301,7 @@
                 findAll('.questionText').forEach(el => el.classList.add('hidden'));
                 findAll('.answerText').forEach(el => el.classList.remove('hidden'));
             }
+
         }
 
         function shuffleEffect() {
@@ -310,6 +317,7 @@
             }, 100);
 
             shuffleQuestions();
+
         }
 
         function toggleFocusMenu() {
@@ -422,6 +430,13 @@
                 specialModeAnswer.style.display = 'block';
             } else {
                 specialModeAnswer.style.display = 'none';
+            }
+        }
+
+        function closePopoverOnOutsideClick(event) {
+            if (!event.target.closest(".popover-menu") && !event.target.closest(".text-xl")) {
+                document.querySelectorAll(".popover-menu").forEach(el => el.classList.add("hidden"));
+                activePopoverId = null;
             }
         }
 

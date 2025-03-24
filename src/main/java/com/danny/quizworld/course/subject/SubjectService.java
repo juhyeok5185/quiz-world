@@ -50,10 +50,6 @@ public class SubjectService {
         return subjectMapper.toResponse(subject);
     }
 
-    public Subject copy(Subject targetSubject, Member member) {
-        return subjectMapper.copy(targetSubject , member);
-    }
-
     public void validateToSave(Member member,SubjectCommand.save request) {
         subjectValidator.validateToSave(member , request);
     }

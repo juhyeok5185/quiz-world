@@ -32,16 +32,4 @@ public class SubjectMapper {
                 .build();
     }
 
-    public Subject copy(Subject targetSubject, Member member) {
-        return Subject.builder()
-                .member(member)
-                .name(targetSubject.getName())
-                .description(targetSubject.getDescription())
-                .likeCount(0)
-                .downloadCount(0)
-                .publicYn(false)
-                .price(0L)
-                .downloadId(targetSubject.getSubjectId())
-                .build();
-    }
 }

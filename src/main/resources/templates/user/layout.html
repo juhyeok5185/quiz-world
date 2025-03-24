@@ -85,10 +85,8 @@
         const keys = [
             'postCount',
             'getCount',
-            'shuffleCount',
-            'toggleCount',
-            'specialModeCount',
-            'viewAnswerCount'
+            'updateCount',
+            'useModeCount'
         ];
 
         keys.forEach((key) => {
@@ -103,39 +101,17 @@
         const value = parseInt(localStorage.getItem(key) || '0');
         localStorage.setItem(key, (value + 1).toString());
         switch (key) {
-            case 'postCount':
-                if (value >= 5) {
-                    alert('광고');
-                    localStorage.setItem(key, '0');
-                }
+            case 'postCount': // save
+                if (value >= 15) { alert('광고'); localStorage.setItem(key, '0'); }
                 break;
-
-            case 'getCount':
-                if (value >= 20) {
-                    alert('광고');
-                    localStorage.setItem(key, '0');
-                }
+            case 'getCount': // getList
+                if (value >= 8) { alert('광고'); localStorage.setItem(key, '0'); }
                 break;
-
-            case 'shuffleCount':
-                if (value >= 100) {
-                    alert('광고');
-                    localStorage.setItem(key, '0');
-                }
+            case 'updateCount': // 수정
+                if (value >= 30) { alert('광고'); localStorage.setItem(key, '0'); }
                 break;
-
-            case 'specialModeCount':
-                if (value >= 10) {
-                    alert('광고');
-                    localStorage.setItem(key, '0');
-                }
-                break;
-
-            case 'viewAnswerCount':
-                if (value >= 100) {
-                    alert('광고');
-                    localStorage.setItem(key, '0');
-                }
+            case 'useModeCount': // 조회만 클라이언트에서
+                if (value >= 50) { alert('광고'); localStorage.setItem(key, '0'); }
                 break;
         }
     }

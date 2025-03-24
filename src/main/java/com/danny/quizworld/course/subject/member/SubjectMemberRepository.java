@@ -9,4 +9,6 @@ import java.util.List;
 public interface SubjectMemberRepository extends JpaRepository<SubjectMember, Long>{
 
     SubjectMember findBySubject_SubjectIdAndMember_MemberId(Long subjectId, Long memberId);
+
+    List<SubjectMember> findByMember_MemberId(Long memberId);
 }

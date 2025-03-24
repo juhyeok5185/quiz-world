@@ -16,6 +16,4 @@ public class ScheduledTasks {
         scheduledTasksFacade.expiredSubscribe();
     }
 
-
-
 }

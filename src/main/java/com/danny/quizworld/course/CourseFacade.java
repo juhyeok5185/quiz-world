@@ -18,8 +18,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -66,35 +68,23 @@ public class CourseFacade {
 
     @Transactional(readOnly = true)
     public List<SubjectResponse> findAllByMemberId(Long memberId) {
-        return subjectService.findAllByMemberId(memberId).stream().map(subject -> {
-                    Long studyCount = studyService.countBySubjectId(subject.getSubjectId());
-                    SubjectResponse subjectResponse = subjectService.toResponse(subject);
-                    subjectResponse.setStudyCount(studyCount);
-                    return subjectResponse;
-                })
+        List<Subject> mySubjects = subjectService.findAllByMemberId(memberId);
+        List<Subject> purchasedSubjects = subjectMemberService.findByMemberId(memberId).stream()
+                .map(SubjectMember::getSubject)
+                .toList();
+
+        return Stream.concat(purchasedSubjects.stream(), mySubjects.stream())
+                .map(subjectService::toResponse)
                 .collect(Collectors.toList());
     }
+
+
 
     @Transactional(readOnly = true)
     public SubjectResponse findSubjectById(Long subjectId) {
         return subjectService.toResponse(subjectService.findById(subjectId));
     }
 
-    @Transactional(readOnly = true)
-    public void downloadSubject(Long subjectId, Long memberId) {
-        Subject targetSubject = subjectService.findById(subjectId);
-
-        if (targetSubject.getPrice() != 0){
-            SubjectMember subjectMember = subjectMemberService.findBySubjectIdAndMemberId(targetSubject.getSubjectId() , memberId);
-            if(subjectMember == null){
-                throw new MyException("결제 후에 다운로드 가능합니다.");
-            }
-        }
-
-        Member member = memberService.findById(memberId);
-        Subject subject = subjectService.copy(targetSubject , member);
-        subjectService.save(subject);
-    }
 
     //Chapter 관련 API ---------------------------------------------------------------------------------------
     @Transactional
@@ -170,6 +160,9 @@ public class CourseFacade {
         return studyService.toResponse(studyService.findById(studyId));
     }
 
+
+    //SubjectMember 관련 API ---------------------------------------------------------------------------------------
+    @Transactional
     public void saveSubjectMember(String subjectId, Long memberId) {
         Member member = memberService.findById(memberId);
         Subject subject = subjectService.findById(Long.parseLong(subjectId));

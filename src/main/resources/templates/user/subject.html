@@ -112,6 +112,7 @@
             const url = `/api/courses/subjects`;
             const formData = new FormData(find('#saveForm'));
             await fetchPostByJson(url, changeFormDataToJson(formData));
+            increaseAdCount('postCount')
             location.reload();
         }
 
@@ -189,6 +190,7 @@
             const url = `/api/courses/subjects/${subjectId}`;
             const formData = new FormData(find('#updateForm'));
             await fetchPatchByJson(url, changeFormDataToJson(formData));
+            increaseAdCount('updateCount')
             location.reload();
         }
 
