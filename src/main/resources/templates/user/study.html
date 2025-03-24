@@ -156,7 +156,6 @@
         async function saveQuestion() {
             const chapterId = getParamValue('chapterId');
             const formData = new FormData(find('#saveForm'));
-            logFormData(formData)
             await fetchPostByFormData(`/api/courses/subjects/chapters/${chapterId}/studies`, formData);
             location.reload();
         }
@@ -165,7 +164,7 @@
             const chapterId = getParamValue('chapterId');
             const url = `/api/courses/subjects/chapters/${chapterId}/studies`;
             studys = await fetchGet(url);
-            // changeLogoText(`${studys[0].chapter.subject.name} - ${studys[0].chapter.name}`)
+            changeLogoText(`${studys[0].chapter.subject.name} - ${studys[0].chapter.name}`)
             drawList();
         }
 

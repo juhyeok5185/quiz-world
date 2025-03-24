@@ -82,9 +82,8 @@
             const subjectId = getParamValue('subjectId');
             const url = `/api/courses/subjects/${subjectId}/chapters`;
             chapters = await fetchGet(url);
-            console.log(chapters)
             drawList();
-            changeLogoText(`${chapters[0]?.subject.name || "과목 이름 없음"}`);
+            changeLogoText(`${chapters.subject.name}`);
         }
 
         function drawList() {
@@ -122,7 +121,6 @@
             event.stopPropagation(); // 부모 div 클릭 이벤트 차단
             const url = `/api/courses/subjects/chapters/${chapterId}`;
             const chapter = await fetchGet(url);
-            console.log(chapter)
             find('#chapterId').value = chapter.chapterId;
             find('#name').value = chapter.name;
             find('#modal-update').classList.remove('hidden');
