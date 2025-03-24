@@ -216,47 +216,49 @@
             let html = ``;
             if(studys.length === 0 ) {
                 html += `
-                        <div class="text-center text-gray-500 py-10">
-                            등록된 과목이 없습니다.<br>과목을 추가해 주세요!
-                        </div>`;
+            <div class="text-center text-gray-500 py-10">
+                등록된 과목이 없습니다.<br>과목을 추가해 주세요!
+            </div>`;
             } else {
                 studys.forEach((study, index) => {
                     html += `
-                          <div onclick="revealHidden(${index})" class="bg-white shadow-lg rounded-lg p-4 cursor-pointer flex flex-col user-select-none relative">
+                    <div onclick="revealHidden(${index})"
+                         class="bg-white shadow-lg rounded-lg p-1 cursor-pointer flex flex-col relative">
 
-                            <!-- 1. 톱니바퀴 영역 (오른쪽 상단) -->
-                            <div class="flex justify-end mb-2">
-                              <div class="cursor-pointer text-gray-500 hover:text-gray-700 text-xl"
-                                   onclick="openSettings(event, ${study.studyId})">
-                                ⚙️
-                              </div>
-                            </div>
+                        <!-- 톱니바퀴 (상단 여백 완전 제거) -->
+                        <div class="flex justify-end -mt-0.5">
+                            <div class="cursor-pointer text-gray-500 hover:text-gray-700 text-xl leading-none"
+                                 onclick="openSettings(event, ${study.studyId})">⚙️</div>
+                        </div>
 
-                            <!-- 2. 질문/답변 영역 -->
-                            <div class="flex justify-between items-center px-2">
-                              <span class="questionText font-semibold text-gray-900 text-left">${study.questionText}</span>
-                              <span class="answerText font-semibold text-gray-900 text-right">${study.answerText}</span>
-                            </div>
+                        <!-- 질문/답변 (여백 완전 제거) -->
+                        <div class="text-sm text-gray-900 text-start break-words space-y-0">
+                            <div class="questionText font-normal pb-0"><strong class="text-blue-700">Q.</strong>&nbsp;${study.questionText}</div>
+                            <div class="answerText font-normal pt-0"><strong class="text-green-700">A.</strong>&nbsp;${study.answerText}</div>
+                        </div>
 
-                            <!-- 3. 설명 (hint) -->
-                            <div id="hint-${index}" class="descriptionText mt-2 text-sm text-gray-600 hidden">
-                              ${study.description || "설명 없음"}
-                            </div>
+                        <!-- 설명 (여백 최소화) -->
+                        <div id="hint-${index}" class="descriptionText text-[11px] text-gray-400 hidden">
+                            ${study.description || "설명 없음"}
+                        </div>
 
-                            <!-- 4. Popover 메뉴 -->
-                            <div id="popover-${study.studyId}" class="popover-menu absolute right-3 top-10 bg-white border border-gray-300 shadow-lg rounded-md hidden z-20">
-                              <ul class="text-sm text-gray-700">
-                                <li class="p-2 cursor-pointer hover:bg-gray-100" onclick="updateMode(event, ${study.studyId})">수정</li>
-                                <li class="p-2 cursor-pointer hover:bg-red-100 text-red-500" onclick="deleteById(event, ${study.studyId})">삭제</li>
-                              </ul>
-                            </div>
-
-                          </div>`;
+                        <!-- Popover (위치 조정) -->
+                        <div id="popover-${study.studyId}"
+                             class="popover-menu absolute right-2 top-6 bg-white border border-gray-200 shadow-sm rounded-sm hidden z-20">
+                            <ul class="text-xs space-y-0">
+                                <li class="px-2 py-0.5 cursor-pointer hover:bg-gray-50"
+                                    onclick="updateMode(event, ${study.studyId})">수정</li>
+                                <li class="px-2 py-0.5 cursor-pointer hover:bg-red-50 text-red-500"
+                                    onclick="deleteById(event, ${study.studyId})">삭제</li>
+                            </ul>
+                        </div>
+                    </div>`;
                 });
             }
-
             find('.listArea').innerHTML = html;
         }
+
+
 
         function revealHidden(index) {
             const questionEl = document.querySelectorAll('.questionText')[index];
