@@ -8,6 +8,7 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring", uses = {ChapterMapper.class})
 public interface StudyMapper {
 
+    @Mapping(target = "chapter", source = "chapter")
     @Mapping(target = "subject", source = "chapter.subject")
     Study toEntity(Chapter chapter, StudyCommand.save request);
 
