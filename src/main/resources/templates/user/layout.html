@@ -14,9 +14,17 @@
     <div id="menuButton" class="text-2xl cursor-pointer">≡</div> <!-- 햄버거 메뉴 (작대기 3개) -->
 </header>
 
-<div id="adBanner" class="w-full bg-yellow-200 text-gray-800 text-center py-3">
+<div id="adBanner" class="w-full bg-yellow-200 text-gray-800 text-center py-3 hidden">
     <span class="font-semibold">🔥 지금 가입하면 30% 할인! 🔥</span>
 </div>
+
+<!-- 광고 제거 버튼 -->
+<div id="removeAdButton"
+     class="fixed bottom-4 left-4 z-50 bg-gradient-to-r from-blue-500 to-indigo-500 text-white text-sm px-4 py-2 rounded-full shadow-lg cursor-pointer transition hidden">
+    광고 제거
+</div>
+
+
 
 
 <!-- 전체 화면 팝업 -->
@@ -72,7 +80,6 @@
 <script src="/static/common/js/fetchUtils.js" type="application/javascript"></script>
 <script src="/static/common/js/common.js" type="application/javascript"></script>
 <script>
-    let memberInfo = [];
 
 
     window.onload = function () {
@@ -80,6 +87,11 @@
         hideBackButton();
         makeAdLocalStorage();
     }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        checkSubscribe();
+    });
+
 
     function makeAdLocalStorage(){
         const keys = [
@@ -97,7 +109,8 @@
     }
 
     function increaseAdCount(key) {
-        if(memberInfo.subscribeYn) return
+        const isSubscribed = localStorage.getItem("subscribeYn") === 'true';
+        if(isSubscribed) return
         const value = parseInt(localStorage.getItem(key) || '0');
         localStorage.setItem(key, (value + 1).toString());
         switch (key) {
@@ -118,13 +131,16 @@
 
     async function findMember(){
         const url = `/api/members`;
-        memberInfo = await fetchGet(url);
-        checkSubscribe();
+        const response = await fetchGet(url);
+        localStorage.setItem("subscribeYn", response.subscribeYn ? 'true' : 'false');
+
     }
 
     function checkSubscribe(){
-        if(memberInfo.subscribeYn){
-            find('#adBanner').classList.add("hidden");
+        const isSubscribed = localStorage.getItem("subscribeYn") === 'true';
+        if(!isSubscribed){
+            find('#adBanner').classList.remove("hidden");
+            find('#removeAdButton').classList.remove("hidden");
         }
     }
 

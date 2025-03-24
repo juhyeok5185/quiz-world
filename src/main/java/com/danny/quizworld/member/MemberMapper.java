@@ -1,34 +1,33 @@
 package com.danny.quizworld.member;
 
 import com.danny.quizworld.common.util.AES256Utils;
-import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
-import org.springframework.stereotype.Component;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Named;
 
-@Component
-@RequiredArgsConstructor
-public class MemberMapper {
+@Mapper(componentModel = "spring")
+public interface MemberMapper {
 
-    public Member toEntity(String name , String email) {
-        return Member.builder()
-                .name(AES256Utils.encrypt(name))
-                .email(AES256Utils.encrypt(email))
-                .role(MemberRole.USER)
-                .deviceToken(null)
-                .likeCount(0)
-                .subscribeYn(false)
-                .businessYn(false)
-                .build();
+    @Mapping(target = "name", source = "name", qualifiedByName = "encrypt")
+    @Mapping(target = "email", source = "email", qualifiedByName = "encrypt")
+    @Mapping(target = "role", constant = "USER")
+    @Mapping(target = "deviceToken", constant = "null")
+    @Mapping(target = "likeCount", constant = "0")
+    @Mapping(target = "subscribeYn", constant = "false")
+    @Mapping(target = "businessYn", constant = "false")
+    Member toEntity(String name, String email);
+
+    @Mapping(target = "name", source = "name", qualifiedByName = "decrypt")
+    @Mapping(target = "email", source = "email", qualifiedByName = "decrypt")
+    MemberResponse toResponse(Member member);
+
+    @Named("encrypt")
+    static String encrypt(String value) {
+        return AES256Utils.encrypt(value);
     }
 
-    public MemberResponse toResponse(Member member) {
-        return MemberResponse.builder()
-                .email(AES256Utils.decrypt(member.getEmail()))
-                .name(AES256Utils.decrypt(member.getName()))
-                .likeCount(member.getLikeCount())
-                .subscribeYn(member.getSubscribeYn())
-                .businessYn(member.getBusinessYn())
-                .build();
+    @Named("decrypt")
+    static String decrypt(String value) {
+        return AES256Utils.decrypt(value);
     }
 }

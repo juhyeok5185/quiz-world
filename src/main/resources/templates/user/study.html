@@ -277,6 +277,8 @@
                     hintEl.classList.add('hidden');
                 }
             }
+
+            increaseAdCount('useModeCount');
         }
 
         function shuffleQuestions() {
@@ -294,6 +296,7 @@
             studys = shuffled;
             drawList();
             setToggle(currentToggleMode);
+            increaseAdCount('useModeCount');
         }
 
         function setToggle(mode) {
@@ -324,6 +327,8 @@
                     hint.classList.add('hidden');
                 }
             });
+
+            increaseAdCount('useModeCount');
         }
 
         function shuffleEffect() {
@@ -393,6 +398,9 @@
                     updateSpecialModeContent();
                 }
             };
+
+            increaseAdCount('useModeCount');
+
         }
 
         function startFlashMode() {
@@ -422,6 +430,8 @@
                 currentIndex = (currentIndex + 1) % studys.length;
                 updateSpecialModeContent();
             }, 3000);
+
+            increaseAdCount('useModeCount');
         }
 
         function closeSpecialMode() {
