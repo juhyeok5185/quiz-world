@@ -148,6 +148,7 @@
              <p class="text-sm text-gray-600 mt-1">소개: ${subject.description}</p>
              <p class="text-sm text-gray-600">총 문항: ${subject.studyCount} 문항</p>
              <p class="text-sm text-gray-600">추천 : ${subject.likeCount} 개</p>
+             <p class="text-sm text-gray-600">추천 : ${subject.category.name}</p>
              <p class="text-sm text-gray-600">작성자: ${subject.member.name}</p>
              <span class="absolute right-6 bottom-6 bg-gradient-to-r from-blue-500 to-indigo-500 text-white px-3 py-1 rounded hover:opacity-90 transition"
                    onclick="${ subject.price === 0 ? `saveSubjectMember(${subject.subjectId})` : 'purchase()' }">
