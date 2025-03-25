@@ -1,5 +1,6 @@
 package com.danny.quizworld.member;
 
+import com.danny.quizworld.common.response.UserDashBoardResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,5 +20,12 @@ public class MemberFacade {
         Member member = memberService.findById(memberId);
         member.addScore();
         memberService.save(member);
+    }
+
+    @Transactional(readOnly = true)
+    public UserDashBoardResponse findUserDashBoardResponseByMemberId(Long memberId) {
+        UserDashBoardResponse response = memberService.findUserDashBoardResponseByMemberId(memberId);
+        response.decryptName();
+        return response;
     }
 }

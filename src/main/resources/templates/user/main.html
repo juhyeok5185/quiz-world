@@ -3,16 +3,37 @@
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="user/layout">
-
 <div layout:fragment="content" class="p-4 space-y-6">
 
     <!-- 사용자 정보 및 점수 -->
-    <div class="bg-white p-6 rounded-lg shadow-md flex items-center justify-between">
-        <div>
-            <h2 class="text-xl font-bold">박주혁</h2>
-            <p class="text-gray-500 text-sm">현재 보유 점수</p>
+    <div id="userInfo">
+        <div class="bg-white p-6 rounded-lg shadow-md flex items-center justify-between">
+            <div>
+                <h2 class="text-xl font-bold name"></h2>
+                <p class="text-gray-500 text-sm">현재 보유 점수</p>
+            </div>
+            <div class="text-2xl font-bold text-blue-500 score"></div>
+            <img src="/static/common/image/다운로드.png" class="w-24 h-24 object-cover" />
         </div>
-        <div class="text-2xl font-bold text-blue-500">3,456</div>
+    </div>
+
+    <!-- 3가지 데이터를 가로로 표시 (가운데 항목 넓게) -->
+    <div class="flex bg-white p-4 border rounded-lg shadow-md">
+        <!-- 나의 과목 (25%) -->
+        <div class="w-2/4 text-center border-r border-gray-300">
+            <p class="text-xl font-bold">나의 과목</p>
+            <p class="text-lg font-semibold text-gray-500 mySubjectCount"></p>
+        </div>
+        <!-- 나의 퀴즈 (50%) -->
+        <div class="w-2/4 text-center border-r border-gray-300">
+            <p class="text-xl font-bold">나의 퀴즈</p>
+            <p class="text-lg font-semibold text-gray-500 myStudyCount"></p>
+        </div>
+        <!-- 수강중 (25%) -->
+        <div class="w-2/4 text-center">
+            <p class="text-xl font-bold">수강중</p>
+            <p class="text-lg font-semibold text-gray-500 enrolledSubjectCount"></p>
+        </div>
     </div>
 
     <!-- 내 과목 바로가기 -->
@@ -27,46 +48,28 @@
         <p class="text-lg font-semibold text-gray-700">과목 검색하기</p>
     </div>
 
-    <!-- 그래프 영역 -->
-    <div class="bg-white p-6 rounded-lg shadow-md">
-        <h3 class="text-lg font-semibold mb-4">학습 그래프</h3>
-        <div class="relative w-full h-[200px]">
-            <canvas id="progressChart"></canvas>
-        </div>
-    </div>
-
-
 </div>
 
 <th:block layout:fragment="script">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script th:inline="javascript">
-        document.addEventListener("DOMContentLoaded", function () {
-            const ctx = document.getElementById('progressChart').getContext('2d');
-            new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: ['10일', '14일', '20일', '25일', '28일'],
-                    datasets: [{
-                        label: '점수 변화',
-                        data: [100, 250, 500, 800, 1200],
-                        borderColor: 'rgb(59, 130, 246)',
-                        backgroundColor: 'rgba(59, 130, 246, 0.2)',
-                        fill: true,
-                        tension: 0.3
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        y: { beginAtZero: true }
-                    }
-                }
-            });
-        });
+        window.onload = function () {
+            findMember();
+        }
 
+        async function findMember() {
+            const url = `/api/members/dashboard`;
+            const response = await fetchGet(url);
+            drawTable(response);
+        }
+
+        function drawTable(response) {
+            find('.name').textContent = response.name;
+            find('.score').textContent = response.score + `점`;
+            find('.mySubjectCount').textContent = response.mySubjectCount + `개`;
+            find('.myStudyCount').textContent = response.myStudyCount + `개`;
+            find('.enrolledSubjectCount').textContent = response.enrolledSubjectCount + `개`;
+        }
     </script>
 </th:block>
-
 </html>

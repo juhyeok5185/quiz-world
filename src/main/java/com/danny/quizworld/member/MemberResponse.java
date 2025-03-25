@@ -12,5 +12,6 @@ public class MemberResponse {
     private String email;
     private Integer likeCount;
     private Boolean subscribeYn;
+    private Integer score;
     private Boolean businessYn;
 }

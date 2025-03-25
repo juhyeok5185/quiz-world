@@ -1,6 +1,7 @@
 package com.danny.quizworld.member;
 
 import com.danny.quizworld.common.response.ApiResponse;
+import com.danny.quizworld.common.response.UserDashBoardResponse;
 import com.danny.quizworld.common.util.Utils;
 import com.danny.quizworld.course.chapter.ChapterResponse;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,12 @@ public class MemberApiController {
     public ResponseEntity<ApiResponse<MemberResponse>> findByIdToResponse(Authentication authentication) {
         Long memberId = Utils.getMemberId(authentication);
         return ResponseEntity.ok(new ApiResponse<>(memberFacade.findByIdToResponse(memberId)));
+    }
+
+    @GetMapping("/dashboard")
+    public ResponseEntity<ApiResponse<UserDashBoardResponse>> findUserDashBoardResponseByMemberId(Authentication authentication) {
+        Long memberId = Utils.getMemberId(authentication);
+        return ResponseEntity.ok(new ApiResponse<>(memberFacade.findUserDashBoardResponseByMemberId(memberId)));
     }
 
     @PatchMapping

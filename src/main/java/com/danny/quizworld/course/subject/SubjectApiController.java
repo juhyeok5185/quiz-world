@@ -3,6 +3,7 @@ package com.danny.quizworld.course.subject;
 import com.danny.quizworld.common.response.ApiResponse;
 import com.danny.quizworld.common.util.Utils;
 import com.danny.quizworld.course.CourseFacade;
+import com.danny.quizworld.course.chapter.ChapterResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -58,6 +59,12 @@ public class SubjectApiController {
     public ResponseEntity<ApiResponse<SubjectResponse>> deleteSubjectById(@PathVariable Long subjectId) {
         courseFacade.deleteSubjectById(subjectId);
         return ResponseEntity.status(201).body(new ApiResponse<>("삭제 완료" , 201 ,null));
+    }
+
+    @GetMapping("/dashboard")
+    public ResponseEntity<ApiResponse<List<ChapterResponse>>> findAllChapterBySubjectId(@PathVariable Long subjectId , Authentication authentication) {
+        Long memberId = Utils.getMemberId(authentication);
+        return ResponseEntity.ok(new ApiResponse<>(courseFacade.findAllChapterBySubjectId(subjectId , memberId)));
     }
 
 }

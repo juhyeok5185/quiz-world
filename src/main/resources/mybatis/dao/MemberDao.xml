@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.danny.quizworld.member.MemberDao">
+
+    <resultMap id="UserDashboardMap" type="com.danny.quizworld.common.response.UserDashBoardResponse">
+        <result column="name" property="name"/>
+        <result column="score" property="score"/>
+        <result column="like_count" property="likeCount"/>
+        <result column="my_subject_count" property="mySubjectCount"/>
+        <result column="my_study_count" property="myStudyCount"/>
+        <result column="enrolled_subject_count" property="enrolledSubjectCount"/>
+    </resultMap>
+
+    <select id="findUserDashBoardResponseByMemberId"
+            resultMap="UserDashboardMap">
+        SELECT
+            m.name,
+            m.score,
+            m.like_count,
+            (
+                SELECT COUNT(*)
+                FROM t_subject
+                WHERE member_id = #{memberId}
+            ) AS my_subject_count,
+            (
+                SELECT COUNT(*)
+                FROM t_subject sb
+                         JOIN t_study st ON st.subject_id = sb.subject_id
+                WHERE sb.member_id = #{memberId}
+            ) AS my_study_count,
+            (
+                SELECT COUNT(*)
+                FROM t_subject_member
+                WHERE member_id = #{memberId}
+            ) AS enrolled_subject_count
+        FROM
+            t_member m
+        WHERE
+            m.member_id = #{memberId}
+    </select>
+
+</mapper>

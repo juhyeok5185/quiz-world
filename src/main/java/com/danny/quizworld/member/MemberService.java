@@ -1,5 +1,6 @@
 package com.danny.quizworld.member;
 
+import com.danny.quizworld.common.response.UserDashBoardResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,6 +14,7 @@ public class MemberService {
     private final MemberStore memberStore;
     private final MemberReader memberReader;
     private final MemberMapper memberMapper;
+    private final MemberDao memberDao;
 
     @Transactional
     public Member save(Member member){
@@ -43,4 +45,8 @@ public class MemberService {
     }
 
 
+    @Transactional(readOnly = true)
+    public UserDashBoardResponse findUserDashBoardResponseByMemberId(Long memberId) {
+        return memberDao.findUserDashBoardResponseByMemberId(memberId);
+    }
 }
