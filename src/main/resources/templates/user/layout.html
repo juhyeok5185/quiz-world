@@ -28,7 +28,6 @@
 
 
 <!-- 전체 화면 팝업 -->
-<!-- 전체 화면 팝업 -->
 <div id="fullScreenPopup" class="fixed inset-0 bg-white hidden flex flex-col z-50">
     <!-- 상단 네비게이션 바 -->
     <div class="w-full px-6 py-4 flex items-center">
@@ -115,28 +114,28 @@
             case 'postCount': // save
                 if (value >= 15) {
                     localStorage.setItem(key, '0');
-                    await fetchPatchByJson();
+                    await fetchPatchByJson("/api/members");
                     viewAd();
                 }
                 break;
             case 'getCount': // getList
                 if (value >= 8) {
                     localStorage.setItem(key, '0');
-                    await fetchPatchByJson();
+                    await fetchPatchByJson("/api/members");
                     viewAd();
                 }
                 break;
             case 'updateCount': // 수정
                 if (value >= 30) {
                     localStorage.setItem(key, '0');
-                    await fetchPatchByJson();
+                    await fetchPatchByJson("/api/members");
                     viewAd();
                 }
                 break;
             case 'useModeCount': // 조회만 클라이언트에서
                 if (value >= 50) {
                     localStorage.setItem(key, '0');
-                    await fetchPatchByJson();
+                    await fetchPatchByJson("/api/members");
                     viewAd();
                 }
                 break;

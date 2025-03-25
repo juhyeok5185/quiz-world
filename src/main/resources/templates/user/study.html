@@ -172,7 +172,7 @@
             const chapterId = getParamValue('chapterId');
             const url = `/api/courses/subjects/chapters/${chapterId}/studies`;
             studys = await fetchGet(url);
-            const subject = await fetchGet(`/api/courses/subjects/chapters/${chapterId}`);
+            subject = await fetchGet(`/api/courses/subjects/by/${chapterId}`);
             checkAuth(subject);
             changeLogoText(`${studys[0].chapter.subject.name} - ${studys[0].chapter.name}`)
             drawList();
@@ -180,7 +180,7 @@
         }
 
         function checkAuth(subject) {
-            if(subject.createYn === false){
+            if(subject.createYn === true){
                 find('#addBtn').classList.remove('hidden');
             }
         }

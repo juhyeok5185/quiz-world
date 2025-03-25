@@ -42,7 +42,7 @@ public class SubjectApiController {
         return ResponseEntity.ok(new ApiResponse<>(courseFacade.findSubjectById(subjectId , memberId)));
     }
 
-    @GetMapping("/chapters/{chapterId}")
+    @GetMapping("/by/{chapterId}")
     public ResponseEntity<ApiResponse<SubjectResponse>> findSubjectByChapterId(@PathVariable Long chapterId , Authentication authentication) {
         Long memberId = Utils.getMemberId(authentication);
         return ResponseEntity.ok(new ApiResponse<>(courseFacade.findSubjectByChapterId(chapterId , memberId)));

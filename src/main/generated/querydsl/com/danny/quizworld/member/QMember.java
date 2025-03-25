@@ -41,6 +41,8 @@ public class QMember extends EntityPathBase<Member> {
     //inherited
     public final DateTimePath<java.time.LocalDateTime> saveDtm = _super.saveDtm;
 
+    public final NumberPath<Integer> score = createNumber("score", Integer.class);
+
     public final BooleanPath subscribeYn = createBoolean("subscribeYn");
 
     //inherited
