@@ -239,19 +239,19 @@
                     html += `
                     <div onclick="revealHidden(${index})"
                          class="bg-white shadow-lg rounded-lg p-1 cursor-pointer flex flex-col relative">
-                        ${subject.createYn ? `
-                              <!-- 톱니바퀴 (상단 여백 완전 제거) -->
+                         ${subject.createYn ? `
                         <div class="flex justify-end -mt-0.5">
                             <div class="cursor-pointer text-gray-500 hover:text-gray-700 text-xl leading-none"
                                  onclick="openSettings(event, ${study.studyId})">⚙️</div>
                         </div>
+                        ` : ``}
+
 
                         <!-- 질문/답변 (여백 완전 제거) -->
                         <div class="text-sm text-gray-900 text-start break-words space-y-0">
                             <div class="questionText font-normal pb-0"><strong class="text-blue-700">Q.</strong>&nbsp;${study.questionText}</div>
                             <div class="answerText font-normal pt-0"><strong class="text-green-700">A.</strong>&nbsp;${study.answerText}</div>
                         </div>
-                              ` : ``}
 
                         <!-- 설명 (여백 최소화) -->
                         <div id="hint-${index}" class="descriptionText text-[11px] text-gray-400 hidden">
