@@ -125,18 +125,24 @@
          class="fixed top-[-16px] left-0 w-full h-full bg-white z-[9999] flex items-center justify-center hidden">
         <div class="absolute top-4 left-4">
             <div onclick="closeSpecialMode()" class="text-gray-700 hover:text-gray-900 cursor-pointer">
+                <!-- X 아이콘 -->
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24"
                      stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M6 18L18 6M6 6l12 12"/>
                 </svg>
             </div>
+            <!-- ... 닫기 버튼 유지 ... -->
         </div>
-        <div id="specialModeContent" class="text-center">
-            <div id="specialModeQuestion" class="text-3xl font-bold mb-6"></div>
-            <div id="specialModeAnswer" class="text-2xl mt-4 hidden"></div>
+        <div id="specialModeContent" class="text-center w-full max-w-3xl px-4 h-[80vh] flex flex-col justify-center">
+            <div id="specialModeQuestion"
+                 class="text-3xl font-bold mb-6 break-words whitespace-pre-wrap overflow-y-auto max-h-[60vh] text-center px-8">
+            </div>
+            <div id="specialModeAnswer"
+                 class="text-2xl mt-4 hidden break-words whitespace-pre-wrap overflow-y-auto max-h-[60vh] text-center px-8">
+            </div>
         </div>
     </div>
-
 </div>
 
 <th:block layout:fragment="script">
