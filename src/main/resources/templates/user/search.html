@@ -164,7 +164,9 @@
             if (confirm("무료 수강하시겠습니까?")) {
                 const url = `/api/courses/subjects/subject-members/${subjectId}`;
                 await fetchPostByJson(url);
+                increaseAdCount('postCount');
                 location.href = `/user/subject`;
+
             }
         }
 
