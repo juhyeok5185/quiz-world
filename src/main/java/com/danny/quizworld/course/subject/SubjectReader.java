@@ -22,4 +22,5 @@ public class SubjectReader {
     public List<Subject> findAllSubjectBySearch(SubjectSearch search) {
         return subjectRepository.findAllSubjectBySearch(search);
     }
+
 }

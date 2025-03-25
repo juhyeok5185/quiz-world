@@ -13,6 +13,7 @@ public interface MemberMapper {
     @Mapping(target = "role", constant = "USER")
     @Mapping(target = "deviceToken", constant = "null")
     @Mapping(target = "likeCount", constant = "0")
+    @Mapping(target = "score", constant = "0")
     @Mapping(target = "subscribeYn", constant = "false")
     @Mapping(target = "businessYn", constant = "false")
     Member toEntity(String name, String email);

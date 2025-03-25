@@ -7,6 +7,7 @@ create table t_member
     email        varchar(255)                           not null comment '이메일',
     device_token varchar(100)                           null comment '디바이스 토큰',
     like_count   int        default 0                   not null comment '좋아요',
+    score        int        default 0                   not null comment '점수',
     subscribe_yn tinyint(1) default 0                   not null comment '구독여부',
     business_yn  tinyint(1) default 0                   not null comment '사업자 여부',
     use_yn       tinyint(1) default 1                   not null comment '사용여부',

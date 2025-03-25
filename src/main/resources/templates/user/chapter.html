@@ -10,10 +10,10 @@
     <div class="listArea grid grid-cols-1 gap-4 mt-4"></div>
 
     <!-- 챕터 추가 버튼 (우측 하단 고정) -->
-    <div onclick="find('#modal-div').classList.remove('hidden')"
+    <div id="addBtn" onclick="find('#modal-div').classList.remove('hidden')"
          class="fixed bottom-20 right-6 w-14 h-14 bg-gradient-to-r from-blue-500 to-indigo-500
                 text-white text-[28px] font-bold rounded-full shadow-xl hover:opacity-90 transition
-                flex items-center justify-center cursor-pointer">
+                flex items-center justify-center cursor-pointer hidden">
         <span class="absolute top-[12px] right-[17.5px] leading-none">+</span>
     </div>
 
@@ -63,6 +63,7 @@
 <th:block layout:fragment="script">
     <script th:inline="javascript">
         let chapters = [];
+        let subject = null;
         let activePopoverId = null;
 
         window.onload = () => {
@@ -81,10 +82,17 @@
 
         async function findAllBySubjectId() {
             const subjectId = getParamValue('subjectId');
-            const url = `/api/courses/subjects/${subjectId}/chapters`;
-            chapters = await fetchGet(url);
+            chapters = await fetchGet(`/api/courses/subjects/${subjectId}/chapters`);
+            subject = await fetchGet(`/api/courses/subjects/${subjectId}`);
             drawList();
+            checkAuth(subject);
             changeLogoText(`${chapters[0].subject.name}`);
+        }
+
+        function checkAuth() {
+            if(subject.createYn === false){
+                find('#addBtn').classList.remove('hidden');
+            }
         }
 
         function drawList() {
@@ -96,8 +104,8 @@
                     html += `
                          <div class="bg-white shadow-lg rounded-lg p-6 relative cursor-pointer hover:bg-gray-100 transition"
                               onclick="location.href = '/user/study?chapterId=${chapter.chapterId}'">
-                             <!-- 설정 아이콘 (톱니바퀴) -->
-                             <div class="absolute top-3 right-3 cursor-pointer text-gray-500 hover:text-gray-700 text-xl"
+                              ${subject.createYn ? `
+                              <div class="absolute top-3 right-3 cursor-pointer text-gray-500 hover:text-gray-700 text-xl"
                                   onclick="openSettings(event, ${chapter.chapterId})">
                                  ⚙️
                              </div>
@@ -108,6 +116,9 @@
                                      <li class="p-2 cursor-pointer hover:bg-red-100 text-red-500" onclick="deleteChapter(event, ${chapter.chapterId})">삭제</li>
                                  </ul>
                              </div>
+                              ` : ``}
+                             <!-- 설정 아이콘 (톱니바퀴) -->
+
                              <h3 class="text-lg font-semibold text-gray-900">${chapter.name}</h3>
                              <p class="text-sm text-gray-600 mt-1">총 문항: ${chapter.studyCount}문제</p>
                          </div>

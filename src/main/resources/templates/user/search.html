@@ -143,20 +143,37 @@
             } else {
                 subjects.forEach(subject => {
                     html += `
-                          <div class="bg-white shadow-lg rounded-lg p-6 relative cursor-pointer hover:bg-gray-100 transition">
-                              <div class="text-lg font-semibold text-gray-900">${subject.name}</div>
-                              <p class="text-sm text-gray-600 mt-1">소개: ${subject.description}</p>
-                              <p class="text-sm text-gray-600">총 문항: ${subject.studyCount} 문항</p>
-                              <p class="text-sm text-gray-600">추천 : ${subject.likeCount} 개</p>
-                              <p class="text-sm text-gray-600">금액: ${subject.price} 원</p>
-                              <p class="text-sm text-gray-600">작성자: ${subject.member.name}</p>
-                          </div>
-                `;
-                })
+                       <div class="bg-white shadow-lg rounded-lg p-6 relative cursor-pointer">
+             <div class="text-lg font-semibold text-gray-900">${subject.name}</div>
+             <p class="text-sm text-gray-600 mt-1">소개: ${subject.description}</p>
+             <p class="text-sm text-gray-600">총 문항: ${subject.studyCount} 문항</p>
+             <p class="text-sm text-gray-600">추천 : ${subject.likeCount} 개</p>
+             <p class="text-sm text-gray-600">작성자: ${subject.member.name}</p>
+             <span class="absolute right-6 bottom-6 bg-gradient-to-r from-blue-500 to-indigo-500 text-white px-3 py-1 rounded hover:opacity-90 transition"
+                   onclick="${ subject.price === 0 ? `saveSubjectMember(${subject.subjectId})` : 'purchase()' }">
+                 ${ subject.price === 0 ? '무료 수강하기' : subject.price + '원 결제' }
+             </span>
+         </div>
+                           `;
+                });
             }
-
             find('.listArea').innerHTML = html;
         }
+
+        async function saveSubjectMember(subjectId) {
+            if (confirm("무료 수강하시겠습니까?")) {
+                const url = `/api/courses/subjects/subject-members/${subjectId}`;
+                await fetchPostByJson(url);
+                location.href = `/user/subject`;
+            }
+        }
+
+
+        function purchase(){
+            alert('결제기능은 준비중입니다.')
+        }
+
+
     </script>
 </th:block>
 </body>

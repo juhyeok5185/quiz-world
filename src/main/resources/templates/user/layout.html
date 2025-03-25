@@ -108,24 +108,45 @@
         });
     }
 
-    function increaseAdCount(key) {
-        const isSubscribed = localStorage.getItem("subscribeYn") === 'true';
-        if(isSubscribed) return
+    async function increaseAdCount(key) {
         const value = parseInt(localStorage.getItem(key) || '0');
         localStorage.setItem(key, (value + 1).toString());
         switch (key) {
             case 'postCount': // save
-                if (value >= 15) { alert('광고'); localStorage.setItem(key, '0'); }
+                if (value >= 15) {
+                    localStorage.setItem(key, '0');
+                    await fetchPatchByJson();
+                    viewAd();
+                }
                 break;
             case 'getCount': // getList
-                if (value >= 8) { alert('광고'); localStorage.setItem(key, '0'); }
+                if (value >= 8) {
+                    localStorage.setItem(key, '0');
+                    await fetchPatchByJson();
+                    viewAd();
+                }
                 break;
             case 'updateCount': // 수정
-                if (value >= 30) { alert('광고'); localStorage.setItem(key, '0'); }
+                if (value >= 30) {
+                    localStorage.setItem(key, '0');
+                    await fetchPatchByJson();
+                    viewAd();
+                }
                 break;
             case 'useModeCount': // 조회만 클라이언트에서
-                if (value >= 50) { alert('광고'); localStorage.setItem(key, '0'); }
+                if (value >= 50) {
+                    localStorage.setItem(key, '0');
+                    await fetchPatchByJson();
+                    viewAd();
+                }
                 break;
+        }
+    }
+
+    function viewAd(){
+        const isSubscribed = localStorage.getItem("subscribeYn") === 'true';
+        if(!isSubscribed) {
+            alert('광고');
         }
     }
 
@@ -133,7 +154,6 @@
         const url = `/api/members`;
         const response = await fetchGet(url);
         localStorage.setItem("subscribeYn", response.subscribeYn ? 'true' : 'false');
-
     }
 
     function checkSubscribe(){

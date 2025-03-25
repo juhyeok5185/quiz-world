@@ -14,6 +14,7 @@ public class SubjectMemberService {
     private final SubjectMemberReader subjectMemberReader;
     private final SubjectMemberStore subjectMemberStore;
     private final SubjectMemberMapper subjectMemberMapper;
+    private final SubjectMemberValidator subjectMemberValidator;
 
     @Transactional
     public void save(SubjectMember subjectMember) {
@@ -25,13 +26,17 @@ public class SubjectMemberService {
         return subjectMemberReader.findBySubjectIdAndMemberId(subjectId , memberId);
     }
 
-    public SubjectMember toEntity(Subject subject, Member member) {
-        return subjectMemberMapper.toEntity(subject, member);
-    }
-
-
     @Transactional(readOnly = true)
     public List<SubjectMember> findByMemberId(Long memberId) {
         return subjectMemberReader.findByMemberId(memberId);
     }
+
+    public SubjectMember toEntity(Subject subject, Member member) {
+        return subjectMemberMapper.toEntity(subject, member);
+    }
+
+    public void validateToSave(Member member , Subject subject , SubjectMember subjectMember){
+        subjectMemberValidator.validateToSave(member , subject , subjectMember);
+    }
+
 }

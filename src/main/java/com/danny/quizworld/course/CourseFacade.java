@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -83,17 +84,29 @@ public class CourseFacade {
                 .map(subject -> {
                     SubjectResponse response = subjectService.toResponse(subject);
                     response.setStudyCount(studyService.countBySubjectId(subject.getSubjectId()));
+                    response.setCreateYn(Objects.equals(memberId, subject.getMember().getMemberId()));
                     return response;
                 })
                 .collect(Collectors.toList());
     }
 
-
-
+    @Transactional(readOnly = true)
+    public SubjectResponse findSubjectById(Long subjectId , Long memberId) {
+        Subject subject = subjectService.findById(subjectId);
+        SubjectResponse response = subjectService.toResponse(subject);
+        response.setStudyCount(studyService.countBySubjectId(subjectId));
+        response.setCreateYn(Objects.equals(memberId, subject.getMember().getMemberId()));
+        return response;
+    }
 
     @Transactional(readOnly = true)
-    public SubjectResponse findSubjectById(Long subjectId) {
-        return subjectService.toResponse(subjectService.findById(subjectId));
+    public SubjectResponse findSubjectByChapterId(Long chapterId, Long memberId) {
+        Chapter chapter = chapterService.findById(chapterId);
+        Subject subject = chapter.getSubject();
+        SubjectResponse response = subjectService.toResponse(subject);
+        response.setStudyCount(studyService.countBySubjectId(subject.getSubjectId()));
+        response.setCreateYn(Objects.equals(memberId, subject.getMember().getMemberId()));
+        return response;
     }
 
 
@@ -121,12 +134,13 @@ public class CourseFacade {
     }
 
     @Transactional(readOnly = true)
-    public List<ChapterResponse> findAllChapterBySubjectId(Long subjectId) {
+    public List<ChapterResponse> findAllChapterBySubjectId(Long subjectId , Long memberId) {
         return chapterService.findAllBySubjectId(subjectId).stream()
                 .map(chapter -> {
                     Long studyCount = studyService.countByChapterId(chapter.getChapterId());
                     ChapterResponse chapterResponse = chapterService.toResponse(chapter);
                     chapterResponse.setStudyCount(studyCount);
+                    chapterResponse.getSubject().setCreateYn(Objects.equals(memberId, chapter.getSubject().getMember().getMemberId()));
                     return chapterResponse;
                 })
                 .collect(Collectors.toList());
@@ -159,10 +173,14 @@ public class CourseFacade {
     }
 
     @Transactional(readOnly = true)
-    public List<StudyResponse> findAllStudyByChapterId(Long chapterId) {
+    public List<StudyResponse> findAllStudyByChapterId(Long chapterId , Long memberId) {
         List<Study> studyList = studyService.findAllByChapterId(chapterId);
         return studyList.stream()
-                .map(studyService::toResponse)
+                .map(chapter ->{
+                    StudyResponse studyResponse = studyService.toResponse(chapter);
+                    studyResponse.getChapter().getSubject().setCreateYn(Objects.equals(memberId, chapter.getChapter().getSubject().getMember().getMemberId()));
+                    return studyResponse;
+                })
                 .collect(Collectors.toList());
     }
 
@@ -177,7 +195,13 @@ public class CourseFacade {
     public void saveSubjectMember(String subjectId, Long memberId) {
         Member member = memberService.findById(memberId);
         Subject subject = subjectService.findById(Long.parseLong(subjectId));
+        SubjectMember checkSubjectMember = subjectMemberService.findBySubjectIdAndMemberId(subject.getSubjectId(), member.getMemberId());
+        subjectMemberService.validateToSave(member , subject , checkSubjectMember);
         SubjectMember subjectMember = subjectMemberService.toEntity(subject , member);
         subjectMemberService.save(subjectMember);
+
+        subject.addDownloadCnt();
+        subjectService.save(subject);
     }
+
 }

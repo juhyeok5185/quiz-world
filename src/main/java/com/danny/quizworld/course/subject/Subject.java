@@ -61,4 +61,8 @@ public class Subject extends BaseTimeEntity {
         this.publicYn = request.getPublicYn();
         this.price = request.getPrice() == null ? 0L : request.getPrice();
     }
+
+    public void addDownloadCnt() {
+        this.downloadCount++;
+    }
 }

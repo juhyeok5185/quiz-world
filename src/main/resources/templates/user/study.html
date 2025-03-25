@@ -56,10 +56,10 @@
     <div class="listArea grid grid-cols-1 gap-4 mt-4"></div>
 
     <!-- 문제 추가 버튼 -->
-    <div onclick="find('#modal-save').classList.remove('hidden')"
+    <div id="addBtn" onclick="find('#modal-save').classList.remove('hidden');"
          class="fixed bottom-20 right-6 w-14 h-14 bg-gradient-to-r from-blue-500 to-indigo-500
                 text-white text-[28px] font-bold rounded-full shadow-xl hover:opacity-90 transition
-                flex items-center justify-center cursor-pointer">
+                flex items-center justify-center cursor-pointer hidden">
         <span class="absolute top-[12px] right-[17.5px] leading-none">+</span>
     </div>
 
@@ -148,6 +148,7 @@
 <th:block layout:fragment="script">
     <script th:inline="javascript">
         let studys = [];
+        let subject = null;
         let flashInterval = null;
         let currentToggleMode = 'all'; // ✅ 현재 토글 상태 저장
         let activePopoverId = null;
@@ -171,9 +172,17 @@
             const chapterId = getParamValue('chapterId');
             const url = `/api/courses/subjects/chapters/${chapterId}/studies`;
             studys = await fetchGet(url);
+            const subject = await fetchGet(`/api/courses/subjects/chapters/${chapterId}`);
+            checkAuth(subject);
             changeLogoText(`${studys[0].chapter.subject.name} - ${studys[0].chapter.name}`)
             drawList();
             increaseAdCount('getCount')
+        }
+
+        function checkAuth(subject) {
+            if(subject.createYn === false){
+                find('#addBtn').classList.remove('hidden');
+            }
         }
 
         async function updateStudy() {
@@ -230,8 +239,8 @@
                     html += `
                     <div onclick="revealHidden(${index})"
                          class="bg-white shadow-lg rounded-lg p-1 cursor-pointer flex flex-col relative">
-
-                        <!-- 톱니바퀴 (상단 여백 완전 제거) -->
+                        ${subject.createYn ? `
+                              <!-- 톱니바퀴 (상단 여백 완전 제거) -->
                         <div class="flex justify-end -mt-0.5">
                             <div class="cursor-pointer text-gray-500 hover:text-gray-700 text-xl leading-none"
                                  onclick="openSettings(event, ${study.studyId})">⚙️</div>
@@ -242,6 +251,7 @@
                             <div class="questionText font-normal pb-0"><strong class="text-blue-700">Q.</strong>&nbsp;${study.questionText}</div>
                             <div class="answerText font-normal pt-0"><strong class="text-green-700">A.</strong>&nbsp;${study.answerText}</div>
                         </div>
+                              ` : ``}
 
                         <!-- 설명 (여백 최소화) -->
                         <div id="hint-${index}" class="descriptionText text-[11px] text-gray-400 hidden">

@@ -1,9 +1,11 @@
 package com.danny.quizworld.course.study;
 
 import com.danny.quizworld.common.response.ApiResponse;
+import com.danny.quizworld.common.util.Utils;
 import com.danny.quizworld.course.CourseFacade;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -24,8 +26,9 @@ public class StudyApiController {
     }
 
     @GetMapping("/{chapterId}/studies")
-    public ResponseEntity<ApiResponse<List<StudyResponse>>> findAllStudyByChapterId(@PathVariable Long chapterId) {
-        return ResponseEntity.ok(new ApiResponse<>(courseFacade.findAllStudyByChapterId(chapterId)));
+    public ResponseEntity<ApiResponse<List<StudyResponse>>> findAllStudyByChapterId(@PathVariable Long chapterId , Authentication authentication) {
+        Long memberId = Utils.getMemberId(authentication);
+        return ResponseEntity.ok(new ApiResponse<>(courseFacade.findAllStudyByChapterId(chapterId , memberId)));
     }
 
     @GetMapping("/studies/{studyId}")

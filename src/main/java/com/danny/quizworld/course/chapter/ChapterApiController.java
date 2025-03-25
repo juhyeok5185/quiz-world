@@ -1,10 +1,12 @@
 package com.danny.quizworld.course.chapter;
 
 import com.danny.quizworld.common.response.ApiResponse;
+import com.danny.quizworld.common.util.Utils;
 import com.danny.quizworld.course.CourseFacade;
 import com.danny.quizworld.course.subject.SubjectResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,8 +25,9 @@ public class ChapterApiController {
     }
 
     @GetMapping("/{subjectId}/chapters")
-    public ResponseEntity<ApiResponse<List<ChapterResponse>>> findAllChapterBySubjectId(@PathVariable Long subjectId) {
-        return ResponseEntity.ok(new ApiResponse<>(courseFacade.findAllChapterBySubjectId(subjectId)));
+    public ResponseEntity<ApiResponse<List<ChapterResponse>>> findAllChapterBySubjectId(@PathVariable Long subjectId , Authentication authentication) {
+        Long memberId = Utils.getMemberId(authentication);
+        return ResponseEntity.ok(new ApiResponse<>(courseFacade.findAllChapterBySubjectId(subjectId , memberId)));
     }
 
     @GetMapping("/chapters/{chapterId}")

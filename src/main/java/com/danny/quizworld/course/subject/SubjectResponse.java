@@ -18,4 +18,5 @@ public class SubjectResponse {
     private Integer downloadCount;
     private Long studyCount;
     private MemberResponse member;
+    private Boolean createYn;
 }
