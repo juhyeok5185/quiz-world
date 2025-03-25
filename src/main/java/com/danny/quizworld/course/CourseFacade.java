@@ -63,7 +63,13 @@ public class CourseFacade {
     @Transactional(readOnly = true)
     public List<SubjectResponse> findAllSubjectBySearch(SubjectSearch search) {
         List<Subject> subjectList = subjectService.findAllSubjectBySearch(search);
-        return subjectList.stream().map(subjectService::toResponse).collect(Collectors.toList());
+        return subjectList.stream()
+                .map(subject -> {
+                    SubjectResponse response = subjectService.toResponse(subject);
+                    response.setStudyCount(studyService.countBySubjectId(subject.getSubjectId()));
+                    return response;
+                })
+                .collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)

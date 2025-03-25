@@ -1,5 +1,6 @@
 package com.danny.quizworld.course.subject;
 
+import com.danny.quizworld.member.MemberResponse;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,4 +17,5 @@ public class SubjectResponse {
     private Integer likeCount;
     private Integer downloadCount;
     private Long studyCount;
+    private MemberResponse member;
 }

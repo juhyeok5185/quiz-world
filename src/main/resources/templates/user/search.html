@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="user/layout">
+<head>
+    <meta charset="UTF-8">
+    <title>검색</title>
+</head>
+<body>
+<div layout:fragment="content" class="p-6 space-y-4">
+
+    <!-- 검색 영역 -->
+    <div class="relative">
+        <input name="name" id="name" type="text" placeholder="과목의 이름을 입력해주세요"
+               class="w-full pl-4 pr-12 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+        <span class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 cursor-pointer">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                     stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M21 21l-4.35-4.35M9 17a8 8 0 100-16 8 8 0 000 16z"/>
+                </svg>
+            </span>
+    </div>
+
+    <!-- 키워드 토글 영역 (왼쪽에 아이콘 버튼 대신 span 사용) -->
+    <div class="flex items-center gap-2">
+        <!-- 새로고침(리프레시) 아이콘 span -->
+        <span id="keywordReset"
+              class="bg-gray-200 text-gray-800 p-2 rounded-full cursor-pointer
+                 hover:bg-blue-500 hover:text-white transition inline-flex items-center justify-center">
+        <!-- Heroicons arrow-path (리프레시 느낌) -->
+             <svg xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                  class="h-5 w-5">
+                 <path stroke-linecap="round" stroke-linejoin="round"
+                       d="M4.5 4.5v5.25h5.25
+                          M19.5 19.5v-5.25h-5.25
+                          M19.5 12a7.5 7.5 0 11-3.04-6.03"/>
+             </svg>
+        </span>
+
+        <span class="keyword bg-gray-200 text-gray-800 px-3 py-1 rounded cursor-pointer select-none">무료</span>
+        <!--        <span class="keyword bg-gray-200 text-gray-800 px-3 py-1 rounded cursor-pointer select-none">카테고리</span>-->
+        <!--        <span class="keyword bg-gray-200 text-gray-800 px-3 py-1 rounded cursor-pointer select-none">퀴즈톡 인증</span>-->
+    </div>
+
+    <!-- 리스트 출력 영역 -->
+    <div class="listArea grid grid-cols-1 gap-4 mt-4">
+        <div class="bg-white shadow-lg rounded-lg p-6 relative cursor-pointer hover:bg-gray-100 transition">
+            <div class="text-lg font-semibold text-gray-900">dddd</div>
+            <p class="text-sm text-gray-600 mt-1">ff</p>
+            <p class="text-sm text-gray-600">zz</p>
+            <p class="text-sm text-gray-600">cc</p>
+        </div>
+
+        <div class="bg-white shadow-lg rounded-lg p-6 relative cursor-pointer hover:bg-gray-100 transition">
+            <div class="text-lg font-semibold text-gray-900">dddd</div>
+            <p class="text-sm text-gray-600 mt-1">ff</p>
+            <p class="text-sm text-gray-600">zz</p>
+            <p class="text-sm text-gray-600">cc</p>
+        </div>
+
+        <div class="bg-white shadow-lg rounded-lg p-6 relative cursor-pointer hover:bg-gray-100 transition">
+            <div class="text-lg font-semibold text-gray-900">dddd</div>
+            <p class="text-sm text-gray-600 mt-1">ff</p>
+            <p class="text-sm text-gray-600">zz</p>
+            <p class="text-sm text-gray-600">cc</p>
+        </div>
+
+    </div>
+</div>
+
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+
+        let subjects = [];
+
+        window.onload = () => {
+            findAllBySearch();
+        }
+
+        document.querySelectorAll('.keyword').forEach(keyword => {
+            keyword.addEventListener('click', function () {
+                keyword.classList.toggle('bg-blue-500');
+                keyword.classList.toggle('text-white');
+                keyword.classList.toggle('bg-gray-200');
+                keyword.classList.toggle('text-gray-800');
+                keyword.classList.toggle('active');
+            });
+        });
+
+
+        async function findAllBySearch() {
+            //search 값 가져오기 나중에 바꿔야함
+            const name = find('#name').value;
+            const freeKeyword = Array.from(document.querySelectorAll('.keyword'))
+                .find(el => el.textContent.trim() === "무료");
+            const freeYn = freeKeyword && freeKeyword.classList.contains('active');
+            //search 값 가져오기 나중에 바꿔야함
+
+
+            const url = `/api/courses/subjects/search`;
+            const json = {name , freeYn};
+            subjects = await fetchGet(url, json);
+            drawList();
+        }
+
+        function drawList(){
+            let html = ``;
+            if(subjects.length === 0) {
+                html += `
+                <div class="text-center text-gray-500 py-10">등록된 과목이 없습니다.<br>과목을 추가해 주세요!</div>
+                `;
+            } else {
+                subjects.forEach(subject => {
+                    html += `
+                          <div class="bg-white shadow-lg rounded-lg p-6 relative cursor-pointer hover:bg-gray-100 transition">
+                              <div class="text-lg font-semibold text-gray-900">${subject.name}</div>
+                              <p class="text-sm text-gray-600 mt-1">소개: ${subject.description}</p>
+                              <p class="text-sm text-gray-600">총 문항: ${subject.studyCount} 문항</p>
+                              <p class="text-sm text-gray-600">추천 : ${subject.likeCount} 개</p>
+                              <p class="text-sm text-gray-600">금액: ${subject.price} 원</p>
+                              <p class="text-sm text-gray-600">작성자: ${subject.member.name}</p>
+                          </div>
+                `;
+                })
+            }
+
+            find('.listArea').innerHTML = html;
+        }
+    </script>
+</th:block>
+</body>
+</html>
+

@@ -1,8 +1,9 @@
 package com.danny.quizworld.course.subject;
 
-import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
+
 import static com.danny.quizworld.course.subject.QSubject.subject;
 
 import java.util.List;
@@ -25,7 +26,17 @@ public class SubjectRepositoryCustomImpl extends QuerydslRepositorySupport imple
                 .fetch();
     }
 
-    public BooleanExpression searchCondition(SubjectSearch search) {
-        return subject.name.contains(search.getName());
+    public BooleanBuilder searchCondition(SubjectSearch search) {
+        BooleanBuilder builder = new BooleanBuilder();
+
+        if (search.getName() != null && !search.getName().isEmpty()) {
+            builder.and(subject.name.contains(search.getName()));
+        }
+
+        if (Boolean.TRUE.equals(search.getFreeYn())) {
+            builder.and(subject.price.eq(0L));
+        }
+
+        return builder;
     }
 }

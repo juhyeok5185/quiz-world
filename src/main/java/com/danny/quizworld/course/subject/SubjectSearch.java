@@ -7,4 +7,5 @@ import lombok.Setter;
 @Setter
 public class SubjectSearch {
     private String name;
+    private Boolean freeYn;
 }
