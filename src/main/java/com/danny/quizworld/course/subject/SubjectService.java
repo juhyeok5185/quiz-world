@@ -1,5 +1,6 @@
 package com.danny.quizworld.course.subject;
 
+import com.danny.quizworld.course.subject.category.Category;
 import com.danny.quizworld.member.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -42,8 +43,8 @@ public class SubjectService {
     }
 
 
-    public Subject toEntity(Member member, SubjectCommand.save request) {
-        return subjectMapper.toEntity(member, request);
+    public Subject toEntity(Member member, Category category, SubjectCommand.save request) {
+        return subjectMapper.toEntity(member,category, request);
     }
 
     public SubjectResponse toResponse(Subject subject) {

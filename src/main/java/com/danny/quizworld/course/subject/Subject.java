@@ -1,5 +1,6 @@
 package com.danny.quizworld.course.subject;
 
+import com.danny.quizworld.course.subject.category.Category;
 import com.danny.quizworld.member.Member;
 import com.danny.quizworld.common.entity.BaseTimeEntity;
 import lombok.*;
@@ -20,6 +21,11 @@ public class Subject extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id")
+    private Category category;
+
 
     @Column(name = "name")
     private String name;
@@ -44,8 +50,9 @@ public class Subject extends BaseTimeEntity {
 
 
     @Builder
-    public Subject(Member member, String name, String description, Integer likeCount, Integer downloadCount, Boolean downloadYn, Long downloadId, Boolean publicYn, Long price) {
+    public Subject(Member member,Category category, String name, String description, Integer likeCount, Integer downloadCount, Boolean downloadYn, Long downloadId, Boolean publicYn, Long price) {
         this.member = member;
+        this.category = category;
         this.name = name;
         this.description = description;
         this.likeCount = likeCount;
@@ -55,8 +62,9 @@ public class Subject extends BaseTimeEntity {
         this.price = price;
     }
 
-    public void update(SubjectCommand.update request) {
+    public void update(SubjectCommand.update request , Category category) {
         this.name = request.getName();
+        this.category = category;
         this.description = request.getDescription();
         this.publicYn = request.getPublicYn();
         this.price = request.getPrice() == null ? 0L : request.getPrice();

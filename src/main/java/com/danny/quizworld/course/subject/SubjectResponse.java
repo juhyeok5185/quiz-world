@@ -1,5 +1,6 @@
 package com.danny.quizworld.course.subject;
 
+import com.danny.quizworld.course.subject.category.CategoryResponse;
 import com.danny.quizworld.member.MemberResponse;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,4 +20,5 @@ public class SubjectResponse {
     private Long studyCount;
     private MemberResponse member;
     private Boolean createYn;
+    private CategoryResponse category;
 }

@@ -24,6 +24,8 @@ public class QSubject extends EntityPathBase<Subject> {
 
     public final com.danny.quizworld.common.entity.QBaseTimeEntity _super = new com.danny.quizworld.common.entity.QBaseTimeEntity(this);
 
+    public final com.danny.quizworld.course.subject.category.QCategory category;
+
     public final StringPath description = createString("description");
 
     public final NumberPath<Integer> downloadCount = createNumber("downloadCount", Integer.class);
@@ -69,6 +71,7 @@ public class QSubject extends EntityPathBase<Subject> {
 
     public QSubject(Class<? extends Subject> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
+        this.category = inits.isInitialized("category") ? new com.danny.quizworld.course.subject.category.QCategory(forProperty("category")) : null;
         this.member = inits.isInitialized("member") ? new com.danny.quizworld.member.QMember(forProperty("member")) : null;
     }
 

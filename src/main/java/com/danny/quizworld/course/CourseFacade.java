@@ -1,12 +1,16 @@
 package com.danny.quizworld.course;
 
 import com.danny.quizworld.common.config.MyException;
+import com.danny.quizworld.common.response.ApiResponse;
 import com.danny.quizworld.course.chapter.ChapterCommand;
 import com.danny.quizworld.course.study.Study;
 import com.danny.quizworld.course.study.StudyCommand;
 import com.danny.quizworld.course.study.StudyResponse;
 import com.danny.quizworld.course.study.StudyService;
 import com.danny.quizworld.course.subject.*;
+import com.danny.quizworld.course.subject.category.Category;
+import com.danny.quizworld.course.subject.category.CategoryResponse;
+import com.danny.quizworld.course.subject.category.CategoryService;
 import com.danny.quizworld.course.subject.member.SubjectMember;
 import com.danny.quizworld.course.subject.member.SubjectMemberService;
 import com.danny.quizworld.member.Member;
@@ -33,13 +37,15 @@ public class CourseFacade {
     private final ChapterService chapterService;
     private final StudyService studyService;
     private final SubjectMemberService subjectMemberService;
+    private final CategoryService categoryService;
 
     //Subject 관련 API ---------------------------------------------------------------------------------------
     @Transactional
     public void saveSubject(Long memberId, SubjectCommand.save request) {
         Member member = memberService.findById(memberId);
         subjectService.validateToSave(member ,request);
-        Subject subject = subjectService.toEntity(member, request);
+        Category category = categoryService.findById(request.getCategoryId());
+        Subject subject = subjectService.toEntity(member, category,request);
         subjectService.save(subject);
     }
 
@@ -47,7 +53,8 @@ public class CourseFacade {
     public void updateSubject(Long subjectId, SubjectCommand.update request) {
         Subject subject = subjectService.findById(subjectId);
         subjectService.validateToUpdate(subject , request);
-        subject.update(request);
+        Category category = categoryService.findById(request.getCategoryId());
+        subject.update(request , category);
         subjectService.save(subject);
     }
 
@@ -204,4 +211,11 @@ public class CourseFacade {
         subjectService.save(subject);
     }
 
+    //Category 관련 API --------------------------------------------------------------------------------------------
+    @Transactional(readOnly = true)
+    public List<CategoryResponse> findAllCategory() {
+        List<Category> categoryList = categoryService.findAllCategory();
+        return categoryList.stream().map(categoryService::toResponse).collect(Collectors.toList());
+
+    }
 }

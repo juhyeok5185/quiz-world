@@ -25,6 +25,9 @@ public class SubjectCommand {
         @NotNull(message = "공개 여부는 필수입니다.")
         private Boolean publicYn;
         private Long price;
+
+        @NotNull(message = "카테고리를 선택해주세요")
+        private Integer categoryId;
     }
 
     @Getter
@@ -41,5 +44,8 @@ public class SubjectCommand {
         @NotNull(message = "공개 여부는 필수입니다.")
         private Boolean publicYn;
         private Long price;
+
+        @NotNull(message = "카테고리를 선택해주세요")
+        private Integer categoryId;
     }
 }
