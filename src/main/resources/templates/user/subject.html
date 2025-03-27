@@ -154,8 +154,9 @@
                               ${subject.createYn ? `
                               <!-- 설정 아이콘 (톱니바퀴) -->
                               <div class="absolute top-3 right-3 cursor-pointer text-gray-500 hover:text-gray-700 text-xl" onclick="openSettings(event, ${subject.subjectId})">
-                                  ⚙️
+                                  <i class="fa-solid fa-gear"></i>
                               </div>
+
                               <!-- Popover 메뉴 -->
                               <div id="popover-${subject.subjectId}" class="popover-menu absolute right-3 top-10 bg-white border border-gray-300 shadow-lg rounded-md hidden">
                                   <ul class="text-sm text-gray-700">

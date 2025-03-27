@@ -11,7 +11,7 @@
 
     <!-- 챕터 추가 버튼 (우측 하단 고정) -->
     <div class="fixed bottom-20 right-6 md:right-[calc(50%-320px-200px)] z-50">
-        <div onclick="find('#modal-div').classList.remove('hidden')"
+        <div id="addBtn" onclick="find('#modal-div').classList.remove('hidden')"
              class="w-14 h-14 bg-gradient-to-r from-blue-500 to-indigo-500 text-white text-[28px] font-bold rounded-full shadow-xl hover:opacity-90 transition flex items-center justify-center cursor-pointer">
             <span class="absolute top-[12px] right-[17.5px] leading-none">+</span>
         </div>
@@ -88,7 +88,9 @@
             chapters = await fetchGet(`/api/courses/subjects/${subjectId}/chapters`);
             subject = await fetchGet(`/api/courses/subjects/${subjectId}`);
             drawList();
+            console.log(subject)
             checkAuth(subject);
+            console.log(subject)
             changeLogoText(`${chapters[0].subject.name}`);
         }
 
@@ -108,14 +110,14 @@
                          <div class="bg-white shadow-lg rounded-lg p-6 relative cursor-pointer hover:bg-gray-100 transition"
                               onclick="location.href = '/user/study?chapterId=${chapter.chapterId}'">
                               ${subject.createYn ? `
-                              <div class="absolute top-3 right-3 cursor-pointer text-gray-500 hover:text-gray-700 text-xl"
-                                  onclick="openSettings(event, ${chapter.chapterId})">
-                                 ⚙️
-                             </div>
+                              <div class="absolute top-3 right-3 cursor-pointer text-gray-500 hover:text-gray-700 text-xl" onclick="openSettings(event, ${chapter.chapterId})">
+                                  <i class="fa-solid fa-gear"></i>
+                              </div>
                              <!-- Popover 메뉴 -->
                              <div id="popover-${chapter.chapterId}" class="popover-menu absolute right-3 top-10 bg-white border border-gray-300 shadow-lg rounded-md hidden">
                                  <ul class="text-sm text-gray-700">
                                      <li class="p-2 cursor-pointer hover:bg-gray-100" onclick="updateMode(event, ${chapter.chapterId})">수정</li>
+                                     <li class="p-2 cursor-pointer hover:bg-gray-100" >시험등록</li>
                                      <li class="p-2 cursor-pointer hover:bg-red-100 text-red-500" onclick="deleteChapter(event, ${chapter.chapterId})">삭제</li>
                                  </ul>
                              </div>

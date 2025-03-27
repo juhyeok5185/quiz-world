@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://kit.fontawesome.com/7fe498c607.js" crossorigin="anonymous"></script>
+
     <title>공통 레이아웃</title>
 </head>
 <body class="flex flex-col min-h-screen bg-gray-100">
@@ -11,7 +13,8 @@
 <header class="flex items-center justify-between px-4 py-3 bg-gradient-to-r from-blue-500 to-indigo-500 text-white">
     <div id="backButton" class="text-2xl cursor-pointer" onclick="goBack();">←</div> <!-- 뒤로가기 -->
     <h1 id="logoArea" class="text-xl font-bold"></h1> <!-- 중앙 로고 -->
-    <div id="menuButton" class="text-2xl cursor-pointer">≡</div> <!-- 햄버거 메뉴 (작대기 3개) -->
+    <i class="fa-solid fa-sliders cursor-pointer" id="menuButton"></i>
+
 </header>
 
 <div id="adBanner" class="w-full bg-yellow-200 text-gray-800 text-center py-3 hidden">
@@ -28,45 +31,48 @@
 
 
 <!-- 전체 화면 팝업 -->
+<!-- 전체 화면 팝업 -->
 <div id="fullScreenPopup" class="fixed inset-0 bg-white hidden flex flex-col z-50">
-    <!-- 상단 네비게이션 바 -->
-    <div class="w-full px-6 py-4 flex items-center">
-        <button id="closePopup" class="text-2xl text-gray-700">←</button> <!-- 뒤로가기 버튼 -->
+    <div class="w-full max-w-[600px] mx-auto flex flex-col flex-grow px-4 md:px-6">
+
+        <!-- 상단 네비게이션 바 -->
+        <div class="w-full py-4 flex items-center">
+            <button id="closePopup" class="text-2xl text-gray-700">←</button>
+        </div>
+
+        <!-- 알림 | 설정 | 로그아웃 -->
+        <div class="w-full py-4 flex justify-around text-lg font-semibold text-gray-700">
+            <div class="flex flex-col items-center">
+                <i class="fa-solid fa-bell"></i>
+                <span>알림</span>
+            </div>
+            <div class="flex flex-col items-center">
+                <i class="fa-solid fa-gear"></i>
+                <span>설정</span>
+            </div>
+            <div class="flex flex-col items-center">
+                <i class="fa-solid fa-right-from-bracket"></i>
+                <span class="text-red-500" onclick="logout()">로그아웃</span>
+            </div>
+        </div>
+
+        <!-- 메뉴 리스트 -->
+        <div class="w-full">
+            <div class="flex items-center justify-between h-16 cursor-pointer"
+                 onclick="location.href='/user/subject'">
+                <span class="text-lg text-gray-800">내 과목 바로가기</span>
+                <span class="text-xl text-gray-500">›</span>
+            </div>
+
+            <div class="flex items-center justify-between h-16 border-t border-b cursor-pointer"
+                 onclick="location.href='#'">
+                <span class="text-lg text-gray-800">과목 검색하기</span>
+                <span class="text-xl text-gray-500">›</span>
+            </div>
+        </div>
+
+        <div class="flex-grow"></div>
     </div>
-
-    <!-- 알림 | 설정 | 로그아웃 (아이콘 추가) -->
-    <div class="w-full px-6 py-4 flex justify-around text-lg font-semibold text-gray-700">
-        <div class="flex flex-col items-center">
-            <span class="text-2xl">🔔</span>
-            <span>알림</span>
-        </div>
-        <div class="flex flex-col items-center">
-            <span class="text-2xl">⚙️</span>
-            <span>설정</span>
-        </div>
-        <div class="flex flex-col items-center">
-            <span class="text-2xl text-red-500">🚪</span>
-            <span class="text-red-500" onclick="logout()">로그아웃</span>
-        </div>
-    </div>
-
-    <!-- 메뉴 리스트 (높이 증가) -->
-    <div class="w-full">
-        <div class="flex items-center justify-between px-4 h-16 cursor-pointer"
-             onclick="location.href='/user/subject'">
-            <span class="text-lg text-gray-800">내 과목 바로가기</span>
-            <span class="text-xl text-gray-500">›</span>
-        </div>
-
-        <div class="flex items-center justify-between px-4 h-16 border-t border-b cursor-pointer"
-             onclick="location.href='#'">
-            <span class="text-lg text-gray-800">과목 검색하기</span>
-            <span class="text-xl text-gray-500">›</span>
-        </div>
-    </div>
-
-    <!-- 빈 공간 -->
-    <div class="flex-grow bg-white"></div>
 </div>
 
 

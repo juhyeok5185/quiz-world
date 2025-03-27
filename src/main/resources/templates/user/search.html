@@ -29,19 +29,10 @@
     <div class="flex items-center gap-2">
         <!-- reset 버튼: 이벤트 대상에서 제외 -->
         <span id="resetBtn" onclick="clickResetBtn();"
-              class="bg-gray-200 text-gray-800 p-2 rounded-full cursor-pointer transition inline-flex items-center justify-center">
-    <svg xmlns="http://www.w3.org/2000/svg"
-         fill="none"
-         viewBox="0 0 24 24"
-         stroke-width="1.5"
-         stroke="currentColor"
-         class="h-5 w-5">
-      <path stroke-linecap="round" stroke-linejoin="round"
-            d="M4.5 4.5v5.25h5.25
-               M19.5 19.5v-5.25h-5.25
-               M19.5 12a7.5 7.5 0 11-3.04-6.03"/>
-    </svg>
-  </span>
+              class="bg-gray-200 text-gray-800 p-1 w-9 h-9 rounded-full cursor-pointer transition inline-flex items-center justify-center">
+            <i class="fa-solid fa-arrows-rotate text-lg"></i>
+            </span>
+
 
         <!-- 나머지 키워드들 -->
         <span class="keyword bg-gray-200 text-gray-800 px-3 py-1 rounded cursor-pointer select-none">무료</span>
@@ -51,27 +42,6 @@
 
     <!-- 리스트 출력 영역 -->
     <div class="listArea grid grid-cols-1 gap-4 mt-4">
-        <div class="bg-white shadow-lg rounded-lg p-6 relative cursor-pointer hover:bg-gray-100 transition">
-            <div class="text-lg font-semibold text-gray-900">dddd</div>
-            <p class="text-sm text-gray-600 mt-1">ff</p>
-            <p class="text-sm text-gray-600">zz</p>
-            <p class="text-sm text-gray-600">cc</p>
-        </div>
-
-        <div class="bg-white shadow-lg rounded-lg p-6 relative cursor-pointer hover:bg-gray-100 transition">
-            <div class="text-lg font-semibold text-gray-900">dddd</div>
-            <p class="text-sm text-gray-600 mt-1">ff</p>
-            <p class="text-sm text-gray-600">zz</p>
-            <p class="text-sm text-gray-600">cc</p>
-        </div>
-
-        <div class="bg-white shadow-lg rounded-lg p-6 relative cursor-pointer hover:bg-gray-100 transition">
-            <div class="text-lg font-semibold text-gray-900">dddd</div>
-            <p class="text-sm text-gray-600 mt-1">ff</p>
-            <p class="text-sm text-gray-600">zz</p>
-            <p class="text-sm text-gray-600">cc</p>
-        </div>
-
     </div>
 </div>
 
@@ -151,8 +121,8 @@
              <p class="text-sm text-gray-600">추천 : ${subject.category.name}</p>
              <p class="text-sm text-gray-600">작성자: ${subject.member.name}</p>
              <span class="absolute right-6 bottom-6 bg-gradient-to-r from-blue-500 to-indigo-500 text-white px-3 py-1 rounded hover:opacity-90 transition"
-                   onclick="${ subject.price === 0 ? `saveSubjectMember(${subject.subjectId})` : 'purchase()' }">
-                 ${ subject.price === 0 ? '무료 수강하기' : subject.price + '원 결제' }
+                   onclick="${subject.price === 0 ? `saveSubjectMember(${subject.subjectId})` : 'purchase()'}">
+                 ${subject.price === 0 ? '무료 수강하기' : subject.price + '원 결제'}
              </span>
          </div>
                            `;
@@ -172,7 +142,7 @@
         }
 
 
-        function purchase(){
+        function purchase() {
             alert('결제기능은 준비중입니다.')
         }
 
