@@ -154,8 +154,12 @@ public class CourseFacade {
     }
 
     @Transactional(readOnly = true)
-    public ChapterResponse findChapterById(Long chapterId) {
-        return chapterService.toResponse(chapterService.findById(chapterId));
+    public ChapterResponse findChapterById(Long chapterId, Long memberId) {
+        Chapter chapter = chapterService.findById(chapterId);
+        ChapterResponse chapterResponse = chapterService.toResponse(chapter);
+        chapterResponse.setStudyCount(studyService.countByChapterId(chapterId));
+        chapterResponse.getSubject().setCreateYn(Objects.equals(memberId, chapter.getSubject().getMember().getMemberId()));
+        return chapterResponse;
     }
 
     //Study 관련 API ---------------------------------------------------------------------------------------

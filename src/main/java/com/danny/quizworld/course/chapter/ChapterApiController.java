@@ -31,8 +31,9 @@ public class ChapterApiController {
     }
 
     @GetMapping("/chapters/{chapterId}")
-    public ResponseEntity<ApiResponse<ChapterResponse>> findChapterById(@PathVariable Long chapterId) {
-        return ResponseEntity.ok(new ApiResponse<>(courseFacade.findChapterById(chapterId)));
+    public ResponseEntity<ApiResponse<ChapterResponse>> findChapterById(@PathVariable Long chapterId , Authentication authentication) {
+        Long memberId = Utils.getMemberId(authentication);
+        return ResponseEntity.ok(new ApiResponse<>(courseFacade.findChapterById(chapterId , memberId)));
     }
 
     @PatchMapping("/chapters/{chapterId}")

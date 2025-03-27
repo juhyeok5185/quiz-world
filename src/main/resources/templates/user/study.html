@@ -155,7 +155,7 @@
 <th:block layout:fragment="script">
     <script th:inline="javascript">
         let studys = [];
-        let subject = null;
+        let chapter = null;
         let flashInterval = null;
         let currentToggleMode = 'all'; // ✅ 현재 토글 상태 저장
         let activePopoverId = null;
@@ -179,9 +179,9 @@
             const chapterId = getParamValue('chapterId');
             const url = `/api/courses/subjects/chapters/${chapterId}/studies`;
             studys = await fetchGet(url);
-            subject = await fetchGet(`/api/courses/subjects/by/${chapterId}`);
-            checkAuth(subject);
-            changeLogoText(`${studys[0].chapter.subject.name} - ${studys[0].chapter.name}`)
+            chapter = await fetchGet(`/api/courses/subjects/chapters/${chapterId}`);
+            checkAuth(chapter.subject);
+            changeLogoText(`${chapter.subject.name} - ${chapter.name}`)
             drawList();
             increaseAdCount('getCount')
         }
@@ -236,26 +236,26 @@
 
         function drawList() {
             let html = ``;
-            if (studys.length === 0) {
-                html += `
-        <div class="text-center text-gray-500 py-10">
-            등록된 과목이 없습니다.<br>과목을 추가해 주세요!
-        </div>`;
-            } else {
-                html += `<div class="flex flex-col md:flex-row gap-4 min-h-[400px]">`;
+            html += `<div class="flex flex-col md:flex-row gap-4 min-h-[400px]">`;
 
-                // 블럭 리스트 (좌측)
+            if (studys.length === 0) {
+                // 좌측 안내 문구
                 html += `
         <div class="flex flex-col gap-4 w-full md:w-1/2 flex-1 max-h-[calc(100vh-200px)] overflow-y-auto pr-1">
-        `;
-
+            <div class="text-center text-gray-500 py-10">
+                등록된 과목이 없습니다.<br>과목을 추가해 주세요!
+            </div>
+        </div>`;
+            } else {
+                // 좌측 리스트
+                html += `<div class="flex flex-col gap-4 w-full md:w-1/2 flex-1 max-h-[calc(100vh-200px)] overflow-y-auto pr-1">`;
                 studys.forEach((study, index) => {
                     html += `
             <div onclick="revealHidden(${index})"
                  class="bg-white shadow-lg rounded-lg p-1 cursor-pointer flex flex-col relative">
-                 ${subject.createYn ? `
+                 ${chapter.subject.createYn ? `
                     <div class="absolute top-3 right-3 cursor-pointer text-gray-500 hover:text-gray-700 text-xl" onclick="openSettings(event, ${study.studyId})">
-                                  <i class="fa-solid fa-gear"></i>
+                        <i class="fa-solid fa-gear"></i>
                     </div>` : ``}
 
                 <div class="text-sm text-gray-900 text-start break-words space-y-0">
@@ -272,30 +272,35 @@
                 </div>
 
                 <div id="popover-${study.studyId}"
-                     class="popover-menu absolute right-2 top-6 bg-white border border-gray-200 shadow-sm rounded-sm hidden z-20">
-                    <ul class="text-xs space-y-0">
-                        <li class="px-2 py-0.5 cursor-pointer hover:bg-gray-50"
-                            onclick="updateMode(event, ${study.studyId})">수정</li>
-                        <li class="px-2 py-0.5 cursor-pointer hover:bg-red-50 text-red-500"
-                            onclick="deleteById(event, ${study.studyId})">삭제</li>
+                     class="popover-menu absolute right-2 top-6 w-44 bg-white border border-gray-200 shadow-xl rounded-lg hidden z-30">
+                    <ul class="text-sm text-gray-800">
+                        <li class="flex items-center gap-2 px-4 py-2 cursor-pointer hover:bg-blue-50 hover:text-blue-600 transition"
+                            onclick="updateMode(event, ${study.studyId})">
+                            <i class="fa-solid fa-pen-to-square"></i> 수정
+                        </li>
+                        <li class="flex items-center gap-2 px-4 py-2 cursor-pointer hover:bg-red-50 text-red-500 hover:text-red-600 transition"
+                            onclick="deleteById(event, ${study.studyId})">
+                            <i class="fa-solid fa-trash-can"></i> 삭제
+                        </li>
                     </ul>
                 </div>
+
             </div>`;
                 });
 
-                html += `</div>`; // end of 블럭 리스트
-
-                // 연습장 (우측) - md 이상에서만 표시 + 높이는 100vh에서 일정 여백 제외
-                html += `
-                    <div class="hidden md:block flex-1">
-                        <textarea class="w-full border border-gray-300 rounded p-4 text-sm resize-y"
-                      style="height: calc(100vh - 250px);"
-                      placeholder="자유롭게 작성하면서 공부해보세요! (해당 내용은 저장되지 않습니다.)"></textarea>
-                    </div>
-                    `;
-
-                html += `</div>`; // end of flex row
+                html += `</div>`;
             }
+
+            // 우측 연습장은 항상 표시
+            html += `
+        <div class="hidden md:block flex-1">
+            <textarea class="w-full border border-gray-300 rounded p-4 text-sm resize-y"
+              style="height: calc(100vh - 250px);"
+              placeholder="자유롭게 작성하면서 공부해보세요! (해당 내용은 저장되지 않습니다.)"></textarea>
+        </div>
+    `;
+
+            html += `</div>`; // end of flex row
 
             find('.listArea').innerHTML = html;
         }
