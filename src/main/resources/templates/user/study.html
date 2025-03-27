@@ -281,11 +281,12 @@
 
                 // 연습장 (우측) - md 이상에서만 표시 + 높이는 100vh에서 일정 여백 제외
                 html += `
-        <div class="hidden md:block flex-1">
-            <textarea class="w-full border border-gray-300 rounded p-4 text-sm resize-y"
-          style="height: calc(100vh - 250px);"
-          placeholder="자유롭게 작성하면서 공부해보세요!"></textarea>
-        </div>`;
+                    <div class="hidden md:block flex-1">
+                        <textarea class="w-full border border-gray-300 rounded p-4 text-sm resize-y"
+                      style="height: calc(100vh - 250px);"
+                      placeholder="자유롭게 작성하면서 공부해보세요! (해당 내용은 저장되지 않습니다.)"></textarea>
+                    </div>
+                    `;
 
                 html += `</div>`; // end of flex row
             }
