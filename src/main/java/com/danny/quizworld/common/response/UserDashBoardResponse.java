@@ -12,6 +12,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class UserDashBoardResponse {
     private String name;
+    private String nickname;
     private Integer score;
     private Integer likeCount;
     private Long mySubjectCount;
@@ -20,5 +21,6 @@ public class UserDashBoardResponse {
 
     public void decryptName() {
         this.name = AES256Utils.decrypt(this.name);
+        this.nickname = AES256Utils.decrypt(this.nickname);
     }
 }

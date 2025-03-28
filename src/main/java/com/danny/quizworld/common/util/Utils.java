@@ -4,6 +4,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDate;
 
 public class Utils {
 
@@ -46,4 +47,21 @@ public class Utils {
 
         return null;
     }
+
+
+    public static String generateUniqueNickname(String baseName) {
+        String nickname;
+        int randNum = (int) (Math.random() * 9000) + 1000; // 1000~9999
+        nickname = baseName + "_" + randNum;
+        return nickname;
+    }
+
+    public static Integer getLastMonth() {
+        return LocalDate.now().minusMonths(1).getMonthValue();
+    }
+
+    public static Integer getLastMonthYear() {
+        return LocalDate.now().minusMonths(1).getYear();
+    }
+
 }

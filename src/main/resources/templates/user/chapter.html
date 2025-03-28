@@ -100,7 +100,6 @@
             const subjectId = getParamValue('subjectId');
             chapters = await fetchGet(`/api/courses/subjects/${subjectId}/chapters`);
             subject = await fetchGet(`/api/courses/subjects/${subjectId}`);
-            console.log(chapters)
             drawList();
             checkAuth(subject);
             changeLogoText(`${chapters[0].subject.name}`);

@@ -25,6 +25,9 @@ public class Member extends BaseTimeEntity {
     @Column(name = "email")
     private String email;
 
+    @Column(name = "nickname")
+    private String nickname;
+
     @Column(name = "device_token")
     private String deviceToken;
 
@@ -41,10 +44,11 @@ public class Member extends BaseTimeEntity {
     private Boolean businessYn;
 
     @Builder
-    public Member(MemberRole role,  String name, String email, String deviceToken, Integer likeCount, Integer score, Boolean subscribeYn, Boolean businessYn) {
+    public Member(MemberRole role,  String name, String email,String nickname, String deviceToken, Integer likeCount, Integer score, Boolean subscribeYn, Boolean businessYn) {
         this.role = role;
         this.name = name;
         this.email = email;
+        this.nickname = nickname;
         this.deviceToken = deviceToken;
         this.likeCount = likeCount;
         this.score = score;
@@ -58,5 +62,9 @@ public class Member extends BaseTimeEntity {
 
     public void addScore() {
         this.score += 10;
+    }
+
+    public void initScore() {
+        this.score = 0;
     }
 }

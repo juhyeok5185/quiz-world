@@ -36,8 +36,12 @@ public class MemberService {
         return memberReader.findAllBySubscribeYnTrue();
     }
 
-    public Member toEntity(String name , String email){
-        return memberMapper.toEntity(name ,email);
+    @Transactional(readOnly = true)
+    public List<Member> findAll() {
+        return memberReader.findAll();
+    }
+    public Member toEntity(String name , String email , String nickname){
+        return memberMapper.toEntity(name ,email , nickname);
     }
 
     public MemberResponse toResponse(Member member){

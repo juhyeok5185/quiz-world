@@ -59,6 +59,7 @@
         async function findMember() {
             const url = `/api/members/dashboard`;
             const response = await fetchGet(url);
+            console.log(response)
             drawTable(response);
         }
 

@@ -1,6 +1,7 @@
 package com.danny.quizworld.common.service;
 
 import com.danny.quizworld.common.util.AES256Utils;
+import com.danny.quizworld.common.util.Utils;
 import com.danny.quizworld.member.Member;
 import com.danny.quizworld.member.MemberRole;
 import com.danny.quizworld.member.MemberService;
@@ -39,7 +40,8 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
         Member member = memberService.findByEmail(AES256Utils.encrypt(email));
         if(member == null){
-            Member newMember = memberService.toEntity(name, email);
+            String nickname = Utils.generateUniqueNickname(name);
+            Member newMember = memberService.toEntity(name, email , nickname);
             member = memberService.save(newMember);
         }
         if(deviceToken != null){

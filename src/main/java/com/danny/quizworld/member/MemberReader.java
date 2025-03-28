@@ -24,4 +24,8 @@ public class MemberReader {
     public List<Member> findAllBySubscribeYnTrue() {
         return memberRepository.findAllBySubscribeYnTrue();
     }
+
+    public List<Member> findAll() {
+        return memberRepository.findAll();
+    }
 }

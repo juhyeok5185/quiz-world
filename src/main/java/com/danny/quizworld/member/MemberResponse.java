@@ -10,6 +10,7 @@ import lombok.Setter;
 public class MemberResponse {
     private String name;
     private String email;
+    private String nickname;
     private Integer likeCount;
     private Boolean subscribeYn;
     private Integer score;

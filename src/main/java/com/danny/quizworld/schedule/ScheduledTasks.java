@@ -16,4 +16,9 @@ public class ScheduledTasks {
         scheduledTasksFacade.expiredSubscribe();
     }
 
+    @Scheduled(cron = "0 1 0 1 * *", zone = "Asia/Seoul")
+    public void triggerAtMidnight01OfEveryMonth() {
+        scheduledTasksFacade.triggerAtMidnight01OfEveryMonth();
+    }
+
 }
