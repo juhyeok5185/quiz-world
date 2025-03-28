@@ -67,4 +67,8 @@ public class Member extends BaseTimeEntity {
     public void initScore() {
         this.score = 0;
     }
+
+    public void updateNickname(String nickname) {
+        this.nickname = nickname;
+    }
 }

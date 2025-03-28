@@ -28,4 +28,11 @@ public class MemberFacade {
         response.decryptName();
         return response;
     }
+
+    @Transactional
+    public void updateNickname(MemberCommand.updateNickname request, Long memberId) {
+        Member member = memberService.findById(memberId);
+        member.updateNickname(request.getNickname());
+        memberService.save(member);
+    }
 }

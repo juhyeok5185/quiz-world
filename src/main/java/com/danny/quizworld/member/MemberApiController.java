@@ -36,4 +36,10 @@ public class MemberApiController {
         return ResponseEntity.status(201).body(new ApiResponse<>("score 추가" , 201 , null));
     }
 
+    @PatchMapping("/nickname")
+    public ResponseEntity<ApiResponse<MemberResponse>> updateNickname(@RequestBody MemberCommand.updateNickname request, Authentication authentication){
+        Long memberId = Utils.getMemberId(authentication);
+        memberFacade.updateNickname(request, memberId);
+        return ResponseEntity.status(201).body(new ApiResponse<>("Nickname 변경" , 201 , null));
+    }
 }
