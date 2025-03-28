@@ -12,7 +12,7 @@
     <!-- 챕터 추가 버튼 (우측 하단 고정) -->
     <div class="fixed bottom-20 right-6 md:right-[calc(50%-320px-200px)] z-50">
         <div id="addBtn" onclick="find('#modal-div').classList.remove('hidden')"
-             class="w-14 h-14 bg-gradient-to-r from-blue-500 to-indigo-500 text-white text-[28px] font-bold rounded-full shadow-xl hover:opacity-90 transition flex items-center justify-center cursor-pointer">
+             class="w-14 h-14 bg-gradient-to-r from-blue-500 to-indigo-500 text-white text-[28px] font-bold rounded-full shadow-xl hover:opacity-90 transition flex items-center justify-center cursor-pointer hidden">
             <span class="absolute top-[12px] right-[17.5px] leading-none">+</span>
         </div>
     </div>
@@ -119,6 +119,7 @@
         }
 
         function checkAuth() {
+            console.log(subject)
             if (subject.createYn === true) {
                 find('#addBtn').classList.remove('hidden');
             }
@@ -131,48 +132,52 @@
             } else {
                 chapters.forEach((chapter, index) => {
                     html += `
-                <div class="bg-white shadow-lg rounded-lg p-6 relative cursor-pointer hover:bg-gray-100 transition"
-                     onclick="location.href = '/user/study?chapterId=${chapter.chapterId}'">
+            <div class="bg-white shadow-lg rounded-lg p-6 relative cursor-pointer hover:bg-gray-100 transition"
+                 onclick="location.href = '/user/study?chapterId=${chapter.chapterId}'">
 
-                    <!-- 설정 아이콘 -->
-                    ${subject.createYn ? `
-                        <div class="absolute top-3 right-3 cursor-pointer text-gray-500 hover:text-gray-700 text-xl" onclick="openSettings(event, ${chapter.chapterId})">
-                            <i class="fa-solid fa-gear"></i>
-                        </div>
-                        <div id="popover-${chapter.chapterId}"
-                             class="popover-menu absolute right-3 top-10 w-44 bg-white border border-gray-200 shadow-xl rounded-lg hidden z-30">
-                            <ul class="text-sm text-gray-800">
-                                <li class="flex items-center gap-2 px-4 py-2 cursor-pointer hover:bg-blue-50 hover:text-blue-600 transition"
-                                    onclick="updateMode(event, ${chapter.chapterId})">
-                                    <i class="fa-solid fa-pen-to-square"></i> 수정
-                                </li>
-                                <li class="flex items-center gap-2 px-4 py-2 cursor-pointer hover:bg-emerald-50 hover:text-emerald-600 transition"
-                                    onclick="alert('시험 등록 기능을 추가하세요')">
-                                    <i class="fa-solid fa-clipboard-list"></i> 시험등록
-                                </li>
-                                <li class="flex items-center gap-2 px-4 py-2 cursor-pointer hover:bg-red-50 text-red-500 hover:text-red-600 transition"
-                                    onclick="deleteChapter(event, ${chapter.chapterId})">
-                                    <i class="fa-solid fa-trash-can"></i> 삭제
-                                </li>
-                            </ul>
-                        </div>
-                    ` : ``}
+                <!-- 설정 아이콘 -->
+                ${subject.createYn ? `
+                    <div class="absolute top-3 right-3 cursor-pointer text-gray-500 hover:text-gray-700 text-xl" onclick="openSettings(event, ${chapter.chapterId})">
+                        <i class="fa-solid fa-gear"></i>
+                    </div>
+                    <div id="popover-${chapter.chapterId}"
+                         class="popover-menu absolute right-3 top-10 w-44 bg-white border border-gray-200 shadow-xl rounded-lg hidden z-30">
+                        <ul class="text-sm text-gray-800">
+                            <li class="flex items-center gap-2 px-4 py-2 cursor-pointer hover:bg-blue-50 hover:text-blue-600 transition"
+                                onclick="updateMode(event, ${chapter.chapterId})">
+                                <i class="fa-solid fa-pen-to-square"></i> 수정
+                            </li>
+                            <li class="flex items-center gap-2 px-4 py-2 cursor-pointer hover:bg-emerald-50 hover:text-emerald-600 transition"
+                                onclick="alert('시험 등록 기능을 추가하세요')">
+                                <i class="fa-solid fa-clipboard-list"></i> 시험등록
+                            </li>
+                            <li class="flex items-center gap-2 px-4 py-2 cursor-pointer hover:bg-red-50 text-red-500 hover:text-red-600 transition"
+                                onclick="deleteChapter(event, ${chapter.chapterId})">
+                                <i class="fa-solid fa-trash-can"></i> 삭제
+                            </li>
+                        </ul>
+                    </div>
+                ` : ``}
 
-                    <!-- 자물쇠 + 내용 영역 -->
-                    <div class="flex items-start gap-4">
-                        <!-- 자물쇠 아이콘 -->
-                        <div class="${chapter.publicYn ? 'text-blue-500' : 'text-gray-500'} text-3xl mt-1">
-                            ${chapter.publicYn ? `<i class="fa-solid fa-lock-open"></i>` : `<i class="fa-solid fa-lock"></i>`}
-                        </div>
+                <!-- 자물쇠 + 텍스트 -->
+                <div class="flex items-start gap-4">
+                    <!-- 자물쇠 아이콘 (조건 처리) -->
+                    <div class="${subject.createYn ? (chapter.publicYn ? 'text-blue-500' : 'text-gray-500') : 'invisible'} text-3xl mt-1">
+                        ${subject.createYn
+                        ? (chapter.publicYn
+                            ? `<i class="fa-solid fa-lock-open"></i>`
+                            : `<i class="fa-solid fa-lock"></i>`)
+                        : ``}
+                    </div>
 
-                        <!-- 텍스트 -->
-                        <div class="flex-1">
-                            <h3 class="text-lg font-semibold text-gray-900">${chapter.name}</h3>
-                            <p class="text-sm text-gray-600 mt-1">총 문항: ${chapter.studyCount}문제</p>
-                        </div>
+                    <!-- 텍스트 내용 -->
+                    <div class="flex-1">
+                        <h3 class="text-lg font-semibold text-gray-900">${chapter.name}</h3>
+                        <p class="text-sm text-gray-600 mt-1">총 문항: ${chapter.studyCount}문제</p>
                     </div>
                 </div>
-            `;
+            </div>
+        `;
                 });
             }
 

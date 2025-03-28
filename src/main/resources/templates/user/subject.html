@@ -172,8 +172,12 @@
                 <!-- 자물쇠 + 제목 + 설명 -->
                 <div class="flex items-start gap-4">
                     <!-- 자물쇠 아이콘 -->
-                    <div class="${subject.publicYn ? 'text-blue-500' : 'text-gray-500'} text-3xl mt-1">
-                        ${subject.publicYn ? `<i class="fa-solid fa-lock-open"></i>` : `<i class="fa-solid fa-lock"></i>`}
+                    <div class="${subject.createYn ? (subject.publicYn ? 'text-blue-500' : 'text-gray-500') : 'invisible'} text-3xl mt-1">
+                       ${subject.createYn
+                        ? (subject.publicYn
+                            ? `<i class="fa-solid fa-lock-open"></i>`
+                            : `<i class="fa-solid fa-lock"></i>`)
+                        : `&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`}
                     </div>
 
                     <!-- 제목 + 설명 영역 -->
