@@ -119,6 +119,7 @@
             const json = {name, freeYn};
             subjects = await fetchGet(url, json);
             drawList();
+            increaseAdCount('getCount');
         }
 
         function drawList() {

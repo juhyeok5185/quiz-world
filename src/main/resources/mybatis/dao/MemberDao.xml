@@ -13,11 +13,19 @@
         <result column="my_subject_count" property="mySubjectCount"/>
         <result column="my_study_count" property="myStudyCount"/>
         <result column="enrolled_subject_count" property="enrolledSubjectCount"/>
+
+        <!-- 💡 memberScoreLog 리스트를 서브쿼리로 매핑 -->
+        <collection property="memberScoreLog"
+                    ofType="com.danny.quizworld.member.score.MemberScoreLogResponse"
+                    column="member_id"
+                    select="findMemberScoreLogByMemberId"/>
     </resultMap>
 
+    <!-- 대시보드 메인 쿼리 -->
     <select id="findUserDashBoardResponseByMemberId"
             resultMap="UserDashboardMap">
         SELECT
+            m.member_id,
             m.name,
             m.nickname,
             m.score,
@@ -42,6 +50,21 @@
             t_member m
         WHERE
             m.member_id = #{memberId}
+    </select>
+
+    <!-- 🧩 memberScoreLog 서브쿼리 -->
+    <select id="findMemberScoreLogByMemberId"
+            resultType="com.danny.quizworld.member.score.MemberScoreLogResponse">
+        SELECT
+            member_score_log_id,
+            member_id,
+            score,
+            year,
+            month
+        FROM
+            t_member_score_log
+        WHERE
+            member_id = #{member_id}
     </select>
 
 </mapper>

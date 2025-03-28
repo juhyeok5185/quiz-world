@@ -14,4 +14,7 @@ public interface MemberScoreLogMapper {
     @Mapping(target = "member", source = "member") // 👈 이거 추가해야 함!
     MemberScoreLog toEntity(Member member, Integer year, Integer month);
 
+
+    MemberScoreLogResponse toResponse(MemberScoreLog memberScoreLog);
+
 }
