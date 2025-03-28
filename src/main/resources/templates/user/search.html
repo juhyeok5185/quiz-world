@@ -8,7 +8,7 @@
     <title>검색</title>
 </head>
 <body>
-<div layout:fragment="content" class="p-6 space-y-4">
+<div layout:fragment="content" class="p-6 space-y-4 w-full md:max-w-screen-md md:mx-auto">
 
     <!-- 검색 영역 -->
     <div class="relative">
@@ -24,18 +24,13 @@
         </span>
     </div>
 
-    <!-- 키워드 토글 영역 (왼쪽에 아이콘 버튼 대신 span 사용) -->
-    <!-- 키워드 토글 영역 -->
     <!-- 키워드 및 필터 선택 영역 -->
     <div class="flex items-center gap-2">
-
-        <!-- reset 버튼 -->
         <span id="resetBtn" onclick="clickResetBtn();"
               class="bg-gray-200 text-gray-800 p-1 w-9 h-9 rounded-full cursor-pointer transition inline-flex items-center justify-center">
-        <i class="fa-solid fa-arrows-rotate text-lg"></i>
-    </span>
+            <i class="fa-solid fa-arrows-rotate text-lg"></i>
+        </span>
 
-        <!-- 검색 조건 -->
         <span class="bg-gray-200 text-gray-800 px-3 py-2 rounded inline-flex items-center gap-2">
             <select class="bg-transparent focus:outline-none text-sm">
                 <option value="">검색조건</option>
@@ -53,18 +48,14 @@
         </span>
 
         <span class="keyword bg-gray-200 text-gray-800 px-3 py-1 rounded cursor-pointer select-none">무료</span>
-
     </div>
-
 
     <!-- 리스트 출력 영역 -->
-    <div class="listArea grid grid-cols-1 gap-4 mt-4">
-    </div>
+    <div class="listArea grid grid-cols-1 gap-4 mt-4"></div>
 </div>
 
 <th:block layout:fragment="script">
     <script th:inline="javascript">
-
         let subjects = [];
 
         window.onload = () => {
@@ -86,35 +77,27 @@
         });
 
         function clickResetBtn() {
-
-
             document.getElementById('name').value = '';
             document.querySelectorAll('.keyword').forEach(keyword => {
                 keyword.classList.remove('bg-blue-500', 'text-white', 'active');
                 keyword.classList.add('bg-gray-200', 'text-gray-800');
             });
 
-            // 3) resetBtn만 잠깐(0.5초) 파란색으로
             const resetBtn = find('#resetBtn');
             resetBtn.classList.add('bg-blue-500', 'text-white', 'active');
             resetBtn.classList.remove('bg-gray-200', 'text-gray-800');
 
-            // 4) 0.5초 후에 다시 회색으로 복구
             setTimeout(() => {
                 resetBtn.classList.remove('bg-blue-500', 'text-white', 'active');
                 resetBtn.classList.add('bg-gray-200', 'text-gray-800');
             }, 80);
         }
 
-
         async function findAllBySearch() {
-            //search 값 가져오기 나중에 바꿔야함
             const name = find('#name').value;
             const freeKeyword = Array.from(document.querySelectorAll('.keyword'))
                 .find(el => el.textContent.trim() === "무료");
             const freeYn = freeKeyword && freeKeyword.classList.contains('active');
-            //search 값 가져오기 나중에 바꿔야함
-
             const url = `/api/courses/subjects/search`;
             const json = {name, freeYn};
             subjects = await fetchGet(url, json);
@@ -126,24 +109,24 @@
             let html = ``;
             if (subjects.length === 0) {
                 html += `
-                <div class="text-center text-gray-500 py-10">등록된 과목이 없습니다.<br>과목을 추가해 주세요!</div>
+                    <div class="text-center text-gray-500 py-10">등록된 과목이 없습니다.<br>과목을 추가해 주세요!</div>
                 `;
             } else {
                 subjects.forEach(subject => {
                     html += `
                        <div class="bg-white shadow-lg rounded-lg p-6 relative cursor-pointer">
-             <div class="text-lg font-semibold text-gray-900">${subject.name}</div>
-             <p class="text-sm text-gray-600 mt-1">소개: ${subject.description}</p>
-             <p class="text-sm text-gray-600">총 문항: ${subject.studyCount} 문항</p>
-             <p class="text-sm text-gray-600">추천 : ${subject.likeCount} 개</p>
-             <p class="text-sm text-gray-600">추천 : ${subject.category.name}</p>
-             <p class="text-sm text-gray-600">작성자: ${subject.member.name}</p>
-             <span class="absolute right-6 bottom-6 bg-gradient-to-r from-blue-500 to-indigo-500 text-white px-3 py-1 rounded hover:opacity-90 transition"
-                   onclick="${subject.price === 0 ? `saveSubjectMember(${subject.subjectId})` : 'purchase()'}">
-                 ${subject.price === 0 ? '무료 수강하기' : subject.price + '원 결제'}
-             </span>
-         </div>
-                           `;
+                           <div class="text-lg font-semibold text-gray-900">${subject.name}</div>
+                           <p class="text-sm text-gray-600 mt-1">소개: ${subject.description}</p>
+                           <p class="text-sm text-gray-600">총 문항: ${subject.studyCount} 문항</p>
+                           <p class="text-sm text-gray-600">추천 : ${subject.likeCount} 개</p>
+                           <p class="text-sm text-gray-600">카테고리 : ${subject.category.name}</p>
+                           <p class="text-sm text-gray-600">작성자: ${subject.member.name}</p>
+                           <span class="absolute right-6 bottom-6 bg-gradient-to-r from-blue-500 to-indigo-500 text-white px-3 py-1 rounded hover:opacity-90 transition"
+                                 onclick="${subject.price === 0 ? `saveSubjectMember(${subject.subjectId})` : 'purchase()'}">
+                               ${subject.price === 0 ? '무료 수강하기' : subject.price + '원 결제'}
+                           </span>
+                       </div>
+                    `;
                 });
             }
             find('.listArea').innerHTML = html;
@@ -155,18 +138,13 @@
                 await fetchPostByJson(url);
                 increaseAdCount('postCount');
                 location.href = `/user/subject`;
-
             }
         }
-
 
         function purchase() {
             alert('결제기능은 준비중입니다.')
         }
-
-
     </script>
 </th:block>
 </body>
 </html>
-

@@ -23,6 +23,7 @@ public class SubjectRepositoryCustomImpl extends QuerydslRepositorySupport imple
                 .selectFrom(subject)
                 .where(searchCondition(search),
                         subject.publicYn.eq(true))
+                .orderBy(subject.subjectId.desc())
                 .fetch();
     }
 
