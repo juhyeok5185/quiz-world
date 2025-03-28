@@ -13,4 +13,5 @@ public class ChapterResponse {
     private String name;
     private SubjectResponse subject;
     private Long studyCount;
+    private Boolean publicYn;
 }

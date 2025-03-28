@@ -13,7 +13,7 @@ public class ChapterReader {
     private final ChapterRepository chapterRepository;
 
     public List<Chapter> findAllBySubjectId(Long subjectId) {
-        return chapterRepository.findAllBySubject_SubjectId(subjectId);
+        return chapterRepository.findAllBySubject_SubjectIdOrderBySaveDtmDesc(subjectId);
     }
 
     public Chapter findById(Long chapterId) {

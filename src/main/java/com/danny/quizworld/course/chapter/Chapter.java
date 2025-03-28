@@ -24,13 +24,18 @@ public class Chapter extends BaseTimeEntity {
     @Column(name = "name")
     private String name;
 
+    @Column(name = "public_yn")
+    private Boolean publicYn;
+
     @Builder
-    public Chapter(Subject subject, String name) {
+    public Chapter(Subject subject, String name , Boolean publicYn) {
         this.subject = subject;
         this.name = name;
+        this.publicYn = publicYn;
     }
 
     public void update(ChapterCommand.update request) {
         this.name = request.getName();
+        this.publicYn = request.getPublicYn();
     }
 }

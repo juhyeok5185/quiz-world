@@ -61,10 +61,5 @@ public class SubjectApiController {
         return ResponseEntity.status(201).body(new ApiResponse<>("삭제 완료" , 201 ,null));
     }
 
-    @GetMapping("/dashboard")
-    public ResponseEntity<ApiResponse<List<ChapterResponse>>> findAllChapterBySubjectId(@PathVariable Long subjectId , Authentication authentication) {
-        Long memberId = Utils.getMemberId(authentication);
-        return ResponseEntity.ok(new ApiResponse<>(courseFacade.findAllChapterBySubjectId(subjectId , memberId)));
-    }
 
 }

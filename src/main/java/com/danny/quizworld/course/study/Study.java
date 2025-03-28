@@ -26,9 +26,6 @@ public class Study extends BaseTimeEntity {
     @JoinColumn(name = "subject_id")
     private Subject subject;
 
-    @Column(name = "type")
-    private StudyType type; // 1: 단어, 2: 서술형
-
     @Column(name = "question_text")
     private String questionText;
 
@@ -39,10 +36,9 @@ public class Study extends BaseTimeEntity {
     private String description;
 
     @Builder
-    public Study(Chapter chapter, Subject subject, StudyType type, String questionText, String answerText, String description) {
+    public Study(Chapter chapter, Subject subject, String questionText, String answerText, String description) {
         this.chapter = chapter;
         this.subject = subject;
-        this.type = type;
         this.questionText = questionText;
         this.answerText = answerText;
         this.description = description;
@@ -52,6 +48,5 @@ public class Study extends BaseTimeEntity {
         this.questionText = request.getQuestionText();
         this.answerText = request.getAnswerText();
         this.description = request.getDescription();
-        this.type = request.getType();
     }
 }

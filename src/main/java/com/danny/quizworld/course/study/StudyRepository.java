@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface StudyRepository extends JpaRepository<Study, Long> {
 
-    List<Study> findAllByChapter_ChapterId(Long chapterId);
+    List<Study> findAllByChapter_ChapterIdOrderBySaveDtmDesc(Long chapterId);
 
     Long countBySubject_SubjectId(Long subjectId);
 

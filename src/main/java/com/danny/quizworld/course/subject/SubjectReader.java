@@ -12,7 +12,7 @@ public class SubjectReader {
     private final SubjectRepository subjectRepository;
 
     public List<Subject> findAllByMemberId(Long memberId) {
-        return subjectRepository.findAllByMember_MemberIdAndUseYnTrue(memberId);
+        return subjectRepository.findAllByMember_MemberIdAndUseYnTrueOrderBySaveDtmDesc(memberId);
     }
 
     public Subject findById(Long subjectId) {

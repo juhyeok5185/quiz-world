@@ -43,18 +43,18 @@ public class CourseFacade {
     @Transactional
     public void saveSubject(Long memberId, SubjectCommand.save request) {
         Member member = memberService.findById(memberId);
-        subjectService.validateToSave(member ,request);
+        subjectService.validateToSave(member, request);
         Category category = categoryService.findById(request.getCategoryId());
-        Subject subject = subjectService.toEntity(member, category,request);
+        Subject subject = subjectService.toEntity(member, category, request);
         subjectService.save(subject);
     }
 
     @Transactional
     public void updateSubject(Long subjectId, SubjectCommand.update request) {
         Subject subject = subjectService.findById(subjectId);
-        subjectService.validateToUpdate(subject , request);
+        subjectService.validateToUpdate(subject, request);
         Category category = categoryService.findById(request.getCategoryId());
-        subject.update(request , category);
+        subject.update(request, category);
         subjectService.save(subject);
     }
 
@@ -98,7 +98,7 @@ public class CourseFacade {
     }
 
     @Transactional(readOnly = true)
-    public SubjectResponse findSubjectById(Long subjectId , Long memberId) {
+    public SubjectResponse findSubjectById(Long subjectId, Long memberId) {
         Subject subject = subjectService.findById(subjectId);
         SubjectResponse response = subjectService.toResponse(subject);
         response.setStudyCount(studyService.countBySubjectId(subjectId));
@@ -141,17 +141,24 @@ public class CourseFacade {
     }
 
     @Transactional(readOnly = true)
-    public List<ChapterResponse> findAllChapterBySubjectId(Long subjectId , Long memberId) {
+    public List<ChapterResponse> findAllChapterBySubjectId(Long subjectId, Long memberId) {
         return chapterService.findAllBySubjectId(subjectId).stream()
+                .filter(chapter -> {
+                    boolean createYnCondition = Objects.equals(memberId, chapter.getSubject().getMember().getMemberId());
+                    boolean isPublic = chapter.getPublicYn();
+                    return createYnCondition || isPublic;
+                })
                 .map(chapter -> {
+                    boolean createYnCondition = Objects.equals(memberId, chapter.getSubject().getMember().getMemberId());
                     Long studyCount = studyService.countByChapterId(chapter.getChapterId());
                     ChapterResponse chapterResponse = chapterService.toResponse(chapter);
                     chapterResponse.setStudyCount(studyCount);
-                    chapterResponse.getSubject().setCreateYn(Objects.equals(memberId, chapter.getSubject().getMember().getMemberId()));
+                    chapterResponse.getSubject().setCreateYn(createYnCondition);
                     return chapterResponse;
                 })
                 .collect(Collectors.toList());
     }
+
 
     @Transactional(readOnly = true)
     public ChapterResponse findChapterById(Long chapterId, Long memberId) {
@@ -184,10 +191,10 @@ public class CourseFacade {
     }
 
     @Transactional(readOnly = true)
-    public List<StudyResponse> findAllStudyByChapterId(Long chapterId , Long memberId) {
+    public List<StudyResponse> findAllStudyByChapterId(Long chapterId, Long memberId) {
         List<Study> studyList = studyService.findAllByChapterId(chapterId);
         return studyList.stream()
-                .map(chapter ->{
+                .map(chapter -> {
                     StudyResponse studyResponse = studyService.toResponse(chapter);
                     studyResponse.getChapter().getSubject().setCreateYn(Objects.equals(memberId, chapter.getChapter().getSubject().getMember().getMemberId()));
                     return studyResponse;
@@ -207,10 +214,9 @@ public class CourseFacade {
         Member member = memberService.findById(memberId);
         Subject subject = subjectService.findById(Long.parseLong(subjectId));
         SubjectMember checkSubjectMember = subjectMemberService.findBySubjectIdAndMemberId(subject.getSubjectId(), member.getMemberId());
-        subjectMemberService.validateToSave(member , subject , checkSubjectMember);
-        SubjectMember subjectMember = subjectMemberService.toEntity(subject , member);
+        subjectMemberService.validateToSave(member, subject, checkSubjectMember);
+        SubjectMember subjectMember = subjectMemberService.toEntity(subject, member);
         subjectMemberService.save(subjectMember);
-
         subject.addDownloadCnt();
         subjectService.save(subject);
     }

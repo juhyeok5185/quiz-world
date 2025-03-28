@@ -12,7 +12,7 @@ public class StudyReader {
     private final StudyRepository studyRepository;
 
     public List<Study> findAllByChapterId(Long chapterId) {
-        return studyRepository.findAllByChapter_ChapterId(chapterId);
+        return studyRepository.findAllByChapter_ChapterIdOrderBySaveDtmDesc(chapterId);
     }
 
     public Study findById(Long studyId) {

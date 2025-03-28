@@ -42,8 +42,6 @@ public class QStudy extends EntityPathBase<Study> {
 
     public final com.danny.quizworld.course.subject.QSubject subject;
 
-    public final EnumPath<StudyType> type = createEnum("type", StudyType.class);
-
     //inherited
     public final BooleanPath useYn = _super.useYn;
 

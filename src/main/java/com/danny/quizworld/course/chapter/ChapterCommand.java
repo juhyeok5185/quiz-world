@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 public class ChapterCommand {
@@ -17,6 +18,8 @@ public class ChapterCommand {
         @NotBlank(message = "챕터명은 필수입니다.")
         @Size(max = 1000 , message = "과목명은 1000자 이하로 입력해주세요")
         private String name;
+        @NotNull
+        private Boolean publicYn;
     }
 
     @Getter
@@ -26,5 +29,7 @@ public class ChapterCommand {
         @NotBlank(message = "챕터명은 필수입니다.")
         @Size(max = 1000 , message = "과목명은 1000자 이하로 입력해주세요")
         private String name;
+        @NotNull
+        private Boolean publicYn;
     }
 }

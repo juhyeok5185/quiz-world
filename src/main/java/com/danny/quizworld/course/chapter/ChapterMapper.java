@@ -10,6 +10,7 @@ public interface ChapterMapper {
 
     @Mapping(target = "subject", source = "subject")
     @Mapping(target = "name", source = "request.name")
+    @Mapping(target = "publicYn", source = "request.publicYn")
     Chapter toEntity(Subject subject, ChapterCommand.save request);
 
     ChapterResponse toResponse(Chapter chapter);

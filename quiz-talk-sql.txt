@@ -1,3 +1,14 @@
+create table t_category
+(
+    category_id bigint auto_increment comment '카테고리 일련번호'
+        primary key,
+    name        varchar(255)                           not null comment '챕터명',
+    use_yn      tinyint(1) default 1                   not null comment '사용 여부',
+    save_dtm    datetime   default current_timestamp() not null comment '저장 시간',
+    mod_dtm     datetime   default current_timestamp() not null on update current_timestamp() comment '수정 시간'
+)
+    comment '카테고리 테이블';
+
 create table t_member
 (
     member_id    bigint auto_increment comment '회원 일련번호'
@@ -56,6 +67,7 @@ create table t_subject
     subject_id     bigint auto_increment comment '과목 일련번호'
         primary key,
     member_id      bigint                                 not null comment '회원 일련번호',
+    category_id    bigint                                 not null comment '카테고리 일련번호',
     name           varchar(255)                           not null comment '과목명',
     description    varchar(1000)                          null comment '설명',
     like_count     int        default 0                   not null comment '좋아요 수',
@@ -66,6 +78,8 @@ create table t_subject
     use_yn         tinyint(1) default 1                   not null comment '사용 여부',
     save_dtm       datetime   default current_timestamp() not null comment '저장 시간',
     mod_dtm        datetime   default current_timestamp() not null comment '수정 시간',
+    constraint fk_subject_category
+        foreign key (category_id) references t_category (category_id),
     constraint t_subject_ibfk_1
         foreign key (member_id) references t_member (member_id)
 );
@@ -76,6 +90,7 @@ create table t_chapter
         primary key,
     subject_id bigint                                 not null comment '과목 일련번호',
     name       varchar(255)                           not null comment '챕터명',
+    public_yn  tinyint(1)                             not null comment '공개여부',
     use_yn     tinyint(1) default 1                   not null comment '사용 여부',
     save_dtm   datetime   default current_timestamp() not null comment '저장 시간',
     mod_dtm    datetime   default current_timestamp() not null comment '수정 시간',
@@ -150,7 +165,6 @@ create table t_study
         primary key,
     chapter_id    bigint                                 not null comment '챕터 일련번호',
     subject_id    bigint                                 not null comment '과목 일련번호',
-    type          tinyint(1)                             not null comment '1:단어(10자 이하), 2:서술형(10자 이상)',
     question_text text                                   not null comment '텍스트 질문',
     answer_text   text                                   not null comment '텍스트 답',
     description   varchar(1000)                          not null comment '설명',

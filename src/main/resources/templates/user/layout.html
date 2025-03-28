@@ -103,7 +103,8 @@
             'postCount',
             'getCount',
             'updateCount',
-            'useModeCount'
+            'useModeCount',
+            'useTextArea'
         ];
 
         keys.forEach((key) => {
@@ -140,6 +141,14 @@
                 break;
             case 'useModeCount': // 조회만 클라이언트에서
                 if (value >= 50) {
+                    localStorage.setItem(key, '0');
+                    await fetchPatchByJson("/api/members");
+                    viewAd();
+                }
+                break;
+
+            case 'useTextArea': // 조회만 클라이언트에서
+                if (value >= 100) {
                     localStorage.setItem(key, '0');
                     await fetchPatchByJson("/api/members");
                     viewAd();

@@ -16,7 +16,6 @@ import javax.persistence.*;
 public class StudyResponse {
     private Long studyId;
     private ChapterResponse chapter;
-    private StudyType type; // 1: 단어, 2: 서술형
     private String questionText;
     private String answerText;
     private String description;

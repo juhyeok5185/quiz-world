@@ -31,6 +31,8 @@ public class QChapter extends EntityPathBase<Chapter> {
 
     public final StringPath name = createString("name");
 
+    public final BooleanPath publicYn = createBoolean("publicYn");
+
     //inherited
     public final DateTimePath<java.time.LocalDateTime> saveDtm = _super.saveDtm;
 
