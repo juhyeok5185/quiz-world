@@ -18,5 +18,15 @@ EXPOSE 80
 
 ENTRYPOINT ["java", "-jar", "app.jar"]
 
-#docker build -t quiz-world:latest .
-#docker run -d -p 80:80 quiz-world:latest
+#서버로 보내는 법
+#docker buildx build --platform linux/amd64 -t quiz-world:latest --output type=docker,dest=quiz-world.tar .
+#scp quiz-world.tar danny@203.245.30.75:/home/danny/image-tar-file/
+#1q2w3e4r
+#rm quiz-world.tar
+
+#서버에서
+#docker stop quiz-world 2>/dev/null || true
+#docker rm quiz-world 2>/dev/null || true
+#docker load -i /home/danny/image-tar-file/quiz-world.tar
+#rm /home/danny/image-tar-file/quiz-world.tar
+#docker run -d -p 80:80 --name quiz-world quiz-world:latest

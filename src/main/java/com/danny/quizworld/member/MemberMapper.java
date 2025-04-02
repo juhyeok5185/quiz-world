@@ -9,7 +9,7 @@ import org.mapstruct.Named;
 public interface MemberMapper {
 
     @Mapping(target = "name", source = "name", qualifiedByName = "encrypt")
-    @Mapping(target = "email", source = "email", qualifiedByName = "encrypt")
+    @Mapping(target = "authId", source = "authId", qualifiedByName = "encrypt")
     @Mapping(target = "nickname", source = "nickname", qualifiedByName = "encrypt")
     @Mapping(target = "role", constant = "USER")
     @Mapping(target = "deviceToken", constant = "null")
@@ -17,10 +17,10 @@ public interface MemberMapper {
     @Mapping(target = "score", constant = "0")
     @Mapping(target = "subscribeYn", constant = "false")
     @Mapping(target = "businessYn", constant = "false")
-    Member toEntity(String name, String email , String nickname);
+    Member toEntity(String name, String authId , String nickname);
 
     @Mapping(target = "name", source = "name", qualifiedByName = "decrypt")
-    @Mapping(target = "email", source = "email", qualifiedByName = "decrypt")
+    @Mapping(target = "authId", source = "authId", qualifiedByName = "decrypt")
     @Mapping(target = "nickname", source = "nickname", qualifiedByName = "decrypt")
     MemberResponse toResponse(Member member);
 

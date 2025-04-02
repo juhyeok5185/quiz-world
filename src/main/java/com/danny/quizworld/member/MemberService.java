@@ -27,8 +27,8 @@ public class MemberService {
     }
 
     @Transactional(readOnly = true)
-    public Member findByEmail(String email) {
-        return memberReader.findByEmail(email);
+    public Member findByAuthId(String authId) {
+        return memberReader.findByAuthId(authId);
     }
 
     @Transactional(readOnly = true)
@@ -40,8 +40,8 @@ public class MemberService {
     public List<Member> findAll() {
         return memberReader.findAll();
     }
-    public Member toEntity(String name , String email , String nickname){
-        return memberMapper.toEntity(name ,email , nickname);
+    public Member toEntity(String name , String authId , String nickname){
+        return memberMapper.toEntity(name ,authId , nickname);
     }
 
     public MemberResponse toResponse(Member member){

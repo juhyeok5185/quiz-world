@@ -10,7 +10,7 @@
 <body class="flex flex-col min-h-screen bg-gray-100">
 
 <!-- Header -->
-<header class="flex items-center justify-between px-4 py-3 bg-gradient-to-r from-blue-500 to-indigo-500 text-white">
+<header class="flex items-center justify-between px-4 py-3 bg-gradient-to-r from-blue-500 to-indigo-500 text-white min-h-[60px]">
     <div id="backButton" class="text-2xl cursor-pointer" onclick="goBack();">←</div> <!-- 뒤로가기 -->
     <h1 id="logoArea" class="text-xl font-bold"></h1> <!-- 중앙 로고 -->
     <i class="fa-solid fa-sliders cursor-pointer" id="menuButton"></i>
@@ -89,11 +89,11 @@
 
     window.onload = function () {
         findMember()
-        hideBackButton();
         makeAdLocalStorage();
     }
 
     document.addEventListener('DOMContentLoaded', () => {
+        hideBackButton();
         checkSubscribe();
     });
 
@@ -179,6 +179,7 @@
     }
 
     function hideBackButton(){
+        console.log("dd")
         const url = window.location.pathname;
         if (url === "/user/main") {
             document.querySelector("#backButton").classList.add("hidden"); // 뒤로가기 버튼 숨김

@@ -21,11 +21,11 @@ public class QMember extends EntityPathBase<Member> {
 
     public final com.danny.quizworld.common.entity.QBaseTimeEntity _super = new com.danny.quizworld.common.entity.QBaseTimeEntity(this);
 
+    public final StringPath authId = createString("authId");
+
     public final BooleanPath businessYn = createBoolean("businessYn");
 
     public final StringPath deviceToken = createString("deviceToken");
-
-    public final StringPath email = createString("email");
 
     public final NumberPath<Integer> likeCount = createNumber("likeCount", Integer.class);
 

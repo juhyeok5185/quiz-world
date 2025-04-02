@@ -15,7 +15,7 @@ create table t_member
         primary key,
     role         tinyint(1)                               not null comment '역할 (0: USER , 1: ADMIN)',
     name         varchar(100)                             not null comment '이름',
-    email        varchar(255)                             not null comment '이메일',
+    auth_id      varchar(255)                             not null comment '계정 식별 일련번호',
     nickname     varchar(255) default ''                  not null comment '닉네임',
     device_token varchar(100)                             null comment '디바이스 토큰',
     like_count   int          default 0                   not null comment '좋아요',

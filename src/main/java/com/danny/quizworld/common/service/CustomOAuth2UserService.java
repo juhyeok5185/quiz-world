@@ -31,17 +31,23 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
         OAuth2User oAuth2User = super.loadUser(userRequest);
         Map<String, Object> attributes = oAuth2User.getAttributes();
-        String email = (String) attributes.get("email");
-        String name = (String) attributes.get("name");
 
+        Map<String, Object> response = (Map<String, Object>) attributes.get("response");
+        String authId = (String) response.get("id");
+        String name = (String) response.get("name");
+
+
+        //구글일때
+//        String email = (String) attributes.get("email");
+//        String name = (String) attributes.get("name");
         HttpServletRequest request =
                 ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         String deviceToken = (String) request.getSession().getAttribute("deviceToken");
 
-        Member member = memberService.findByEmail(AES256Utils.encrypt(email));
+        Member member = memberService.findByAuthId(AES256Utils.encrypt(authId));
         if(member == null){
             String nickname = Utils.generateUniqueNickname(name);
-            Member newMember = memberService.toEntity(name, email , nickname);
+            Member newMember = memberService.toEntity(name, authId , nickname);
             member = memberService.save(newMember);
         }
         if(deviceToken != null){
@@ -52,11 +58,13 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         Map<String, Object> customAttributes = new HashMap<>(attributes);
         customAttributes.put("memberId", member.getMemberId());
         customAttributes.put("role", member.getRole().toString());
+        customAttributes.put("authId", authId);
+
         request.getSession().removeAttribute("deviceToken");
         return new DefaultOAuth2User(
                 Collections.singleton(new SimpleGrantedAuthority("ROLE_" + member.getRole().toString())),
                 customAttributes,
-                "email"
+                "authId"
         );
     }
 }

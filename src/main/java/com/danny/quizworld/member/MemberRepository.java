@@ -6,7 +6,7 @@ import java.util.List;
 
 
 public interface MemberRepository extends JpaRepository<Member , Long> {
-    Member findByEmail(String email);
+    Member findByAuthId(String authId);
 
     List<Member> findAllBySubscribeYnTrue();
 }

@@ -9,12 +9,13 @@
     <!-- 리스트 출력 영역 -->
     <div class="listArea grid grid-cols-1 gap-4 mt-4"></div>
 
-    <div class="fixed bottom-20 right-6 md:right-[calc(50%-320px-200px)] z-50">
-        <div onclick="find('#modal-div').classList.remove('hidden')"
+    <div id="plus-button" class="fixed bottom-20 right-6 md:right-[calc(50%-320px-200px)] z-50">
+        <div onclick="openModal('modal-div');"
              class="w-14 h-14 bg-gradient-to-r from-blue-500 to-indigo-500 text-white text-[28px] font-bold rounded-full shadow-xl hover:opacity-90 transition flex items-center justify-center cursor-pointer">
-            <span class="absolute top-[12px] right-[17.5px] leading-none">+</span>
+            <span class="flex items-center justify-center">+</span>
         </div>
     </div>
+
 
 
 
@@ -50,7 +51,7 @@
 <!--                    <input type="text"  class="w-full border p-2 rounded bg-gray-200 cursor-not-allowed" placeholder="판매자 신청 후 이용해주세요" disabled>-->
 <!--                </div>-->
                 <div class="flex justify-end space-x-2">
-                    <div onclick="find('#modal-div').classList.add('hidden')" class="bg-gray-300 text-gray-700 px-4 py-2 rounded-md cursor-pointer">
+                    <div onclick="closeModal('modal-div');" class="bg-gray-300 text-gray-700 px-4 py-2 rounded-md cursor-pointer">
                         취소
                     </div>
                     <div onclick="save()"
@@ -94,7 +95,7 @@
 <!--                    <input type="text" id="price" name="price" class="w-full border p-2 rounded bg-gray-200 cursor-not-allowed" placeholder="판매자 신청 후 이용해주세요" disabled>-->
 <!--                </div>-->
                 <div class="flex justify-end">
-                    <div onclick="find('#modal-update').classList.add('hidden')" class="bg-gray-300 text-gray-700 px-4 py-2 rounded-md mr-2 cursor-pointer">
+                    <div onclick="closeModal('modal-update')" class="bg-gray-300 text-gray-700 px-4 py-2 rounded-md mr-2 cursor-pointer">
                         취소
                     </div>
                     <div onclick="updateSubject();" class="bg-gradient-to-r from-blue-500 to-indigo-500 text-white px-4 py-2 rounded-md hover:opacity-90 transition cursor-pointer">
@@ -223,7 +224,7 @@
             const categorySelect = updateForm.querySelector('.categorySelect');
             categorySelect.value = subject.category.categoryId;
 
-            find('#modal-update').classList.remove('hidden');
+            openModal('modal-update');
         }
 
         async function deleteSubject(event, subjectId) {
@@ -262,6 +263,17 @@
                 popover.classList.remove("hidden");
                 activePopoverId = subjectId; // 현재 열린 popover ID 저장
             }
+        }
+
+        function openModal(name) {
+            document.getElementById(name).classList.remove('hidden');
+            document.getElementById('plus-button').classList.add('hidden'); // + 버튼 숨기기
+
+        }
+
+        function closeModal(name) {
+            document.getElementById(name).classList.add('hidden');
+            document.getElementById('plus-button').classList.remove('hidden'); // + 버튼 다시 보이기
         }
 
         function closePopoverOnOutsideClick(event) {

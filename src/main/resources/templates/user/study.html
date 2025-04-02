@@ -6,7 +6,7 @@
 
 <div layout:fragment="content" class="p-6 space-y-4">
     <div class="flex flex-wrap space-x-4 mb-6 items-center">
-        <div class="flex space-x-4 items-center">
+        <div class="flex space-x-4 items-center text-sm">
             <!-- 토글 버튼 그룹 -->
             <div class="bg-gray-200 p-2 rounded-lg flex space-x-2">
                 <div id="toggleAll" onclick="setToggle('all')"
@@ -63,12 +63,13 @@
 <!--        <span class="absolute top-[12px] right-[17.5px] leading-none">+</span>-->
 <!--    </div>-->
 
-    <div id="addBtn" onclick="find('#modal-save').classList.remove('hidden');"
-            class="fixed bottom-20 right-6 md:right-[calc(50%-320px+350px)] z-50 hidden">
-        <div class="w-14 h-14 bg-gradient-to-r from-blue-500 to-indigo-500 text-white text-[28px] font-bold rounded-full shadow-xl hover:opacity-90 transition flex items-center justify-center cursor-pointer">
-            <span class="absolute top-[12px] right-[17.5px] leading-none">+</span>
+    <div id="plus-button" class="fixed bottom-20 right-6 md:right-[calc(50%-320px-200px)] z-50">
+        <div onclick="openModal('modal-save');"
+             class="w-14 h-14 bg-gradient-to-r from-blue-500 to-indigo-500 text-white text-[28px] font-bold rounded-full shadow-xl hover:opacity-90 transition flex items-center justify-center cursor-pointer">
+            <span class="flex items-center justify-center">+</span>
         </div>
     </div>
+
 
     <!-- 문제 추가 모달 -->
     <div id="modal-save"
@@ -83,7 +84,7 @@
                 <input type="text" name="description" placeholder="설명 입력"
                        class="w-full border p-2 rounded mb-4">
                 <div class="flex justify-end">
-                    <div onclick="find('#modal-save').classList.add('hidden')"
+                    <div onclick="closeModal('modal-div');"
                          class="bg-gray-300 text-gray-700 px-4 py-2 rounded-md mr-2 cursor-pointer">
                         취소
                     </div>
@@ -109,7 +110,7 @@
                 <input type="text" id="description" name="description" placeholder="설명 입력"
                        class="w-full border p-2 rounded mb-4">
                 <div class="flex justify-end">
-                    <div onclick="find('#modal-update').classList.add('hidden')" class="bg-gray-300 text-gray-700 px-4 py-2 rounded-md mr-2 cursor-pointer">
+                    <div onclick="closeModal('modal-update')" class="bg-gray-300 text-gray-700 px-4 py-2 rounded-md mr-2 cursor-pointer">
                         취소
                     </div>
                     <div onclick="updateStudy()"
@@ -180,9 +181,8 @@
         }
 
         function checkAuth(subject) {
-            console.log(subject.createYn)
             if(subject.createYn === true){
-                find('#addBtn').classList.remove('hidden');
+                find('#plus-button').classList.remove('hidden');
             }
         }
 
@@ -225,7 +225,8 @@
             find('#questionText').value = study.questionText;
             find('#answerText').value = study.answerText;
             find('#description').value = study.description;
-            find('#modal-update').classList.remove('hidden');
+            find(`#popover-${studyId}`).classList.add('hidden');
+            openModal('modal-update');
         }
 
         function drawList() {
@@ -519,6 +520,18 @@
         function handleTextAreaKeyDown(){
             increaseAdCount('useTextArea');
         }
+
+        function openModal(name) {
+            document.getElementById(name).classList.remove('hidden');
+            document.getElementById('plus-button').classList.add('hidden'); // + 버튼 숨기기
+
+        }
+
+        function closeModal(name) {
+            document.getElementById(name).classList.add('hidden');
+            document.getElementById('plus-button').classList.remove('hidden'); // + 버튼 다시 보이기
+        }
+
 
 
     </script>

@@ -63,13 +63,18 @@ public class SecurityConfig {
                         .antMatchers("/", "/login", "/save", "/static/**", "/api/members/sessions", "/design/**").permitAll()
                         .anyRequest().authenticated()
                 )
+                // ✅ 동시 세션 허용 설정 추가 (아래 4줄)
+                .sessionManagement(session -> session
+                        .maximumSessions(-1) // -1: 무제한 동시 로그인 허용
+                        .sessionRegistry(sessionRegistry())
+                )
                 .exceptionHandling(exception ->
                         exception.authenticationEntryPoint(customAuthenticationEntryPoint())
                 )
                 .oauth2Login(oauth2 -> oauth2
-                        .loginPage("/login") // 커스텀 로그인 페이지
-                        .successHandler(new CustomLoginSuccessHandler()) // ✅ 내부 클래스로 만든 핸들러 적용
-                        .failureUrl("/login?error=true") // 로그인 실패 시 리다이렉트할 URL
+                        .loginPage("/login")
+                        .successHandler(new CustomLoginSuccessHandler())
+                        .failureUrl("/login?error=true")
                         .authorizationEndpoint().authorizationRequestResolver(new CustomAuthorizationRequestResolver(clientRegistrationRepository))
                 )
                 .logout(logout -> logout
