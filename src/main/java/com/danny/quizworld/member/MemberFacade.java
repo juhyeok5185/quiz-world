@@ -1,5 +1,6 @@
 package com.danny.quizworld.member;
 
+import com.danny.quizworld.common.config.MyException;
 import com.danny.quizworld.common.response.UserDashBoardResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,6 +34,10 @@ public class MemberFacade {
 
     @Transactional
     public void updateNickname(MemberCommand.updateNickname request, Long memberId) {
+        Long checkMember = memberService.countByNickname(request.getNickname());
+        if(checkMember > 0){
+            throw new MyException("같은 닉네임이 존재합니다.");
+        }
         Member member = memberService.findById(memberId);
         member.updateNickname(request.getNickname());
         memberService.save(member);

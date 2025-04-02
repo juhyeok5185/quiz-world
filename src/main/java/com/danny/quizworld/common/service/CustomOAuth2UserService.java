@@ -35,21 +35,29 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         Map<String, Object> response = (Map<String, Object>) attributes.get("response");
         String authId = (String) response.get("id");
         String name = (String) response.get("name");
-
-
         //구글일때
 //        String email = (String) attributes.get("email");
 //        String name = (String) attributes.get("name");
+
+
         HttpServletRequest request =
                 ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         String deviceToken = (String) request.getSession().getAttribute("deviceToken");
 
         Member member = memberService.findByAuthId(AES256Utils.encrypt(authId));
         if(member == null){
-            String nickname = Utils.generateUniqueNickname(name);
-            Member newMember = memberService.toEntity(name, authId , nickname);
+            String nickname;
+            Long memberCount;
+
+            do {
+                nickname = Utils.generateUniqueNickname(name);
+                memberCount = memberService.countByNickname(nickname);
+            } while (memberCount > 0); // 닉네임 중복 시 반복
+
+            Member newMember = memberService.toEntity(name, authId, nickname);
             member = memberService.save(newMember);
         }
+
         if(deviceToken != null){
             member.updateDeviceToken(deviceToken);
             memberService.save(member);

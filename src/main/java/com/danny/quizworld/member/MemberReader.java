@@ -28,4 +28,8 @@ public class MemberReader {
     public List<Member> findAll() {
         return memberRepository.findAll();
     }
+
+    public Long countByNickname(String nickname) {
+        return memberRepository.countByNickname(nickname);
+    }
 }

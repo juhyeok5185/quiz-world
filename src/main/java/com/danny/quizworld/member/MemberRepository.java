@@ -9,4 +9,7 @@ public interface MemberRepository extends JpaRepository<Member , Long> {
     Member findByAuthId(String authId);
 
     List<Member> findAllBySubscribeYnTrue();
+
+    Long countByNickname(String nickname);
+
 }

@@ -40,6 +40,18 @@ public class MemberService {
     public List<Member> findAll() {
         return memberReader.findAll();
     }
+
+    @Transactional(readOnly = true)
+    public Long countByNickname(String nickname){
+        return memberReader.countByNickname(nickname);
+    }
+
+
+    @Transactional(readOnly = true)
+    public UserDashBoardResponse findUserDashBoardResponseByMemberId(Long memberId) {
+        return memberDao.findUserDashBoardResponseByMemberId(memberId);
+    }
+
     public Member toEntity(String name , String authId , String nickname){
         return memberMapper.toEntity(name ,authId , nickname);
     }
@@ -49,8 +61,5 @@ public class MemberService {
     }
 
 
-    @Transactional(readOnly = true)
-    public UserDashBoardResponse findUserDashBoardResponseByMemberId(Long memberId) {
-        return memberDao.findUserDashBoardResponseByMemberId(memberId);
-    }
+
 }
