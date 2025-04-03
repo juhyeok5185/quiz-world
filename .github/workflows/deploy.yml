@@ -28,8 +28,9 @@ jobs:
       - name: 🔔 Jenkins 배포 트리거 (Crumb 포함)
         run: |
           CRUMB=$(curl -s -u "danny:118eca0c3987de8250cb411b6ecf0ad573" \
-            http://203.245.30.75:9090/crumbIssuer/api/xml?xpath=concat\(//crumbRequestField,%22:%22,//crumb\))
+            "http://203.245.30.75:9090/crumbIssuer/api/xml?xpath=concat(//crumbRequestField,\":\",//crumb)")
 
           curl -X POST "http://203.245.30.75:9090/job/thinkdock-deploy/build" \
             -u "danny:118eca0c3987de8250cb411b6ecf0ad573" \
             -H "$CRUMB"
+
