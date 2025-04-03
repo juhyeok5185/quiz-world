@@ -194,8 +194,7 @@
             location.reload();
         }
 
-        async function deleteById() {
-            const studyId = find('#studyId').value;
+        async function deleteById(event, studyId) {
             await fetchDelete(`/api/courses/subjects/chapters/studies/${studyId}`);
             location.reload();
         }
