@@ -14,7 +14,7 @@ WORKDIR /app
 # 빌드한 JAR 파일 복사
 COPY --from=builder /app/build/libs/*.jar app.jar
 
-EXPOSE 80
+EXPOSE 8080
 
 ENTRYPOINT ["java", "-jar", "app.jar"]
 
@@ -29,4 +29,4 @@ ENTRYPOINT ["java", "-jar", "app.jar"]
 #docker rm quiz-world 2>/dev/null || true
 #docker load -i /home/danny/image-tar-file/quiz-world.tar
 #rm /home/danny/image-tar-file/quiz-world.tar
-#docker run -d -p 80:80 --name quiz-world quiz-world:latest
+#docker run -d -p 8080:8080 --name quiz-world quiz-world:latest
