@@ -27,4 +27,5 @@ jobs:
 
       - name: 🔔 Jenkins 배포 트리거
         run: |
-          curl -X POST "http://203.245.30.75:9090/job/thinkdock-deploy/build?token=thinkdock"
+          curl -X POST "http://203.245.30.75:9090/job/thinkdock-deploy/build?token=thinkdock" \
+            --user "danny:118eca0c3987de8250cb411b6ecf0ad573"
