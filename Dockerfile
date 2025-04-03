@@ -30,3 +30,4 @@ ENTRYPOINT ["java", "-jar", "app.jar"]
 #docker load -i /home/danny/image-tar-file/quiz-world.tar
 #rm /home/danny/image-tar-file/quiz-world.tar
 #docker run -d -p 8080:8080 --name quiz-world quiz-world:latest
+#
