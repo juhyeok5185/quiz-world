@@ -9,7 +9,7 @@ Server
 3.80포트 nginx 실행으로 ssl 적용 -> docker 내부 8080포트 프로젝트 실행
 
 자동배포
-1.Github Actions 
+1.Github Actions (github secret 사용으로 계정정보 숨김처리)
     1) docker image build
     2) docker hub repository push
     3) docker hub repository pull

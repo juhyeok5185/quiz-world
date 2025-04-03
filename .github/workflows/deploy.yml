@@ -34,14 +34,15 @@ jobs:
             --push .
           echo "✅ Docker 이미지 푸시 완료"
 
-      - name: SSH 접속 후 서버에서 이미지 Pull 및 컨테이너 재시작
+      - name: SSH 키파일 설정 및 서버 접속 후 이미지 배포
         run: |
-          echo "🔧 sshpass 설치 및 서버 접속 준비"
-          sudo apt-get update
-          sudo apt-get install -y sshpass
+          echo "🔧 SSH 비공개 키파일 생성"
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
 
-          echo "🚀 서버에 SSH 접속하여 이미지 업데이트 및 재시작 수행"
-          sshpass -p '${{ secrets.SSH_PASSWORD }}' ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << EOF
+          echo "🚀 서버에 SSH 접속하여 Docker 이미지 pull 및 컨테이너 재시작"
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << EOF
             echo "⬇️ Docker 이미지 미리 pull"
             docker pull ${{ secrets.DOCKER_USERNAME }}/quiz-world:latest
 
