@@ -41,13 +41,13 @@ jobs:
           sudo apt-get install -y sshpass
 
           echo "🚀 서버에 SSH 접속하여 이미지 업데이트 및 재시작 수행"
-          sshpass -p '${{ secrets.SSH_PASSWORD }}' ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
+          sshpass -p '${{ secrets.SSH_PASSWORD }}' ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << EOF
+            echo "⬇️ Docker 이미지 미리 pull"
+            docker pull ${{ secrets.DOCKER_USERNAME }}/quiz-world:latest
+
             echo "📦 기존 컨테이너 중지 및 삭제"
             docker stop quiz-world 2>/dev/null || true
             docker rm quiz-world 2>/dev/null || true
-
-            echo "⬇️ Docker 이미지 pull"
-            docker pull ${{ secrets.DOCKER_USERNAME }}/quiz-world:latest
 
             echo "🚀 컨테이너 실행"
             docker run -d -p 8080:8080 --name quiz-world ${{ secrets.DOCKER_USERNAME }}/quiz-world:latest

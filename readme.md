@@ -12,7 +12,6 @@ Server
 1.Github Actions 
     1) docker image build
     2) docker hub repository push
-    3) jenkins 호출
-2.Jenkins
-    1) image pull
-    2) container 실행
+    3) docker hub repository pull
+    4) docker container stop
+    5) docker run
