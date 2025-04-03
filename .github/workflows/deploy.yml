@@ -25,7 +25,11 @@ jobs:
             -t ${{ secrets.DOCKER_USERNAME }}/quiz-world:latest \
             --push .
 
-      - name: 🔔 Jenkins 배포 트리거
+      - name: 🔔 Jenkins 배포 트리거 (Crumb 포함)
         run: |
-          curl -X POST "http://203.245.30.75:9090/job/thinkdock-deploy/build?token=thinkdock" \
-            --user "danny:118eca0c3987de8250cb411b6ecf0ad573"
+          CRUMB=$(curl -s -u "danny:118eca0c3987de8250cb411b6ecf0ad573" \
+            http://203.245.30.75:9090/crumbIssuer/api/xml?xpath=concat\(//crumbRequestField,%22:%22,//crumb\))
+
+          curl -X POST "http://203.245.30.75:9090/job/thinkdock-deploy/build" \
+            -u "danny:118eca0c3987de8250cb411b6ecf0ad573" \
+            -H "$CRUMB"
