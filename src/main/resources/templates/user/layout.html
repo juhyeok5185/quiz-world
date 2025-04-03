@@ -205,7 +205,7 @@
     async function logout() {
         console.log(getCsrfToken()); // null이면 문제 발생
         await fetchPostByLogout("/logout")
-        location.href = "/";
+        // location.href = "/";
     }
 </script>
 
