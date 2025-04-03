@@ -16,7 +16,7 @@
 
         <!-- 💡 memberScoreLog 리스트를 서브쿼리로 매핑 -->
         <collection property="memberScoreLog"
-                    ofType="com.danny.quizworld.member.score.MemberScoreLogResponse"
+                    ofType="com.danny.thinkdock.member.score.MemberScoreLogResponse"
                     column="member_id"
                     select="findMemberScoreLogByMemberId"/>
     </resultMap>
