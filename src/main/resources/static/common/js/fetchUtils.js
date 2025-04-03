@@ -228,22 +228,13 @@ async function fetchDelete(url) {
     }
 }
 
-async function fetchPostByLogout(url) {
+async function fetchPostByLogout(url){
     try {
-        const csrfToken = getCsrfToken();
         const response = await fetch(url, {
             method: "POST",
             credentials: "include",
-            headers: {
-                "X-XSRF-TOKEN": csrfToken,
-                "Content-Type": "application/json"
-            }
+            headers: {'X-XSRF-TOKEN': getCsrfToken()},
         });
-
-        if (!(response.ok || response.status === 302)) {
-            throw new Error(`로그아웃 실패 - 상태 코드: ${response.status}`);
-        }
-
     } catch (error) {
         console.error("Logout failed:", error);
         alert("로그아웃에 실패하였습니다. 다시 시도해주세요.");
