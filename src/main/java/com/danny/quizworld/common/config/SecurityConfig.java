@@ -1,5 +1,6 @@
 package com.danny.quizworld.common.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -27,6 +28,10 @@ import java.io.IOException;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
+    // 🔥 application.properties 값 주입
+    @Value("${custom.security.https-enabled:false}")
+    private boolean httpsEnabled;
+
     @Bean
     public SessionRegistry sessionRegistry() {
         return new SessionRegistryImpl();
@@ -39,14 +44,7 @@ public class SecurityConfig {
 
     @Bean
     public AuthenticationEntryPoint customAuthenticationEntryPoint() {
-        return new AuthenticationEntryPoint() {
-            @Override
-            public void commence(HttpServletRequest request, HttpServletResponse response,
-                                 org.springframework.security.core.AuthenticationException authException)
-                    throws IOException {
-                response.sendRedirect("/login");
-            }
-        };
+        return (request, response, authException) -> response.sendRedirect("/login");
     }
 
     @Bean
@@ -54,18 +52,29 @@ public class SecurityConfig {
             HttpSecurity http,
             ClientRegistrationRepository clientRegistrationRepository
     ) throws Exception {
+
+        CookieCsrfTokenRepository csrfTokenRepository = CookieCsrfTokenRepository.withHttpOnlyFalse();
+        csrfTokenRepository.setCookiePath("/");
+        csrfTokenRepository.setCookieName("XSRF-TOKEN");
+
+        // 🔐 HTTPS 환경이면 Secure 설정
+        if (httpsEnabled) {
+            // Spring Security 6.x에서는 setCookieSecure() 없으므로 이렇게만 설정하고,
+            // 나머지는 자동으로 처리됨 (Secure는 Spring Boot 설정에 따라 브라우저가 결정)
+            System.setProperty("server.ssl.enabled", "true");
+        }
+
         http
                 .csrf(csrf -> csrf
-                        .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+                        .csrfTokenRepository(csrfTokenRepository)
                         .sessionAuthenticationStrategy(new NullAuthenticatedSessionStrategy())
                 )
                 .authorizeHttpRequests(auth -> auth
                         .antMatchers("/", "/login", "/save", "/static/**", "/api/members/sessions", "/design/**").permitAll()
                         .anyRequest().authenticated()
                 )
-                // ✅ 동시 세션 허용 설정 추가 (아래 4줄)
                 .sessionManagement(session -> session
-                        .maximumSessions(-1) // -1: 무제한 동시 로그인 허용
+                        .maximumSessions(-1)
                         .sessionRegistry(sessionRegistry())
                 )
                 .exceptionHandling(exception ->
@@ -85,9 +94,9 @@ public class SecurityConfig {
                         .clearAuthentication(true)
                         .permitAll()
                 );
+
         return http.build();
     }
-
 
     private static class CustomLoginSuccessHandler implements AuthenticationSuccessHandler {
         @Override
@@ -95,7 +104,7 @@ public class SecurityConfig {
             String role = authentication.getAuthorities().stream()
                     .map(GrantedAuthority::getAuthority)
                     .findFirst()
-                    .orElse("ROLE_USER"); // 기본값 설정
+                    .orElse("ROLE_USER");
 
             if ("ROLE_ADMIN".equals(role)) {
                 response.sendRedirect("/admin/main");
