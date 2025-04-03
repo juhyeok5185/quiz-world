@@ -232,6 +232,7 @@ async function fetchPostByLogout(url){
     try {
         const response = await fetch(url, {
             method: "POST",
+            credentials: "include",
             headers: {'X-XSRF-TOKEN': getCsrfToken()},
         });
     } catch (error) {
