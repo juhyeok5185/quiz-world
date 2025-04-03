@@ -1,0 +1,20 @@
+name: Log on Push
+
+on:
+  push:   # push 이벤트 발생 시 실행
+    branches:
+      - main   # 또는 원하시는 브랜치 이름
+
+jobs:
+  log_job:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Print push log
+        run: |
+          echo "🚀 A push was detected!"
+          echo "🔍 Git Commit Info:"
+          git log -1
