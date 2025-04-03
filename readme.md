@@ -10,9 +10,10 @@ Server
 
 자동배포
 1.Github Actions (github secret 사용으로 계정정보 숨김처리)
-    6) keygen 하여 ssh 접속 허용
     1) docker image build
     2) docker hub repository push
-    3) docker hub repository pull
-    4) docker container stop
-    5) docker run
+    4) jenkins 호출
+2.jenkins
+    1) docker hub repository pull
+    2) docker stop , rm
+    3) container 실행
