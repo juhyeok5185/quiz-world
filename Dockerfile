@@ -1,33 +1,51 @@
-# 빌드
-FROM gradle:7.6.2-jdk17 AS builder
+name: Build and Deploy
 
-WORKDIR /app
-COPY . .
+on:
+  push:
+    branches: [main]
 
-RUN gradle clean build --no-daemon -x test
+jobs:
+  build-push-deploy:
+    runs-on: ubuntu-latest
 
-# 실행
-FROM openjdk:17-jdk-slim
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-WORKDIR /app
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
 
-# 빌드한 JAR 파일 복사
-COPY --from=builder /app/build/libs/*.jar app.jar
+      - name: DockerHub 로그인
+        run: |
+          echo "🔐 DockerHub 로그인 시작"
+          echo "${{ secrets.DOCKER_TOKEN }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+          echo "✅ DockerHub 로그인 완료"
 
-EXPOSE 8080
+      - name: Build and Push to DockerHub
+        run: |
+          echo "🔨 Docker 이미지 빌드 및 푸시 시작"
+          docker buildx build --platform linux/amd64 \
+            -t ${{ secrets.DOCKER_USERNAME }}/quiz-world:latest \
+            --push .
+          echo "✅ Docker 이미지 푸시 완료"
 
-ENTRYPOINT ["java", "-jar", "app.jar"]
+      - name: SSH 접속 후 서버에서 이미지 Pull 및 컨테이너 재시작
+        run: |
+          echo "🔧 sshpass 설치 및 서버 접속 준비"
+          sudo apt-get update
+          sudo apt-get install -y sshpass
 
-#서버로 보내는 법
-#docker buildx build --platform linux/amd64 -t quiz-world:latest --output type=docker,dest=quiz-world.tar .
-#scp quiz-world.tar danny@203.245.30.75:/home/danny/image-tar-file/
-#1q2w3e4r
-#rm quiz-world.tar
+          echo "🚀 서버에 SSH 접속하여 이미지 업데이트 및 재시작 수행"
+          sshpass -p '${{ secrets.SSH_PASSWORD }}' ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
+            echo "📦 기존 컨테이너 중지 및 삭제"
+            docker stop quiz-world 2>/dev/null || true
+            docker rm quiz-world 2>/dev/null || true
 
-#서버에서
-#docker stop quiz-world 2>/dev/null || true
-#docker rm quiz-world 2>/dev/null || true
-#docker load -i /home/danny/image-tar-file/quiz-world.tar
-#rm /home/danny/image-tar-file/quiz-world.tar
-#docker run -d -p 8080:8080 --name quiz-world quiz-world:latest
-#
+            echo "⬇️ Docker 이미지 pull"
+            docker pull ${{ secrets.DOCKER_USERNAME }}/quiz-world:latest
+
+            echo "🚀 컨테이너 실행"
+            docker run -d -p 8080:8080 --name quiz-world ${{ secrets.DOCKER_USERNAME }}/quiz-world:latest
+
+            echo "✅ 서버에서 배포 완료"
+          EOF
