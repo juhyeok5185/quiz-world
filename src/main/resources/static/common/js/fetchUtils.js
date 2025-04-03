@@ -237,7 +237,7 @@ async function fetchPostByLogout(url){
         });
     } catch (error) {
         console.error("Logout failed:", error);
-        alert("로그아웃에 실패하였습니다. 다시 시도해주세요.");
+        // alert("로그아웃에 실패하였습니다. 다시 시도해주세요.");
     }
 }
 
