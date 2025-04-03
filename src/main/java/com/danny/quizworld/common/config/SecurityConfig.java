@@ -29,8 +29,8 @@ import java.io.IOException;
 public class SecurityConfig {
 
     // 🔥 application.properties 값 주입
-    @Value("${custom.security.https-enabled:false}")
-    private boolean httpsEnabled;
+//    @Value("${custom.security.https-enabled:false}")
+//    private boolean httpsEnabled;
 
     @Bean
     public SessionRegistry sessionRegistry() {
@@ -57,12 +57,12 @@ public class SecurityConfig {
         csrfTokenRepository.setCookiePath("/");
         csrfTokenRepository.setCookieName("XSRF-TOKEN");
 
-        // 🔐 HTTPS 환경이면 Secure 설정
-        if (httpsEnabled) {
-            // Spring Security 6.x에서는 setCookieSecure() 없으므로 이렇게만 설정하고,
-            // 나머지는 자동으로 처리됨 (Secure는 Spring Boot 설정에 따라 브라우저가 결정)
-            System.setProperty("server.ssl.enabled", "true");
-        }
+//        // 🔐 HTTPS 환경이면 Secure 설정
+//        if (httpsEnabled) {
+//            // Spring Security 6.x에서는 setCookieSecure() 없으므로 이렇게만 설정하고,
+//            // 나머지는 자동으로 처리됨 (Secure는 Spring Boot 설정에 따라 브라우저가 결정)
+//            System.setProperty("server.ssl.enabled", "true");
+//        }
 
         http
                 .csrf(csrf -> csrf
