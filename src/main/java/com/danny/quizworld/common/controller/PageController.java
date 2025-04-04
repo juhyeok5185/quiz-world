@@ -17,14 +17,14 @@ public class PageController {
     @GetMapping("/")
     public String index(Authentication authentication) {
         if(authentication == null){
-            return "forward:login";
+            return "redirect:login";
         }
 
         if(Utils.getRole(authentication).equals("ROLE_ADMIN")){
-            return "forward:admin/main";
+            return "redirect:admin/main";
         }
 
-        return "forward:user/main";
+        return "redirect:user/main";
     }
 
     @GetMapping("/{firstUrl}")
@@ -33,9 +33,9 @@ public class PageController {
         if(firstUrl.equals("login")){
             if(authentication != null){
                 if(Utils.getRole(authentication).equals("ROLE_ADMIN")){
-                    return "forward:admin/main";
+                    return "redirect:admin/main";
                 }
-                return "forward:user/main";
+                return "redirect:user/main";
             }
         }
         return firstUrl;

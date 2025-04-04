@@ -60,7 +60,7 @@ public class SecurityConfig {
                         .sessionAuthenticationStrategy(new NullAuthenticatedSessionStrategy())
                 )
                 .authorizeHttpRequests(auth -> auth
-                        .antMatchers("/", "/login", "/save", "/static/**", "/api/members/sessions", "/design/**").permitAll()
+                        .antMatchers("/", "/login", "/privacy", "/static/**", "/api/members/sessions", "/design/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 // ✅ 동시 세션 허용 설정 추가 (아래 4줄)
