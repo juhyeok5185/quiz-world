@@ -392,6 +392,10 @@
         }
 
         function toggleFocusMenu() {
+            if(studys.length === 0){
+                alert('문제를 등록해주세요')
+                return;
+            }
             const menu = document.getElementById("focusModeMenu");
             menu.classList.toggle("hidden"); // 메뉴 보이기/숨기기 토글
 
