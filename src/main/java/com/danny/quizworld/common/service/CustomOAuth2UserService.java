@@ -32,7 +32,9 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         OAuth2User oAuth2User = super.loadUser(userRequest);
         Map<String, Object> attributes = oAuth2User.getAttributes();
 
+        @SuppressWarnings("unchecked")
         Map<String, Object> response = (Map<String, Object>) attributes.get("response");
+
         String authId = (String) response.get("id");
         String name = (String) response.get("name");
         //구글일때

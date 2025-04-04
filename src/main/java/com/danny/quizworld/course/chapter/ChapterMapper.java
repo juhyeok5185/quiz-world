@@ -13,5 +13,6 @@ public interface ChapterMapper {
     @Mapping(target = "publicYn", source = "request.publicYn")
     Chapter toEntity(Subject subject, ChapterCommand.save request);
 
+    @Mapping(target = "studyCount", ignore = true)
     ChapterResponse toResponse(Chapter chapter);
 }

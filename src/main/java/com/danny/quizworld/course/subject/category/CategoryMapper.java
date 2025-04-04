@@ -11,6 +11,7 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface CategoryMapper {
 
+    @Mapping(target = "categoryId", ignore = true)
     Category toEntity(String name);
 
     CategoryResponse toResponse(Category category);

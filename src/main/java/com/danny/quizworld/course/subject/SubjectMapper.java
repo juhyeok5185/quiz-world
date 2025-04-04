@@ -16,9 +16,13 @@ public interface SubjectMapper {
     @Mapping(target = "member", source = "member")
     @Mapping(target = "category", source = "category")
     @Mapping(target = "price", expression = "java(request.getPrice() == null ? 0L : request.getPrice())")
+    @Mapping(target = "downloadYn", ignore = true)
+    @Mapping(target = "downloadId", ignore = true)
     Subject toEntity(Member member, Category category, SubjectCommand.save request);
 
 
     @Mapping(target = "member", source = "member")
+    @Mapping(target = "studyCount", ignore = true)
+    @Mapping(target = "createYn", ignore = true)
     SubjectResponse toResponse(Subject subject);
 }
