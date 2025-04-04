@@ -42,6 +42,10 @@ public class SubjectService {
         return subjectReader.findAllSubjectBySearch(search);
     }
 
+    @Transactional
+    public void deleteAll(List<Subject> subjectList) {
+        subjectStore.deleteAll(subjectList);
+    }
 
     public Subject toEntity(Member member, Category category, SubjectCommand.save request) {
         return subjectMapper.toEntity(member,category, request);
@@ -58,5 +62,6 @@ public class SubjectService {
     public void validateToUpdate(Subject subject , SubjectCommand.update request) {
         subjectValidator.validateToUpdate(subject ,request);
     }
+
 
 }

@@ -65,10 +65,17 @@
             </div>
 
             <div class="flex items-center justify-between h-16 border-t border-b cursor-pointer"
-                 onclick="location.href='#'">
+                 onclick="location.href='/user/subject/search'">
                 <span class="text-lg text-gray-800">과목 검색하기</span>
                 <span class="text-xl text-gray-500">›</span>
             </div>
+
+            <div class="flex items-center justify-between h-16 border-t border-b cursor-pointer"
+                 onclick="deleteMember();">
+                <span class="text-lg text-red-500 font-semibold">회원 탈퇴</span>
+                <span class="text-xl text-red-500">›</span>
+            </div>
+
         </div>
 
         <div class="flex-grow"></div>
@@ -182,6 +189,14 @@
     async function logout() {
         await fetchPostByLogout("/logout")
         location.href = "/";
+    }
+
+    async function deleteMember(){
+        if (confirm("탈퇴를 진행하면 기존에 등록한 과목 정보는 모두 삭제됩니다.\n계속 진행하시겠습니까?")) {
+            const url = `/api/members`;
+            await fetchDelete(url);
+            logout();
+        }
     }
 </script>
 

@@ -12,4 +12,8 @@ public class MemberStore {
     public Member save(Member member){
         return memberRepository.save(member);
     }
+
+    public void delete(Member member) {
+        memberRepository.delete(member);
+    }
 }

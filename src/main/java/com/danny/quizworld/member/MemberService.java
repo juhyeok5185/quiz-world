@@ -46,10 +46,14 @@ public class MemberService {
         return memberReader.countByNickname(nickname);
     }
 
-
     @Transactional(readOnly = true)
     public UserDashBoardResponse findUserDashBoardResponseByMemberId(Long memberId) {
         return memberDao.findUserDashBoardResponseByMemberId(memberId);
+    }
+
+    @Transactional
+    public void delete(Member member) {
+        memberStore.delete(member);
     }
 
     public Member toEntity(String name , String authId , String nickname){

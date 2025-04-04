@@ -42,4 +42,11 @@ public class MemberApiController {
         memberFacade.updateNickname(request, memberId);
         return ResponseEntity.status(201).body(new ApiResponse<>("Nickname 변경" , 201 , null));
     }
+
+    @DeleteMapping
+    public ResponseEntity<ApiResponse<MemberResponse>> deleteMember(Authentication authentication){
+        Long memberId = Utils.getMemberId(authentication);
+        memberFacade.deleteMember(memberId);
+        return ResponseEntity.status(201).body(new ApiResponse<>("Member 삭제" , 201 , null));
+    }
 }
