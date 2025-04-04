@@ -5,25 +5,30 @@ on:
     branches: [main]
 
 jobs:
-  build-and-push:
+  get-profile:
     runs-on: ubuntu-latest
+    outputs:
+      profile: ${{ steps.extract-profile.outputs.profile }}
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Check Spring Profile
-        id: profile
+      - name: Extract Spring Profile
+        id: extract-profile
         run: |
           PROFILE=$(grep "^spring.profiles.active" ./src/main/resources/application.properties | cut -d'=' -f2)
           echo "Detected profile: $PROFILE"
           echo "profile=$PROFILE" >> $GITHUB_OUTPUT
 
-      - name: Skip if profile is dev
-        if: steps.profile.outputs.profile == 'dev'
-        run: |
-          echo "⚠️ Dev profile detected. Skipping build and deployment."
-          exit 0
+  build-and-push:
+    needs: get-profile
+    if: ${{ needs.get-profile.outputs.profile != 'dev' }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
