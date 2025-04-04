@@ -12,6 +12,19 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Check Spring Profile
+        id: profile
+        run: |
+          PROFILE=$(grep "^spring.profiles.active" ./src/main/resources/application.properties | cut -d'=' -f2)
+          echo "Detected profile: $PROFILE"
+          echo "profile=$PROFILE" >> $GITHUB_OUTPUT
+
+      - name: Skip if profile is dev
+        if: steps.profile.outputs.profile == 'dev'
+        run: |
+          echo "⚠️ Dev profile detected. Skipping build and deployment."
+          exit 0
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
@@ -36,5 +49,3 @@ jobs:
           curl -X POST "http://${{ secrets.JENKINS_URL }}/job/thinkdock-deploy/build" \
             -u "${{ secrets.JENKINS_USER }}:${{ secrets.JENKINS_API_TOKEN }}" \
             -H "$CRUMB"
-      
-
