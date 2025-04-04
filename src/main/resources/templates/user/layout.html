@@ -89,66 +89,53 @@
 
 
     window.onload = function () {
-        findMember()
-        makeAdLocalStorage();
     }
 
     document.addEventListener('DOMContentLoaded', () => {
+        findMember()
         hideBackButton();
         checkSubscribe();
     });
 
 
-    function makeAdLocalStorage(){
-        const keys = [
-            'postCount',
-            'getCount',
-            'updateCount',
-            'useModeCount',
-            'useTextArea'
-        ];
-
-        keys.forEach((key) => {
-            if (localStorage.getItem(key) === null) {
-                localStorage.setItem(key, '0'); // 최초 실행일 때만 세팅됨
-            }
-        });
-    }
-
     async function increaseAdCount(key) {
-        const value = parseInt(localStorage.getItem(key) || '0');
+        if (localStorage.getItem(key) === null) {
+            localStorage.setItem(key, '0');
+        }
+
+        const value = parseInt(localStorage.getItem(key));
         localStorage.setItem(key, (value + 1).toString());
+
         switch (key) {
-            case 'postCount': // save
+            case 'postCount':
                 if (value >= 15) {
                     localStorage.setItem(key, '0');
                     await fetchPatchByJson("/api/members");
                     viewAd();
                 }
                 break;
-            case 'getCount': // getList
+            case 'getCount':
                 if (value >= 8) {
                     localStorage.setItem(key, '0');
                     await fetchPatchByJson("/api/members");
                     viewAd();
                 }
                 break;
-            case 'updateCount': // 수정
+            case 'updateCount':
                 if (value >= 30) {
                     localStorage.setItem(key, '0');
                     await fetchPatchByJson("/api/members");
                     viewAd();
                 }
                 break;
-            case 'useModeCount': // 조회만 클라이언트에서
+            case 'useModeCount':
                 if (value >= 50) {
                     localStorage.setItem(key, '0');
                     await fetchPatchByJson("/api/members");
                     viewAd();
                 }
                 break;
-
-            case 'useTextArea': // 조회만 클라이언트에서
+            case 'useTextArea':
                 if (value >= 100) {
                     localStorage.setItem(key, '0');
                     await fetchPatchByJson("/api/members");
