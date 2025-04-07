@@ -3,24 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <title>Think Dock - Login</title>
-    <link rel="icon" type="image/x-icon" href="/static/common/image/favicon.ico"> <!-- ✅ 추가된 라인 -->
+    <link rel="icon" type="image/x-icon" href="/static/common/image/favicon.ico">
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="flex flex-col items-center justify-center min-h-screen bg-gray-100 space-y-12">
 <!-- 로고 -->
 <img src="/static/common/image/logo.png" alt="로고" class="w-80 h-auto">
 
-<!-- 네이버 로그인 버튼 -->
-<a href="/oauth2/authorization/naver"
-   class="flex items-center px-16 py-6 space-x-8 bg-green-500 text-white text-3xl font-bold rounded-2xl shadow-xl
-              hover:bg-green-600 transition duration-300">
+<!-- 네이버 로그인 버튼 (onclick 이벤트로 변경) -->
+<div onclick="handleNaverLogin()"
+     class="flex items-center px-16 py-6 space-x-8 bg-green-500 text-white text-3xl font-bold rounded-2xl shadow-xl
+              hover:bg-green-600 transition duration-300 cursor-pointer">
     <span class="bg-white text-green-500 font-extrabold text-3xl px-4 py-2 rounded">N</span>
     <span>네이버 로그인</span>
-</a>
+</div>
 
 <!-- 개인정보 처리방침 링크 -->
 <footer class="absolute bottom-4 text-lg text-gray-700 hover:text-gray-900 transition duration-200">
-    <a href="/privacy" class="underline">개인정보 처리방침</a>
+    <a href="#" onclick="handlePrivacyClick(event)" class="underline">개인정보 처리방침</a>
 </footer>
+
+<!-- 개선된 로딩 오버레이 -->
+<div id="loadingOverlay" class="fixed inset-0 bg-white bg-opacity-95 z-[9999] flex items-center justify-center hidden">
+    <div class="flex flex-col items-center">
+        <!-- 더 큰 로딩 스피너 -->
+        <div class="w-24 h-24 border-8 border-blue-500 border-t-transparent rounded-full animate-spin mb-6"></div>
+        <!-- 더 큰 텍스트와 그라데이션 효과 -->
+        <p class="text-2xl font-bold bg-gradient-to-r from-blue-500 to-indigo-500 bg-clip-text text-transparent">로딩중...</p>
+    </div>
+</div>
+
+<script>
+    // 네이버 로그인 처리
+    function handleNaverLogin() {
+        document.querySelector("#loadingOverlay").classList.remove('hidden');
+        window.location.href = "/oauth2/authorization/naver";
+    }
+
+    // 개인정보 처리방침 링크 처리
+    function handlePrivacyClick(event) {
+        event.preventDefault();
+        document.querySelector("#loadingOverlay").classList.remove('hidden');
+        window.location.href = "/privacy";
+    }
+</script>
 </body>
 </html>
