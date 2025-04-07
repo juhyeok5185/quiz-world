@@ -10,7 +10,7 @@
     <div class="listArea grid grid-cols-1 gap-4 mt-4"></div>
 
     <!-- 챕터 추가 버튼 (우측 하단 고정) -->
-    <div id="plus-button" class="fixed bottom-20 right-6 md:right-[calc(50%-320px-200px)] z-50">
+    <div id="plus-button" class="fixed bottom-20 right-6 md:right-[calc(50%-320px-200px)] z-50 hidden">
         <div onclick="openModal('modal-div');"
              class="w-14 h-14 bg-gradient-to-r from-blue-500 to-indigo-500 text-white text-[28px] font-bold rounded-full shadow-xl hover:opacity-90 transition flex items-center justify-center cursor-pointer">
             <span class="flex items-center justify-center">+</span>
@@ -115,6 +115,7 @@
             subject = await fetchGet(`/api/courses/subjects/${subjectId}`);
             drawList();
             checkAuth(subject);
+            console.log(subject)
             changeLogoText(`${chapters[0].subject.name}`);
         }
 
