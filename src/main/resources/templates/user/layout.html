@@ -178,12 +178,14 @@
     document.querySelector("#menuButton").addEventListener("click", function () {
         document.querySelector("#fullScreenPopup").classList.remove("hidden");
         document.body.classList.add("overflow-hidden");  // 배경 스크롤 막기
+        document.getElementById('plus-button').classList.add('hidden'); // + 버튼 숨기기
     });
 
     // 팝업 닫기
     document.querySelector("#closePopup").addEventListener("click", function () {
         document.querySelector("#fullScreenPopup").classList.add("hidden");
         document.body.classList.remove("overflow-hidden");  // 배경 스크롤 복구
+        document.getElementById('plus-button').classList.remove('hidden'); // + 버튼 숨기기
     });
 
     async function logout() {
