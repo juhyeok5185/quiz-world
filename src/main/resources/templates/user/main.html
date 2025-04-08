@@ -105,6 +105,12 @@
             find('.myStudyCount').textContent = `${response.myStudyCount}개`;
             find('.enrolledSubjectCount').textContent = `${response.enrolledSubjectCount}개`;
 
+            // 기존 차트 제거 (이 부분이 중요합니다!)
+            const existingChart = Chart.getChart('scoreChart');
+            if (existingChart) {
+                existingChart.destroy();
+            }
+
             const labels = [...memberScoreLog.map(d => `${d.year}.${d.month}`), getCurrentYearMonthStr()];
             const scores = [...memberScoreLog.map(d => d.score), currentScore];
             const pointBackgroundColors = scores.map((_, idx) => idx === scores.length - 1 ? '#FFFFFF' : '#93C5FD');
@@ -145,7 +151,6 @@
                 }
             });
         }
-
         function getCurrentYearMonthStr() {
             const now = new Date();
             return `${now.getFullYear()}.${now.getMonth() + 1}`;
