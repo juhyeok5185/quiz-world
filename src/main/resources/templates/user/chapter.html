@@ -115,7 +115,6 @@
             subject = await fetchGet(`/api/courses/subjects/${subjectId}`);
             drawList();
             checkAuth(subject);
-            console.log(subject)
             changeLogoText(`${chapters[0].subject.name}`);
         }
 

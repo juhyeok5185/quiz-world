@@ -64,18 +64,37 @@
     </div>
 
 
-    <!-- 문제 추가 모달 -->
     <div id="modal-save"
          class="fixed inset-0 left-0 top-[-16px] bg-black bg-opacity-50 flex items-center justify-center hidden">
-        <div class="bg-white p-6 rounded-lg shadow-lg w-[90%] md:w-96 mx-auto">
+        <div class="bg-white p-6 rounded-lg shadow-lg w-[90%] md:w-[450px] lg:w-[500px] mx-auto">
             <h2 class="text-xl font-bold mb-4">새 문제 추가</h2>
             <form id="saveForm">
-                <input type="text" name="questionText" placeholder="문제 입력"
-                       class="w-full border p-2 rounded mb-4">
-                <input type="text" name="answerText" placeholder="정답 입력"
-                       class="w-full border p-2 rounded mb-4">
-                <input type="text" name="description" placeholder="설명 입력"
-                       class="w-full border p-2 rounded mb-4">
+                <div class="mb-4">
+<!--                    <label for="questionTextArea" class="block text-sm font-medium text-gray-700 mb-1">문제</label>-->
+                    <textarea name="questionText" id="questionTextArea" rows="3" placeholder="문제를 입력해주세요!"
+                              class="w-full border p-2 rounded resize-none focus:ring-blue-500 focus:border-blue-500"></textarea>
+                </div>
+                <div class="mb-4">
+<!--                    <label for="answerTextArea" class="block text-sm font-medium text-gray-700 mb-1">정답</label>-->
+                    <textarea name="answerText" id="answerTextArea" rows="3" placeholder="정답을 입력해주세요!"
+                              class="w-full border p-2 rounded resize-none focus:ring-blue-500 focus:border-blue-500"></textarea>
+                </div>
+
+                <!-- 설명 토글 버튼 -->
+                <div class="mb-3">
+                    <button type="button" onclick="toggleDescription('save')" class="text-sm text-blue-600 hover:text-blue-800 flex items-center">
+                        <i id="descriptionIcon-save" class="fa-solid fa-chevron-right mr-1 transition-transform"></i>
+                        <span>설명 추가하기 (선택사항)</span>
+                    </button>
+                </div>
+
+                <!-- 접혀있는 설명 영역 -->
+                <div id="descriptionArea-save" class="mb-4 hidden">
+<!--                    <label for="descriptionTextArea" class="block text-sm font-medium text-gray-700 mb-1">설명</label>-->
+                    <textarea name="description" id="descriptionTextArea" rows="3" placeholder="설명을 입력해주세요!"
+                              class="w-full border p-2 rounded resize-none focus:ring-blue-500 focus:border-blue-500"></textarea>
+                </div>
+
                 <div class="flex justify-end">
                     <div onclick="closeModal('modal-save');"
                          class="bg-gray-300 text-gray-700 px-4 py-2 rounded-md mr-2 cursor-pointer">
@@ -92,16 +111,25 @@
 
     <!-- 문제 수정 모달 -->
     <div id="modal-update" class="fixed inset-0 left-0 top-[-16px] bg-black bg-opacity-50 flex items-center justify-center hidden">
-        <div class="bg-white p-6 rounded-lg shadow-lg w-[90%] md:w-96 mx-auto">
+        <div class="bg-white p-6 rounded-lg shadow-lg w-[90%] md:w-[450px] lg:w-[500px] mx-auto">
             <h2 class="text-xl font-bold mb-4">문제 수정</h2>
             <form id="updateForm">
                 <input type="hidden" id="studyId" name="studyId">
-                <input type="text" id="questionText" name="questionText" placeholder="문제 입력"
-                       class="w-full border p-2 rounded mb-4">
-                <input type="text" id="answerText" name="answerText" placeholder="정답 입력"
-                       class="w-full border p-2 rounded mb-4">
-                <input type="text" id="description" name="description" placeholder="설명 입력"
-                       class="w-full border p-2 rounded mb-4">
+                <div class="mb-4">
+<!--                    <label for="questionText" class="block text-sm font-medium text-gray-700 mb-1">문제</label>-->
+                    <textarea id="questionText" name="questionText" rows="3" placeholder="문제를 입력해주세요!"
+                              class="w-full border p-2 rounded resize-none focus:ring-blue-500 focus:border-blue-500"></textarea>
+                </div>
+                <div class="mb-4">
+                    <label for="answerText" class="block text-sm font-medium text-gray-700 mb-1">정답</label>
+                    <textarea id="answerText" name="answerText" rows="3" placeholder="정답을 입력해주세요!"
+                              class="w-full border p-2 rounded resize-none focus:ring-blue-500 focus:border-blue-500"></textarea>
+                </div>
+                <div class="mb-4">
+                    <label for="description" class="block text-sm font-medium text-gray-700 mb-1">설명</label>
+                    <textarea id="description" name="description" rows="3" placeholder="설명을 입력해주세요(선택사항)"
+                              class="w-full border p-2 rounded resize-none focus:ring-blue-500 focus:border-blue-500"></textarea>
+                </div>
                 <div class="flex justify-end">
                     <div onclick="closeModal('modal-update')" class="bg-gray-300 text-gray-700 px-4 py-2 rounded-md mr-2 cursor-pointer">
                         취소
@@ -114,7 +142,6 @@
             </form>
         </div>
     </div>
-
     <div id="specialModeContainer"
          class="fixed top-[-16px] left-0 w-full h-full bg-white z-[9999] flex items-center justify-center hidden">
         <div class="absolute top-4 left-4">
@@ -238,62 +265,62 @@
                 html += `<div class="flex flex-col gap-4 w-full md:w-1/2 flex-1 max-h-[calc(100vh-200px)] overflow-y-auto pr-1">`;
                 studys.forEach((study, index) => {
                     html += `
-    <div onclick="revealHidden(${index})"
-         class="bg-white shadow-lg rounded-lg p-4 cursor-pointer flex flex-col relative">
+             <div onclick="revealHidden(${index})"
+                  class="bg-white shadow-lg rounded-lg p-4 cursor-pointer flex flex-col relative">
 
-        ${chapter.subject.createYn ? `
-            <div class="absolute top-3 right-3 cursor-pointer text-gray-500 hover:text-gray-700 text-xl" onclick="openSettings(event, ${study.studyId})">
-                <i class="fa-solid fa-gear"></i>
-            </div>` : ``}
+                 ${chapter.subject.createYn ? `
+                     <div class="absolute top-3 right-3 cursor-pointer text-gray-500 hover:text-gray-700 text-xl" onclick="openSettings(event, ${study.studyId})">
+                         <i class="fa-solid fa-gear"></i>
+                     </div>` : ``}
 
-        <div class="flex items-start">
-            <!-- 번호를 텍스트로 표시 -->
-            <div class="text-blue-600 font-bold mr-2 text-lg">${index + 1}.</div>
+                 <div class="flex items-start">
+                     <!-- 번호를 텍스트로 표시 -->
+                     <div class="text-blue-600 font-bold mr-2 text-lg">${index + 1}.</div>
 
-            <div class="text-start break-words flex-1">
-                <div class="text-blue-600 text-xl font-medium mb-2 questionText">
-                    ${study.questionText}
-                </div>
-                <div class="text-gray-700 answerText">
-                    ${study.answerText}
-                </div>
-            </div>
-        </div>
+                     <div class="text-start break-words flex-1">
+                         <div class="text-blue-600 text-xl font-medium mb-2 questionText">
+                             ${study.questionText}
+                         </div>
+                         <div class="text-gray-700 answerText">
+                             ${study.answerText}
+                         </div>
+                     </div>
+                 </div>
 
-        <div id="hint-${index}" class="descriptionText text-sm text-gray-500 mt-2 ml-6 hidden">
-            ${study.description || "설명 없음"}
-        </div>
+                 <div id="hint-${index}" class="descriptionText text-sm text-gray-500 mt-2 ml-6 hidden">
+                     ${study.description || "설명 없음"}
+                 </div>
 
-        <div id="popover-${study.studyId}"
-             class="popover-menu absolute right-2 top-6 w-44 bg-white border border-gray-200 shadow-xl rounded-lg hidden z-30">
-            <ul class="text-sm text-gray-800">
-                <li class="flex items-center gap-2 px-4 py-2 cursor-pointer hover:bg-blue-50 hover:text-blue-600 transition"
-                    onclick="updateMode(event, ${study.studyId})">
-                    <i class="fa-solid fa-pen-to-square"></i> 수정
-                </li>
-                <li class="flex items-center gap-2 px-4 py-2 cursor-pointer hover:bg-red-50 text-red-500 hover:text-red-600 transition"
-                    onclick="deleteById(event, ${study.studyId})">
-                    <i class="fa-solid fa-trash-can"></i> 삭제
-                </li>
-            </ul>
-        </div>
+                 <div id="popover-${study.studyId}"
+                      class="popover-menu absolute right-2 top-6 w-44 bg-white border border-gray-200 shadow-xl rounded-lg hidden z-30">
+                     <ul class="text-sm text-gray-800">
+                         <li class="flex items-center gap-2 px-4 py-2 cursor-pointer hover:bg-blue-50 hover:text-blue-600 transition"
+                             onclick="updateMode(event, ${study.studyId})">
+                             <i class="fa-solid fa-pen-to-square"></i> 수정
+                         </li>
+                         <li class="flex items-center gap-2 px-4 py-2 cursor-pointer hover:bg-red-50 text-red-500 hover:text-red-600 transition"
+                             onclick="deleteById(event, ${study.studyId})">
+                             <i class="fa-solid fa-trash-can"></i> 삭제
+                         </li>
+                     </ul>
+                 </div>
 
-    </div>`;
-                });
+             </div>`;
+                         });
 
                 html += `</div>`;
             }
 
             // 우측 연습장은 항상 표시
             html += `
-<div class="hidden md:block flex-1">
-    <textarea class="w-full border border-gray-300 rounded p-4 text-sm resize-y"
-      style="height: calc(100vh - 250px);"
-      placeholder="자유롭게 작성하면서 공부해보세요! (해당 내용은 저장되지 않습니다.)"
-      onkeydown="handleTextAreaKeyDown()"
-      ></textarea>
-</div>
-`;
+                    <div class="hidden md:block flex-1">
+                        <textarea class="w-full border border-gray-300 rounded p-4 text-sm resize-y"
+                          style="height: calc(100vh - 250px);"
+                          placeholder="자유롭게 작성하면서 공부해보세요! (해당 내용은 저장되지 않습니다.)"
+                          onkeydown="handleTextAreaKeyDown()"
+                          ></textarea>
+                    </div>
+                 `;
 
             html += `</div>`; // end of flex row
 
@@ -533,6 +560,21 @@
             document.getElementById('plus-button').classList.remove('hidden'); // + 버튼 다시 보이기
         }
 
+        // 설명 영역 토글 함수
+        function toggleDescription(modalType) {
+            const descArea = document.getElementById(`descriptionArea-${modalType}`);
+            const icon = document.getElementById(`descriptionIcon-${modalType}`);
+
+            if (descArea.classList.contains('hidden')) {
+                // 보이기
+                descArea.classList.remove('hidden');
+                icon.classList.add('transform', 'rotate-90'); // 아이콘 회전
+            } else {
+                // 숨기기
+                descArea.classList.add('hidden');
+                icon.classList.remove('transform', 'rotate-90'); // 아이콘 회전 제거
+            }
+        }
 
 
     </script>
