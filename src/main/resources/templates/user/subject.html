@@ -134,7 +134,6 @@
         async function findAllByMemberId() {
             const url = `/api/courses/subjects`;
             subjects = await fetchGet(url);
-            subjects[0].createYn = false;
             changeLogoText('내 과목')
             drawList();
         }
