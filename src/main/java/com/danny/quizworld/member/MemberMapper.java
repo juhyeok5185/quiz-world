@@ -15,8 +15,8 @@ public interface MemberMapper {
     @Mapping(target = "deviceToken", constant = "null")
     @Mapping(target = "likeCount", constant = "0")
     @Mapping(target = "score", constant = "0")
-    @Mapping(target = "loginToken" , constant = "null")
-    @Mapping(target = "loginTokenExpiry" , constant = "null")
+    @Mapping(target = "loginToken" , ignore = true)
+    @Mapping(target = "loginTokenExpiry" , ignore = true)
     @Mapping(target = "subscribeYn", constant = "false")
     @Mapping(target = "businessYn", constant = "false")
     Member toEntity(String name, String authId , String nickname);
