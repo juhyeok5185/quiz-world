@@ -96,7 +96,9 @@
         let activePopoverId = null;
 
         window.onload = () => {
+            showLoading()
             findAllBySubjectId();
+            hideLoading()
             document.addEventListener("click", closePopoverOnOutsideClick);
         }
 

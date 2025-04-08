@@ -82,7 +82,13 @@
     </div>
 </div>
 
-
+<div id="loadingOverlay" class="fixed inset-0 bg-white bg-opacity-90 z-[9999] flex items-center justify-center hidden">
+    <div class="flex flex-col items-center">
+        <!-- 로딩 스피너 -->
+        <div class="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mb-4"></div>
+        <p class="text-blue-600 font-medium">로딩중...</p>
+    </div>
+</div>
 
 
 <!-- 콘텐츠 -->
@@ -103,6 +109,14 @@
         findMember()
         hideBackButton();
     });
+
+    function showLoading() {
+        document.getElementById('loadingOverlay').classList.remove('hidden');
+    }
+
+    function hideLoading() {
+        document.getElementById('loadingOverlay').classList.add('hidden');
+    }
 
 
     async function increaseAdCount(key) {

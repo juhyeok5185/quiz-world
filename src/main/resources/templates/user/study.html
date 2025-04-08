@@ -177,7 +177,9 @@
 
 
         window.onload = () => {
+            showLoading()
             findAllByChapterId();
+            hideLoading()
             document.addEventListener("click", closePopoverOnOutsideClick);
         };
 
@@ -255,57 +257,57 @@
             if (studys.length === 0) {
                 // 좌측 안내 문구
                 html += `
-<div class="flex flex-col gap-4 w-full md:w-1/2 flex-1 max-h-[calc(100vh-200px)] overflow-y-auto pr-1">
-    <div class="text-center text-gray-500 py-10">
-        등록된 과목이 없습니다.<br>과목을 추가해 주세요!
-    </div>
-</div>`;
+                    <div class="flex flex-col gap-4 w-full md:w-1/2 flex-1 max-h-[calc(100vh-200px)] overflow-y-auto pr-1">
+                        <div class="text-center text-gray-500 py-10">
+                            등록된 과목이 없습니다.<br>과목을 추가해 주세요!
+                        </div>
+                    </div>`;
             } else {
                 // 좌측 리스트
                 html += `<div class="flex flex-col gap-4 w-full md:w-1/2 flex-1 max-h-[calc(100vh-200px)] overflow-y-auto pr-1">`;
                 studys.forEach((study, index) => {
                     html += `
-             <div onclick="revealHidden(${index})"
-                  class="bg-white shadow-lg rounded-lg p-4 cursor-pointer flex flex-col relative">
+                           <div onclick="revealHidden(${index})"
+                                class="bg-white shadow-lg rounded-lg p-4 cursor-pointer flex flex-col relative">
 
-                 ${chapter.subject.createYn ? `
-                     <div class="absolute top-3 right-3 cursor-pointer text-gray-500 hover:text-gray-700 text-xl" onclick="openSettings(event, ${study.studyId})">
-                         <i class="fa-solid fa-gear"></i>
-                     </div>` : ``}
+                               ${chapter.subject.createYn ? `
+                                   <div class="absolute top-3 right-3 cursor-pointer text-gray-500 hover:text-gray-700 text-xl" onclick="openSettings(event, ${study.studyId})">
+                                       <i class="fa-solid fa-gear"></i>
+                                   </div>` : ``}
 
-                 <div class="flex items-start">
-                     <!-- 번호를 텍스트로 표시 -->
-                     <div class="text-blue-600 font-bold mr-2 text-lg">${index + 1}.</div>
+                               <div class="flex items-start">
+                                   <!-- 번호를 텍스트로 표시 -->
+                                   <div class="text-blue-600 font-bold mr-2 text-lg">${index + 1}.</div>
 
-                     <div class="text-start break-words flex-1">
-                         <div class="text-blue-600 text-xl font-medium mb-2 questionText">
-                             ${study.questionText}
-                         </div>
-                         <div class="text-gray-700 answerText">
-                             ${study.answerText}
-                         </div>
-                     </div>
-                 </div>
+                                   <div class="text-start break-words flex-1">
+                                       <div class="text-blue-600 text-xl font-medium mb-2 questionText">
+                                           ${study.questionText}
+                                       </div>
+                                       <div class="text-gray-700 answerText">
+                                           ${study.answerText}
+                                       </div>
+                                   </div>
+                               </div>
 
-                 <div id="hint-${index}" class="descriptionText text-sm text-gray-500 mt-2 ml-6 hidden">
-                     ${study.description || "설명 없음"}
-                 </div>
+                               <div id="hint-${index}" class="descriptionText text-sm text-gray-500 mt-2 ml-6 hidden">
+                                   ${study.description || "설명 없음"}
+                               </div>
 
-                 <div id="popover-${study.studyId}"
-                      class="popover-menu absolute right-2 top-6 w-44 bg-white border border-gray-200 shadow-xl rounded-lg hidden z-30">
-                     <ul class="text-sm text-gray-800">
-                         <li class="flex items-center gap-2 px-4 py-2 cursor-pointer hover:bg-blue-50 hover:text-blue-600 transition"
-                             onclick="updateMode(event, ${study.studyId})">
-                             <i class="fa-solid fa-pen-to-square"></i> 수정
-                         </li>
-                         <li class="flex items-center gap-2 px-4 py-2 cursor-pointer hover:bg-red-50 text-red-500 hover:text-red-600 transition"
-                             onclick="deleteById(event, ${study.studyId})">
-                             <i class="fa-solid fa-trash-can"></i> 삭제
-                         </li>
-                     </ul>
-                 </div>
+                               <div id="popover-${study.studyId}"
+                                    class="popover-menu absolute right-2 top-6 w-44 bg-white border border-gray-200 shadow-xl rounded-lg hidden z-30">
+                                   <ul class="text-sm text-gray-800">
+                                       <li class="flex items-center gap-2 px-4 py-2 cursor-pointer hover:bg-blue-50 hover:text-blue-600 transition"
+                                           onclick="updateMode(event, ${study.studyId})">
+                                           <i class="fa-solid fa-pen-to-square"></i> 수정
+                                       </li>
+                                       <li class="flex items-center gap-2 px-4 py-2 cursor-pointer hover:bg-red-50 text-red-500 hover:text-red-600 transition"
+                                           onclick="deleteById(event, ${study.studyId})">
+                                           <i class="fa-solid fa-trash-can"></i> 삭제
+                                       </li>
+                                   </ul>
+                               </div>
 
-             </div>`;
+                           </div>`;
                          });
 
                 html += `</div>`;

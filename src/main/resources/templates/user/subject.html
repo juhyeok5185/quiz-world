@@ -116,10 +116,11 @@
 
 
         window.onload = () => {
+            showLoading()
             findAllByMemberId();
             findAllCategory();
+            hideLoading()
             document.addEventListener("click", closePopoverOnOutsideClick);
-
         }
 
         async function save() {
