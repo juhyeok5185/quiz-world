@@ -210,24 +210,19 @@ async function fetchDelete(url) {
             headers: {'X-XSRF-TOKEN': getCsrfToken()},
         });
 
-        if (!response.ok) {
-            alert(await response.text());
-            throw new Error("API 오류");
-        }
+        const responseData = await response.json();
 
         if (!response.ok) {
-            const errorResponse = await response.json();
-            alert(errorResponse.message);
-            throw new Error(`Error: ${errorResponse.message}`);
+            // message만 alert으로 표시
+            alert(responseData.message);
+            throw new Error(`Error: ${responseData.message}`);
         }
 
-        const apiResponse = await response.json();
-        return apiResponse.data;
+        return responseData.data;
     } catch (error) {
         throw error;
     }
 }
-
 async function fetchPostByLogout(url){
     try {
         const response = await fetch(url, {

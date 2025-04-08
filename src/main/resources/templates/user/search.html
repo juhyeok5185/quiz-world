@@ -123,7 +123,7 @@
                            <p class="text-sm text-gray-600">작성자: ${subject.member.name}</p>
                            <span class="absolute right-6 bottom-6 bg-gradient-to-r from-blue-500 to-indigo-500 text-white px-3 py-1 rounded hover:opacity-90 transition"
                                  onclick="${subject.price === 0 ? `saveSubjectMember(${subject.subjectId})` : 'purchase()'}">
-                               ${subject.price === 0 ? '무료 수강하기' : subject.price + '원 결제'}
+                               ${subject.price === 0 ? '수강하기' : subject.price + '원 결제'}
                            </span>
                        </div>
                     `;
@@ -133,7 +133,7 @@
         }
 
         async function saveSubjectMember(subjectId) {
-            if (confirm("무료 수강하시겠습니까?")) {
+            if (confirm("수강하시겠습니까?")) {
                 const url = `/api/courses/subjects/subject-members/${subjectId}`;
                 await fetchPostByJson(url);
                 increaseAdCount('postCount');

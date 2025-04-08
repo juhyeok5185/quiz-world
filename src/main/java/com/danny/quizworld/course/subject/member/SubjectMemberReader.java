@@ -17,4 +17,8 @@ public class SubjectMemberReader {
     public List<SubjectMember> findByMemberId(Long memberId) {
         return subjectMemberRepository.findByMember_MemberId(memberId);
     }
+
+    public Long countBySubjectId(Long subjectId) {
+        return subjectMemberRepository.countBySubject_SubjectId(subjectId);
+    }
 }

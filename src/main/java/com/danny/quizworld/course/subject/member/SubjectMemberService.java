@@ -31,6 +31,16 @@ public class SubjectMemberService {
         return subjectMemberReader.findByMemberId(memberId);
     }
 
+    @Transactional(readOnly = true)
+    public Long countBySubjectId(Long subjectId) {
+        return subjectMemberReader.countBySubjectId(subjectId);
+    }
+
+    @Transactional
+    public void delete(SubjectMember subjectMember) {
+        subjectMemberStore.delete(subjectMember);
+    }
+
     public SubjectMember toEntity(Subject subject, Member member) {
         return subjectMemberMapper.toEntity(subject, member);
     }
@@ -38,5 +48,6 @@ public class SubjectMemberService {
     public void validateToSave(Member member , Subject subject , SubjectMember subjectMember){
         subjectMemberValidator.validateToSave(member , subject , subjectMember);
     }
+
 
 }

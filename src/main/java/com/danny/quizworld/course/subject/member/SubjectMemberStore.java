@@ -13,4 +13,8 @@ public class SubjectMemberStore {
     public void save(SubjectMember subjectMember) {
         subjectMemberRepository.save(subjectMember);
     }
+
+    public void delete(SubjectMember subjectMember) {
+        subjectMemberRepository.delete(subjectMember);
+    }
 }

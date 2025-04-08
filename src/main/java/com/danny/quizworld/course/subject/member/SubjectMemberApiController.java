@@ -28,4 +28,11 @@ public class SubjectMemberApiController {
         return ResponseEntity.status(201).body(new ApiResponse<>("생성 완료" , 201 ,null));
     }
 
+    @DeleteMapping("/{subjectId}")
+    public ResponseEntity<ApiResponse<SubjectResponse>> deleteSubjectMember(@PathVariable Long subjectId , Authentication authentication){
+        Long memberId = Utils.getMemberId(authentication);
+        courseFacade.deleteSubjectMemberBySubjectIdAndMemberId(subjectId , memberId);
+        return ResponseEntity.status(201).body(new ApiResponse<>("삭제 완료" , 201 ,null));
+    }
+
 }

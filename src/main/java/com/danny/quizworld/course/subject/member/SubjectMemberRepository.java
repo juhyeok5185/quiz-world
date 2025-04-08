@@ -11,4 +11,6 @@ public interface SubjectMemberRepository extends JpaRepository<SubjectMember, Lo
     SubjectMember findBySubject_SubjectIdAndMember_MemberId(Long subjectId, Long memberId);
 
     List<SubjectMember> findByMember_MemberId(Long memberId);
+
+    Long countBySubject_SubjectId(Long subjectId);
 }

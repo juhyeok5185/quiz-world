@@ -60,6 +60,10 @@ public class CourseFacade {
 
     @Transactional
     public void deleteSubjectById(Long subjectId) {
+        Long subjectMemberCount = subjectMemberService.countBySubjectId(subjectId);
+        if(subjectMemberCount != 0){
+            throw new MyException("유저가 사용중인 과목은 삭제할 수 없습니다.");
+        }
         List<Study> studyList = studyService.findAllBySubjectId(subjectId);
         studyService.deleteAll(studyList);
         List<Chapter> chapterList = chapterService.findAllBySubjectId(subjectId);
@@ -221,11 +225,18 @@ public class CourseFacade {
         subjectService.save(subject);
     }
 
+    @Transactional
+    public void deleteSubjectMemberBySubjectIdAndMemberId(Long subjectId, Long memberId) {
+        SubjectMember subjectMember = subjectMemberService.findBySubjectIdAndMemberId(subjectId, memberId);
+        subjectMemberService.delete(subjectMember);
+    }
+
     //Category 관련 API --------------------------------------------------------------------------------------------
     @Transactional(readOnly = true)
     public List<CategoryResponse> findAllCategory() {
         List<Category> categoryList = categoryService.findAllCategory();
         return categoryList.stream().map(categoryService::toResponse).collect(Collectors.toList());
-
     }
+
+
 }

@@ -134,6 +134,7 @@
         async function findAllByMemberId() {
             const url = `/api/courses/subjects`;
             subjects = await fetchGet(url);
+            subjects[0].createYn = false;
             changeLogoText('내 과목')
             drawList();
         }
@@ -142,64 +143,68 @@
             let html = ``;
             if (subjects.length === 0) {
                 html += `
-        <div class="text-center text-gray-500 py-10">등록된 과목이 없습니다.<br>과목을 추가해 주세요!</div>
-        `;
+<div class="text-center text-gray-500 py-10">등록된 과목이 없습니다.<br>과목을 추가해 주세요!</div>
+`;
             } else {
                 subjects.forEach((subject, index) => {
                     html += `
-            <div class="bg-white shadow-lg rounded-lg p-6 relative cursor-pointer hover:bg-gray-100 transition" onclick="location.href='/user/chapter?subjectId=${subject.subjectId}'">
+    <div class="bg-white shadow-lg rounded-lg p-6 relative cursor-pointer hover:bg-gray-100 transition" onclick="location.href='/user/chapter?subjectId=${subject.subjectId}'">
 
-                <!-- 설정 아이콘 or 수강중 텍스트 -->
-                ${subject.createYn ? `
-                    <div class="absolute top-3 right-3 cursor-pointer text-gray-500 hover:text-gray-700 text-xl" onclick="openSettings(event, ${subject.subjectId})">
-                        <i class="fa-solid fa-gear"></i>
-                    </div>
-                    <div id="popover-${subject.subjectId}"
-                         class="popover-menu absolute right-3 top-10 w-40 bg-white border border-gray-200 shadow-xl rounded-lg hidden z-30">
-                        <ul class="text-sm text-gray-800">
-                            <li class="flex items-center gap-2 px-4 py-2 cursor-pointer hover:bg-blue-50 hover:text-blue-600 transition"
-                                onclick="updateMode(event, ${subject.subjectId})">
-                                <i class="fa-solid fa-pen-to-square"></i> 수정
-                            </li>
-                            <li class="flex items-center gap-2 px-4 py-2 cursor-pointer hover:bg-red-50 text-red-500 hover:text-red-600 transition"
-                                onclick="deleteSubject(event, ${subject.subjectId})">
-                                <i class="fa-solid fa-trash-can"></i> 삭제
-                            </li>
-                        </ul>
-                    </div>
-                ` : `
-                    <div class="absolute top-3 right-3 text-yellow-500 text-l">수강중</div>
-                `}
+        <!-- 설정 아이콘 or 수강중 텍스트 -->
+        ${subject.createYn ? `
+            <div class="absolute top-3 right-3 cursor-pointer text-gray-500 hover:text-gray-700 text-xl" onclick="openSettings(event, ${subject.subjectId})">
+                <i class="fa-solid fa-gear"></i>
+            </div>
+            <div id="popover-${subject.subjectId}"
+                 class="popover-menu absolute right-3 top-10 w-40 bg-white border border-gray-200 shadow-xl rounded-lg hidden z-30">
+                <ul class="text-sm text-gray-800">
+                    <li class="flex items-center gap-2 px-4 py-2 cursor-pointer hover:bg-blue-50 hover:text-blue-600 transition"
+                        onclick="updateMode(event, ${subject.subjectId})">
+                        <i class="fa-solid fa-pen-to-square"></i> 수정
+                    </li>
+                    <li class="flex items-center gap-2 px-4 py-2 cursor-pointer hover:bg-red-50 text-red-500 hover:text-red-600 transition"
+                        onclick="deleteSubject(event, ${subject.subjectId})">
+                        <i class="fa-solid fa-trash-can"></i> 삭제
+                    </li>
+                </ul>
+            </div>
+        ` : `
+            <div class="absolute top-3 right-3 flex items-center">
+<!--                <span class="text-yellow-500 text-l mr-2">수강중</span>-->
+                <div class="cursor-pointer text-black-300 hover:text-black-700 text-xl" onclick="deleteSubjectMember(event, ${subject.subjectId})">
+                    <i class="fa-solid fa-xmark"></i>
+                </div>
+            </div>
+        `}
 
-                <!-- 자물쇠 + 제목 + 설명 -->
-                <div class="flex items-start gap-4">
-                    <!-- 자물쇠 아이콘 -->
-                    <div class="${subject.createYn ? (subject.publicYn ? 'text-blue-500' : 'text-gray-500') : 'invisible'} text-3xl mt-1">
-                       ${subject.createYn
+        <!-- 자물쇠 + 제목 + 설명 -->
+        <div class="flex items-start gap-4">
+            <!-- 자물쇠 아이콘 -->
+            <div class="${subject.createYn ? (subject.publicYn ? 'text-blue-500' : 'text-gray-500') : 'text-gray-400'} text-3xl mt-1">
+               ${subject.createYn
                         ? (subject.publicYn
                             ? `<i class="fa-solid fa-lock-open"></i>`
                             : `<i class="fa-solid fa-lock"></i>`)
-                        : `&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`}
-                    </div>
-
-                    <!-- 제목 + 설명 영역 -->
-                    <div class="flex-1">
-                        <div class="text-lg font-semibold text-gray-900">${subject.name}</div>
-                        <p class="text-sm text-gray-600 mt-1">소개: ${subject.description}</p>
-                        <p class="text-sm text-gray-600">총 문항: ${subject.studyCount} 문항</p>
-                        <p class="text-sm text-gray-600">추천 : ${subject.likeCount} 개</p>
-                        <p class="text-sm text-gray-600">금액: ${subject.price} 원</p>
-                        <p class="text-sm text-gray-600">카테고리: ${subject.category.name}</p>
-                        <p class="text-sm text-gray-600">다운로드 횟수: ${subject.downloadCount}</p>
-                    </div>
-                </div>
+                        : `<i class="fa-solid fa-graduation-cap"></i>`}
             </div>
-        `;
+
+            <!-- 제목 + 설명 영역 -->
+            <div class="flex-1">
+                <div class="text-lg font-semibold text-gray-900">${subject.name}</div>
+                <p class="text-sm text-gray-600 mt-1">소개: ${subject.description}</p>
+                <p class="text-sm text-gray-600">총 문항: ${subject.studyCount} 문항</p>
+                <p class="text-sm text-gray-600">추천 : ${subject.likeCount} 개</p>
+                <p class="text-sm text-gray-600">금액: ${subject.price} 원</p>
+                <p class="text-sm text-gray-600">카테고리: ${subject.category.name}</p>
+                <p class="text-sm text-gray-600">다운로드 횟수: ${subject.downloadCount}</p>
+            </div>
+        </div>
+    </div>
+`;
                 });
             }
             find('.listArea').innerHTML = html;
         }
-
         async function updateMode(event, subjectId) {
             event.stopPropagation(); // 부모 div 클릭 이벤트 차단
 
@@ -301,7 +306,13 @@
 
 
 
-
+        async function deleteSubjectMember(event, subjectId) {
+            event.stopPropagation();
+            if (confirm("수강 신청을 취소하시겠습니까?")) {
+                const url = `/api/courses/subjects/subject-members/${subjectId}`
+                location.reload();
+            }
+        }
 
     </script>
 </th:block>
