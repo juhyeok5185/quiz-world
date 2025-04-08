@@ -38,7 +38,9 @@ public class RememberMeAuthFilter extends OncePerRequestFilter {
                         String token = cookie.getValue();
                         Member member = memberService.findByLoginToken(token);
 
-                        if (member != null && member.getLoginTokenExpiry() != null && member.getLoginTokenExpiry().isAfter(LocalDateTime.now())) {
+                        if (member != null && member.getLoginTokenExpiry() != null
+                                && member.getLoginTokenExpiry().isAfter(LocalDateTime.now())) {
+
                             Map<String, Object> attributes = Map.of(
                                     "memberId", member.getMemberId(),
                                     "authId", member.getAuthId(),
@@ -54,10 +56,20 @@ public class RememberMeAuthFilter extends OncePerRequestFilter {
                             OAuth2AuthenticationToken auth = new OAuth2AuthenticationToken(
                                     oAuth2User,
                                     oAuth2User.getAuthorities(),
-                                    "naver" // 또는 사용 중인 provider ID
+                                    "naver"
                             );
 
                             SecurityContextHolder.getContext().setAuthentication(auth);
+
+                            // 🔥 자동 로그인 성공 시 리다이렉트
+                            if (request.getRequestURI().equals("/login")) {
+                                String redirectUrl = "ROLE_ADMIN".equals("ROLE_" + member.getRole())
+                                        ? "/admin/main"
+                                        : "/user/main";
+                                response.sendRedirect(redirectUrl);
+                                return; // 필터 체인 타지 않고 종료
+                            }
+
                             break;
                         }
                     }
@@ -67,4 +79,5 @@ public class RememberMeAuthFilter extends OncePerRequestFilter {
 
         filterChain.doFilter(request, response);
     }
+
 }
