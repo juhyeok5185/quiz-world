@@ -24,8 +24,6 @@ public interface MemberMapper {
     @Mapping(target = "name", source = "name", qualifiedByName = "decrypt")
     @Mapping(target = "authId", source = "authId", qualifiedByName = "decrypt")
     @Mapping(target = "nickname", source = "nickname", qualifiedByName = "decrypt")
-    @Mapping(target = "loginToken" , constant = "null")
-    @Mapping(target = "loginTokenExpiry" , constant = "null")
     MemberResponse toResponse(Member member);
 
     @Named("encrypt")
