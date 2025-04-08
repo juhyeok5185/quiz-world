@@ -16,7 +16,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -37,14 +40,12 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
         String authId = (String) response.get("id");
         String name = (String) response.get("name");
-        //구글일때
-//        String email = (String) attributes.get("email");
-//        String name = (String) attributes.get("name");
 
 
         HttpServletRequest request =
                 ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-        String deviceToken = (String) request.getSession().getAttribute("deviceToken");
+        HttpServletResponse responseServlet = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
+
 
         Member member = memberService.findByAuthId(AES256Utils.encrypt(authId));
         if(member == null){
@@ -60,10 +61,22 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             member = memberService.save(newMember);
         }
 
-        if(deviceToken != null){
-            member.updateDeviceToken(deviceToken);
+        if (member.getLoginToken() == null || member.getLoginTokenExpiry() == null || member.getLoginTokenExpiry().isBefore(LocalDateTime.now())) {
+            // 토큰이 없거나 만료되었으면 새로 발급
+            String loginToken = Utils.generateToken();
+            LocalDateTime loginTokenExpiry = LocalDateTime.now().plusDays(14);
+            member.updateLoginToken(loginToken, loginTokenExpiry);
             memberService.save(member);
+
+            Cookie cookie = new Cookie("remember-me-token", loginToken);
+            cookie.setMaxAge(60 * 60 * 24 * 14);
+            cookie.setHttpOnly(true);
+            cookie.setPath("/");
+            assert responseServlet != null;
+            responseServlet.addCookie(cookie);
         }
+
+
 
         Map<String, Object> customAttributes = new HashMap<>(attributes);
         customAttributes.put("memberId", member.getMemberId());
@@ -77,4 +90,8 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                 "authId"
         );
     }
+
+
+
+
 }

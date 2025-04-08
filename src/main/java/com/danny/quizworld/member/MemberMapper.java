@@ -15,6 +15,8 @@ public interface MemberMapper {
     @Mapping(target = "deviceToken", constant = "null")
     @Mapping(target = "likeCount", constant = "0")
     @Mapping(target = "score", constant = "0")
+    @Mapping(target = "loginToken" , constant = "null")
+    @Mapping(target = "loginTokenExpiry" , constant = "null")
     @Mapping(target = "subscribeYn", constant = "false")
     @Mapping(target = "businessYn", constant = "false")
     Member toEntity(String name, String authId , String nickname);
@@ -22,6 +24,8 @@ public interface MemberMapper {
     @Mapping(target = "name", source = "name", qualifiedByName = "decrypt")
     @Mapping(target = "authId", source = "authId", qualifiedByName = "decrypt")
     @Mapping(target = "nickname", source = "nickname", qualifiedByName = "decrypt")
+    @Mapping(target = "loginToken" , constant = "null")
+    @Mapping(target = "loginTokenExpiry" , constant = "null")
     MemberResponse toResponse(Member member);
 
     @Named("encrypt")

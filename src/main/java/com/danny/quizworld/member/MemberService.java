@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -54,6 +55,11 @@ public class MemberService {
     @Transactional
     public void delete(Member member) {
         memberStore.delete(member);
+    }
+
+    @Transactional
+    public Member findByLoginToken(String token) {
+        return memberReader.findByLoginToken(token);
     }
 
     public Member toEntity(String name , String authId , String nickname){

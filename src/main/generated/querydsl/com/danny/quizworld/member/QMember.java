@@ -29,6 +29,10 @@ public class QMember extends EntityPathBase<Member> {
 
     public final NumberPath<Integer> likeCount = createNumber("likeCount", Integer.class);
 
+    public final StringPath loginToken = createString("loginToken");
+
+    public final DateTimePath<java.time.LocalDateTime> loginTokenExpiry = createDateTime("loginTokenExpiry", java.time.LocalDateTime.class);
+
     public final NumberPath<Long> memberId = createNumber("memberId", Long.class);
 
     //inherited

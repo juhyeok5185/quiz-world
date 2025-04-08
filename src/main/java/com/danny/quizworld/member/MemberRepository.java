@@ -12,4 +12,5 @@ public interface MemberRepository extends JpaRepository<Member , Long> {
 
     Long countByNickname(String nickname);
 
+    Member findByLoginToken(String token);
 }

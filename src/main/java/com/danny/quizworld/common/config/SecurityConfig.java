@@ -16,6 +16,7 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.session.NullAuthenticatedSessionStrategy;
+import org.springframework.security.web.context.SecurityContextPersistenceFilter;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
 import javax.servlet.http.HttpServletRequest;
@@ -26,6 +27,13 @@ import java.io.IOException;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
+
+    private final RememberMeAuthFilter rememberMeAuthFilter; // 👈 생성자 주입용 필드
+
+    public SecurityConfig(RememberMeAuthFilter rememberMeAuthFilter) {
+        this.rememberMeAuthFilter = rememberMeAuthFilter;
+    }
+
 
     @Bean
     public SessionRegistry sessionRegistry() {
@@ -55,6 +63,7 @@ public class SecurityConfig {
             ClientRegistrationRepository clientRegistrationRepository
     ) throws Exception {
         http
+                .addFilterBefore(rememberMeAuthFilter, SecurityContextPersistenceFilter.class) // 👈 필터 등록
                 .csrf(csrf -> csrf
                         .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
                         .sessionAuthenticationStrategy(new NullAuthenticatedSessionStrategy())

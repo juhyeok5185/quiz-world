@@ -4,6 +4,7 @@ import com.danny.quizworld.common.entity.BaseTimeEntity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -37,6 +38,12 @@ public class Member extends BaseTimeEntity {
     @Column(name = "score")
     private Integer score;
 
+    @Column(name = "login_token")
+    private String loginToken;
+
+    @Column(name = "login_token_expiry")
+    private LocalDateTime loginTokenExpiry;
+
     @Column(name = "subscribe_yn")
     private Boolean subscribeYn;
 
@@ -44,7 +51,7 @@ public class Member extends BaseTimeEntity {
     private Boolean businessYn;
 
     @Builder
-    public Member(MemberRole role,  String name, String authId,String nickname, String deviceToken, Integer likeCount, Integer score, Boolean subscribeYn, Boolean businessYn) {
+    public Member(MemberRole role,  String name, String authId,String nickname, String deviceToken, Integer likeCount, Integer score,String loginToken , LocalDateTime loginTokenExpiry, Boolean subscribeYn, Boolean businessYn) {
         this.role = role;
         this.name = name;
         this.authId = authId;
@@ -52,12 +59,10 @@ public class Member extends BaseTimeEntity {
         this.deviceToken = deviceToken;
         this.likeCount = likeCount;
         this.score = score;
+        this.loginToken = loginToken;
+        this.loginTokenExpiry = loginTokenExpiry;
         this.subscribeYn = subscribeYn;
         this.businessYn = businessYn;
-    }
-
-    public void updateDeviceToken(String deviceToken) {
-        this.deviceToken = deviceToken;
     }
 
     public void addScore() {
@@ -70,5 +75,10 @@ public class Member extends BaseTimeEntity {
 
     public void updateNickname(String nickname) {
         this.nickname = nickname;
+    }
+
+    public void updateLoginToken(String loginToken, LocalDateTime loginTokenExpiry) {
+        this.loginToken = loginToken;
+        this.loginTokenExpiry = loginTokenExpiry;
     }
 }

@@ -32,4 +32,8 @@ public class MemberReader {
     public Long countByNickname(String nickname) {
         return memberRepository.countByNickname(nickname);
     }
+
+    public Member findByLoginToken(String token) {
+        return memberRepository.findByLoginToken(token);
+    }
 }

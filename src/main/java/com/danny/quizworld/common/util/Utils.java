@@ -5,6 +5,7 @@ import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
+import java.util.UUID;
 
 public class Utils {
 
@@ -64,4 +65,7 @@ public class Utils {
         return LocalDate.now().minusMonths(1).getYear();
     }
 
+    public static String generateToken() {
+        return UUID.randomUUID().toString().replace("-", "");
+    }
 }
