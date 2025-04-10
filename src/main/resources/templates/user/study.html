@@ -174,12 +174,14 @@
         let currentToggleMode = 'all'; // ✅ 현재 토글 상태 저장
         let activePopoverId = null;
 
-        function getPageData() {
+
+
+        window.onload = () => {
             showLoading()
             findAllByChapterId();
             hideLoading()
             document.addEventListener("click", closePopoverOnOutsideClick);
-        }
+        };
 
         async function saveQuestion() {
             const chapterId = getParamValue('chapterId');

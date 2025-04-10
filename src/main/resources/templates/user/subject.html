@@ -114,13 +114,39 @@
         let subjects = [];
         let activePopoverId = null; // 현재 열린 Popover ID 저장
 
-        function getPageData(){
-            showLoading()
-            findAllByMemberId();
-            findAllCategory();
-            document.addEventListener("click", closePopoverOnOutsideClick);
-            hideLoading()
-        }
+
+        window.onload = () => {
+            try {
+                showLoading();
+            } catch (e) {
+                alert("showLoading() 오류: " + e.message);
+            }
+
+            try {
+                findAllByMemberId();
+            } catch (e) {
+                alert("findAllByMemberId() 오류: " + e.message);
+            }
+
+            try {
+                findAllCategory();
+            } catch (e) {
+                alert("findAllCategory() 오류: " + e.message);
+            }
+
+            try {
+                hideLoading();
+            } catch (e) {
+                alert("hideLoading() 오류: " + e.message);
+            }
+
+            try {
+                document.addEventListener("click", closePopoverOnOutsideClick);
+            } catch (e) {
+                alert("addEventListener 오류: " + e.message);
+            }
+        };
+
 
         async function save() {
             const url = `/api/courses/subjects`;

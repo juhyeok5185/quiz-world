@@ -95,8 +95,7 @@
         let subject = null;
         let activePopoverId = null;
 
-
-        function getPageData() {
+        window.onload = () => {
             showLoading()
             findAllBySubjectId();
             hideLoading()

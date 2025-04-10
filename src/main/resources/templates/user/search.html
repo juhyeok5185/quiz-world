@@ -58,10 +58,8 @@
     <script th:inline="javascript">
         let subjects = [];
 
-        function getPageData() {
-            showLoading()
+        window.onload = () => {
             findAllBySearch();
-            hideLoading()
         }
 
         document.querySelectorAll('.keyword').forEach(keyword => {
