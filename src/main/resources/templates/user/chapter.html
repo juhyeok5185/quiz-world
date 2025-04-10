@@ -95,12 +95,12 @@
         let subject = null;
         let activePopoverId = null;
 
-        window.onload = () => {
+        document.addEventListener("DOMContentLoaded", function () {
             showLoading()
             findAllBySubjectId();
             hideLoading()
             document.addEventListener("click", closePopoverOnOutsideClick);
-        }
+        })
 
         async function save() {
             const subjectId = getParamValue('subjectId');

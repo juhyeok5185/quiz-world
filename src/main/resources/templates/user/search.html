@@ -58,9 +58,9 @@
     <script th:inline="javascript">
         let subjects = [];
 
-        window.onload = () => {
+        document.addEventListener("DOMContentLoaded", function () {
             findAllBySearch();
-        }
+        })
 
         document.querySelectorAll('.keyword').forEach(keyword => {
             keyword.addEventListener('click', function () {
