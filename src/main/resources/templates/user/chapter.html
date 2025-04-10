@@ -95,12 +95,9 @@
         let subject = null;
         let activePopoverId = null;
 
-        document.addEventListener('DOMContentLoaded', function() {
-            showLoading()
-            setTimeout(getPageData, 500); // 약간의 지연을 두고 앱 초기화
-        });
 
         function getPageData() {
+            showLoading()
             findAllBySubjectId();
             hideLoading()
             document.addEventListener("click", closePopoverOnOutsideClick);

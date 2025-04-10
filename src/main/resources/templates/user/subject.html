@@ -114,12 +114,8 @@
         let subjects = [];
         let activePopoverId = null; // 현재 열린 Popover ID 저장
 
-        document.addEventListener('DOMContentLoaded', function() {
-            showLoading()
-            setTimeout(getPageData, 500);
-        });
-
         function getPageData(){
+            showLoading()
             findAllByMemberId();
             findAllCategory();
             document.addEventListener("click", closePopoverOnOutsideClick);

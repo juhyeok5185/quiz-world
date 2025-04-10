@@ -174,12 +174,8 @@
         let currentToggleMode = 'all'; // ✅ 현재 토글 상태 저장
         let activePopoverId = null;
 
-        document.addEventListener('DOMContentLoaded', function() {
-            showLoading()
-            setTimeout(getPageData, 500); // 약간의 지연을 두고 앱 초기화
-        })
-
         function getPageData() {
+            showLoading()
             findAllByChapterId();
             hideLoading()
             document.addEventListener("click", closePopoverOnOutsideClick);
