@@ -116,19 +116,12 @@
 
 
         window.onload = async () => {
-            try {
-                showLoading();
-                await Promise.all([
-                    findAllByMemberId(),
-                    findAllCategory()
-                ]);
-            } catch (e) {
-                alert("데이터 로딩 실패:", e);
-            } finally {
-                hideLoading();
-            }
-        };
-
+            showLoading()
+            await findAllByMemberId();
+            await findAllCategory();
+            hideLoading()
+            document.addEventListener("click", closePopoverOnOutsideClick);
+        }
 
         async function save() {
             const url = `/api/courses/subjects`;
