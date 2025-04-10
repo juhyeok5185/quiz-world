@@ -70,10 +70,7 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests(auth -> auth
                         .antMatchers(
-                                "/", "/login", "/privacy", "/static/**",
-                                "/api/members/sessions", "/design/**",
-                                "/googlea79ec91b64639ffe.html"
-                        ).permitAll()
+                                "/", "/login", "/privacy", "/static/**", "/api/members/sessions", "/design/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 // ✅ 동시 세션 허용 설정 추가 (아래 4줄)
