@@ -115,28 +115,13 @@
         let activePopoverId = null; // 현재 열린 Popover ID 저장
 
 
-        window.onload = () => {
-            showLoading();
-
-            findAllByMemberId()
-                .then(() => {
-                    // 타임아웃으로 이벤트 루프 한번 돌림
-                    return new Promise(resolve => setTimeout(() => {
-                        findAllCategory().then(resolve);
-                    }, 10));
-                })
-                .then(() => {
-                    // 확실하게 UI 업데이트를 위한 시간 확보
-                    setTimeout(() => {
-                        hideLoading();
-                        document.addEventListener("click", closePopoverOnOutsideClick);
-                    }, 50);
-                })
-                .catch(error => {
-                    console.error("데이터 로드 오류:", error);
-                    hideLoading();
-                });
-        };
+        window.onload = async () => {
+            showLoading()
+            await findAllByMemberId();
+            // await findAllCategory();
+            hideLoading()
+            document.addEventListener("click", closePopoverOnOutsideClick);
+        }
 
         async function save() {
             const url = `/api/courses/subjects`;
