@@ -176,12 +176,12 @@
 
 
 
-        document.addEventListener("DOMContentLoaded", function () {
+        window.onload = () => {
             showLoading()
             findAllByChapterId();
             hideLoading()
             document.addEventListener("click", closePopoverOnOutsideClick);
-        });
+        };
 
         async function saveQuestion() {
             const chapterId = getParamValue('chapterId');

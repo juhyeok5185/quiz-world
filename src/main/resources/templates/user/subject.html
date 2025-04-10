@@ -6,6 +6,7 @@
 
 <div layout:fragment="content" class="p-4 space-y-6 w-full md:max-w-screen-md md:mx-auto">
 
+    <div id="mes"></div>
     <!-- 리스트 출력 영역 -->
     <div class="listArea grid grid-cols-1 gap-4 mt-4"></div>
 
@@ -115,13 +116,20 @@
         let activePopoverId = null; // 현재 열린 Popover ID 저장
 
 
-        document.addEventListener("DOMContentLoaded", function () {
+        window.onload = () => {
             showLoading()
             findAllByMemberId();
             findAllCategory();
             hideLoading()
             document.addEventListener("click", closePopoverOnOutsideClick);
-        })
+        }
+
+        function start(){
+            find("#mes").textContent = "start";
+        }
+        function stop(){
+            find("#mes").textContent = "end";
+        }
 
         async function save() {
             const url = `/api/courses/subjects`;
