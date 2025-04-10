@@ -115,13 +115,10 @@
         let activePopoverId = null; // 현재 열린 Popover ID 저장
 
 
-        window.onload = () => {
+        window.onload = async () => {
             showLoading()
-            findAllByMemberId();
-            findAllCategory();
-            if(subjects.length === 0){
-                alert("준비중입니다.")
-            }
+            await findAllByMemberId();
+            await findAllCategory();
             hideLoading()
             document.addEventListener("click", closePopoverOnOutsideClick);
         }
