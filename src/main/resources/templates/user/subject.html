@@ -114,13 +114,27 @@
         let subjects = [];
         let activePopoverId = null; // 현재 열린 Popover ID 저장
 
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(initApp, 500); // 약간의 지연을 두고 앱 초기화
+        });
 
-        window.onload = () => {
-            showLoading()
-            findAllByMemberId();
-            findAllCategory();
-            hideLoading()
-            document.addEventListener("click", closePopoverOnOutsideClick);
+        async function initApp() {
+            try {
+                showLoading();
+                await findAllByMemberId();
+                await findAllCategory();
+                hideLoading();
+                document.addEventListener("click", closePopoverOnOutsideClick);
+
+                if (subjects.length === 0) {
+                    console.log("데이터가 로드되지 않음, 다시 시도합니다.");
+                    await findAllByMemberId();
+                    drawList(); // UI 강제 업데이트
+                }
+            } catch (error) {
+                console.error("앱 초기화 중 오류:", error);
+                hideLoading();
+            }
         }
 
         async function save() {
@@ -134,7 +148,6 @@
         async function findAllByMemberId() {
             const url = `/api/courses/subjects`;
             subjects = await fetchGet(url);
-            alert(subjects)
             changeLogoText('내 과목')
             drawList();
         }
@@ -293,7 +306,6 @@
         async function findAllCategory() {
             const url = `/api/courses/subjects/categories`;
             const categories = await fetchGet(url);
-            alert(categories)
             let html = `<option disabled selected>카테고리를 선택해주세요</option>`;
             categories.forEach(category => {
                 html += `<option value="${category.categoryId}">${category.name}</option>`;
