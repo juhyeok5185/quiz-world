@@ -116,37 +116,12 @@
 
 
         window.onload = () => {
-            try {
-                showLoading();
-            } catch (e) {
-                alert("showLoading() 오류: " + e.message);
-            }
-
-            try {
-                findAllByMemberId();
-            } catch (e) {
-                alert("findAllByMemberId() 오류: " + e.message);
-            }
-
-            try {
-                findAllCategory();
-            } catch (e) {
-                alert("findAllCategory() 오류: " + e.message);
-            }
-
-            try {
-                hideLoading();
-            } catch (e) {
-                alert("hideLoading() 오류: " + e.message);
-            }
-
-            try {
-                document.addEventListener("click", closePopoverOnOutsideClick);
-            } catch (e) {
-                alert("addEventListener 오류: " + e.message);
-            }
-        };
-
+            showLoading()
+            findAllByMemberId();
+            findAllCategory();
+            hideLoading()
+            document.addEventListener("click", closePopoverOnOutsideClick);
+        }
 
         async function save() {
             const url = `/api/courses/subjects`;
@@ -159,6 +134,7 @@
         async function findAllByMemberId() {
             const url = `/api/courses/subjects`;
             subjects = await fetchGet(url);
+            alert(subjects)
             changeLogoText('내 과목')
             drawList();
         }
@@ -317,7 +293,7 @@
         async function findAllCategory() {
             const url = `/api/courses/subjects/categories`;
             const categories = await fetchGet(url);
-
+            alert(categories)
             let html = `<option disabled selected>카테고리를 선택해주세요</option>`;
             categories.forEach(category => {
                 html += `<option value="${category.categoryId}">${category.name}</option>`;
