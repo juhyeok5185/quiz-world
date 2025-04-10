@@ -114,19 +114,10 @@
         let subjects = [];
         let activePopoverId = null; // 현재 열린 Popover ID 저장
 
-
         document.addEventListener('DOMContentLoaded', function() {
             showLoading()
-            setTimeout(getPageData, 500); // 약간의 지연을 두고 앱 초기화
+            setTimeout(getPageData, 100); // 약간의 지연을 두고 앱 초기화
         });
-
-        // window.onload = () => {
-        //     showLoading()
-        //     findAllByMemberId();
-        //     findAllCategory();
-        //     hideLoading()
-        //     document.addEventListener("click", closePopoverOnOutsideClick);
-        // }
 
         function getPageData(){
             findAllByMemberId();

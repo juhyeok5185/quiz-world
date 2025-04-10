@@ -58,8 +58,14 @@
     <script th:inline="javascript">
         let subjects = [];
 
-        window.onload = () => {
+        document.addEventListener('DOMContentLoaded', function() {
+            showLoading()
+            setTimeout(getPageData, 100); // 약간의 지연을 두고 앱 초기화
+        });
+
+        function getPageData() {
             findAllBySearch();
+            hideLoading()
         }
 
         document.querySelectorAll('.keyword').forEach(keyword => {
