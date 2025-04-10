@@ -117,13 +117,9 @@
 
         window.onload = () => {
             showLoading()
-            document.addEventListener('DOMContentLoaded', function() {
-                setTimeout(findAllByMemberId, 500); // 약간의 지연을 두고 앱 초기화
-            });
-            document.addEventListener('DOMContentLoaded', function() {
-                setTimeout(findAllCategory, 500); // 약간의 지연을 두고 앱 초기화
-                hideLoading()
-            });
+            findAllByMemberId();
+            findAllCategory();
+            hideLoading()
             document.addEventListener("click", closePopoverOnOutsideClick);
         }
 
