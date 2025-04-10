@@ -116,12 +116,25 @@
 
 
         window.onload = async () => {
-            showLoading()
-            await findAllByMemberId();
-            await findAllCategory();
-            hideLoading()
-            document.addEventListener("click", closePopoverOnOutsideClick);
-        }
+            showLoading();
+            try {
+                alert("🔥 과목 로딩 시작");
+                await findAllByMemberId();
+                alert("✅ 과목 로딩 완료");
+
+                await findAllCategory();
+                alert("✅ 카테고리 로딩 완료");
+
+            } catch (e) {
+                alert("❌ 로딩 실패", e.message || e);
+                find('.listArea').innerHTML = `<div class="text-center text-red-500 py-10">데이터를 불러오는 데 실패했습니다.</div>`;
+            } finally {
+                hideLoading();
+                alert("✅ 로딩 종료");
+            }
+        };
+
+
 
         async function save() {
             const url = `/api/courses/subjects`;
