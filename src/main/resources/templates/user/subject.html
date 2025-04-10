@@ -116,14 +116,10 @@
 
 
         window.onload = async () => {
-            showLoading()
-            alert("start")
+            await showLoading()
             await findAllByMemberId();
-            alert("end")
-            alert("start")
             await findAllCategory();
-            alert("end")
-            hideLoading()
+            await hideLoading()
             document.addEventListener("click", closePopoverOnOutsideClick);
         }
 
