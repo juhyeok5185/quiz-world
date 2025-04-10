@@ -117,8 +117,12 @@
 
         window.onload = async () => {
             showLoading()
+            console.log("start")
             await findAllByMemberId();
+            console.log("end")
+            console.log("start")
             await findAllCategory();
+            console.log("end")
             hideLoading()
             document.addEventListener("click", closePopoverOnOutsideClick);
         }
