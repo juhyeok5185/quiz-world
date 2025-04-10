@@ -115,13 +115,21 @@
         let activePopoverId = null; // 현재 열린 Popover ID 저장
 
 
-        window.onload = () => {
-            showLoading()
+        document.addEventListener('DOMContentLoaded', () => {
+            showLoading();
             findAllByMemberId();
             findAllCategory();
-            hideLoading()
+            hideLoading();
             document.addEventListener("click", closePopoverOnOutsideClick);
-        }
+        });
+
+        // window.onload = () => {
+        //     showLoading()
+        //     findAllByMemberId();
+        //     findAllCategory();
+        //     hideLoading()
+        //     document.addEventListener("click", closePopoverOnOutsideClick);
+        // }
 
         async function save() {
             const url = `/api/courses/subjects`;
