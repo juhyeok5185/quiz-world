@@ -81,4 +81,8 @@ public class Member extends BaseTimeEntity {
         this.loginToken = loginToken;
         this.loginTokenExpiry = loginTokenExpiry;
     }
+
+    public void updateDeviceToken(String deviceToken) {
+        this.deviceToken = deviceToken;
+    }
 }

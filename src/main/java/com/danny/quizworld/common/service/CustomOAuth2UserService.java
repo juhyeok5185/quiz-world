@@ -34,32 +34,20 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
         OAuth2User oAuth2User = super.loadUser(userRequest);
         Map<String, Object> attributes = oAuth2User.getAttributes();
-
         @SuppressWarnings("unchecked")
         Map<String, Object> response = (Map<String, Object>) attributes.get("response");
-
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        HttpServletResponse responseServlet = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
         String authId = (String) response.get("id");
         String name = (String) response.get("name");
+        String deviceToken = request.getHeader("X-Device-Token");
 
 
-        HttpServletRequest request =
-                ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-        HttpServletResponse responseServlet = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
-
-
-        Member member = memberService.findByAuthId(AES256Utils.encrypt(authId));
-        if(member == null){
-            String nickname;
-            Long memberCount;
-
-            do {
-                nickname = Utils.generateUniqueNickname(name);
-                memberCount = memberService.countByNickname(nickname);
-            } while (memberCount > 0); // 닉네임 중복 시 반복
-
-            Member newMember = memberService.toEntity(name, authId, nickname);
-            member = memberService.save(newMember);
+        Member member = getMember(authId, name);
+        if(deviceToken != null){
+            member.updateDeviceToken(deviceToken);
         }
+
 
         if (member.getLoginToken() == null || member.getLoginTokenExpiry() == null || member.getLoginTokenExpiry().isBefore(LocalDateTime.now())) {
             // 토큰이 없거나 만료되었으면 새로 발급
@@ -77,7 +65,6 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         }
 
 
-
         Map<String, Object> customAttributes = new HashMap<>(attributes);
         customAttributes.put("memberId", member.getMemberId());
         customAttributes.put("role", member.getRole().toString());
@@ -91,7 +78,22 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         );
     }
 
+    private Member getMember(String authId, String name) {
+        Member member = memberService.findByAuthId(AES256Utils.encrypt(authId));
+        if (member == null) {
+            String nickname;
+            Long memberCount;
 
+            do {
+                nickname = Utils.generateUniqueNickname(name);
+                memberCount = memberService.countByNickname(nickname);
+            } while (memberCount > 0); // 닉네임 중복 시 반복
+
+            Member newMember = memberService.toEntity(name, authId, nickname);
+            member = memberService.save(newMember);
+        }
+        return member;
+    }
 
 
 }
