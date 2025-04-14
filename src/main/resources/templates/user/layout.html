@@ -177,6 +177,7 @@
     }
 
     function viewAd(){
+        console.log(typeof AdChannel); // object (정상) or undefined (실패)
         const isSubscribed = localStorage.getItem("subscribeYn") === 'true';
         if (!isSubscribed) {
             AdChannel.postMessage("showInterstitial");
