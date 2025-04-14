@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="google-site-verification" content="hbkPs2FpOI3Xe9wizZUe3EOqRXMV-Zg19qzt-urgzK0" />
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6411993651260827" crossorigin="anonymous"></script>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-70NMPCWFRH"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
@@ -177,12 +178,20 @@
     }
 
     function viewAd(){
-        console.log(typeof AdChannel); // object (정상) or undefined (실패)
         const isSubscribed = localStorage.getItem("subscribeYn") === 'true';
-        if (!isSubscribed) {
+
+        // 앱(WebView)일 때만 광고 요청
+        if (!isSubscribed && isAppWebView()) {
             AdChannel.postMessage("showInterstitial");
+        } else {
+            console.log("광고 차단됨 (구독자이거나 일반 웹)");
         }
     }
+
+    function isAppWebView() {
+        return !!(window.flutter_inappwebview || window.AdChannel); // 둘 중 하나라도 있으면 앱
+    }
+
 
     async function findMember(){
         const url = `/api/members`;
