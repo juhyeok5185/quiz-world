@@ -142,35 +142,35 @@
                 if (value >= 15) {
                     localStorage.setItem(key, '0');
                     await fetchPatchByJson("/api/members");
-                    // viewAd();
+                    viewAd();
                 }
                 break;
             case 'getCount':
                 if (value >= 8) {
                     localStorage.setItem(key, '0');
                     await fetchPatchByJson("/api/members");
-                    // viewAd();
+                    viewAd();
                 }
                 break;
             case 'updateCount':
                 if (value >= 30) {
                     localStorage.setItem(key, '0');
                     await fetchPatchByJson("/api/members");
-                    // viewAd();
+                    viewAd();
                 }
                 break;
             case 'useModeCount':
                 if (value >= 50) {
                     localStorage.setItem(key, '0');
                     await fetchPatchByJson("/api/members");
-                    // viewAd();
+                    viewAd();
                 }
                 break;
             case 'useTextArea':
                 if (value >= 100) {
                     localStorage.setItem(key, '0');
                     await fetchPatchByJson("/api/members");
-                    // viewAd();
+                    viewAd();
                 }
                 break;
         }
@@ -178,8 +178,8 @@
 
     function viewAd(){
         const isSubscribed = localStorage.getItem("subscribeYn") === 'true';
-        if(!isSubscribed) {
-            alert('광고');
+        if (!isSubscribed) {
+            AdChannel.postMessage("showInterstitial");
         }
     }
 
