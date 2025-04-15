@@ -28,7 +28,7 @@ import java.io.IOException;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
-    private final RememberMeAuthFilter rememberMeAuthFilter; // 👈 생성자 주입용 필드
+    private final RememberMeAuthFilter rememberMeAuthFilter;
 
     public SecurityConfig(RememberMeAuthFilter rememberMeAuthFilter) {
         this.rememberMeAuthFilter = rememberMeAuthFilter;
