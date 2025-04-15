@@ -28,11 +28,11 @@ import java.io.IOException;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
-    private final RememberMeAuthFilter rememberMeAuthFilter;
-
-    public SecurityConfig(RememberMeAuthFilter rememberMeAuthFilter) {
-        this.rememberMeAuthFilter = rememberMeAuthFilter;
-    }
+//    private final RememberMeAuthFilter rememberMeAuthFilter;
+//
+//    public SecurityConfig(RememberMeAuthFilter rememberMeAuthFilter) {
+//        this.rememberMeAuthFilter = rememberMeAuthFilter;
+//    }
 
 
     @Bean
@@ -63,7 +63,7 @@ public class SecurityConfig {
             ClientRegistrationRepository clientRegistrationRepository
     ) throws Exception {
         http
-                .addFilterBefore(rememberMeAuthFilter, SecurityContextPersistenceFilter.class) // 👈 필터 등록
+//                .addFilterBefore(rememberMeAuthFilter, SecurityContextPersistenceFilter.class) // 👈 필터 등록
                 .csrf(csrf -> csrf
                         .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
                         .sessionAuthenticationStrategy(new NullAuthenticatedSessionStrategy())

@@ -21,7 +21,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MemberFacade {
     private final MemberService memberService;
-    private final SubjectRepository subjectRepository;
     private final SubjectService subjectService;
     private final ChapterService chapterService;
     private final StudyService studyService;
