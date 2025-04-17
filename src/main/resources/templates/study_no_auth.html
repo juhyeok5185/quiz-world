@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="user/layout">
+
+<div layout:fragment="content" class="flex flex-col">
+    <!-- 스마트한 학습의 시작 섹션 -->
+    <section class="min-h-screen flex flex-col justify-center items-center p-4 xs:p-6 bg-gradient-to-b from-blue-50 to-white">
+        <div class="text-center max-w-2xl">
+            <h1 class="text-2xl xs:text-3xl sm:text-4xl font-bold text-blue-600 mb-4 xs:mb-6">스마트한 학습의 시작</h1>
+            <p class="text-base xs:text-lg sm:text-xl text-gray-700 mb-6 xs:mb-8">ThinkDock과 함께 더 효율적인 학습을 시작해보세요</p>
+            <a href="#features" class="inline-block bg-gradient-to-r from-blue-500 to-indigo-500 text-white px-6 xs:px-8 py-2 xs:py-3 rounded-lg text-base xs:text-lg hover:opacity-90 transition">
+                시작하기
+            </a>
+        </div>
+    </section>
+
+    <!-- 문제 섞기 기능 섹션 -->
+    <section id="features" class="min-h-screen flex flex-col justify-center items-center p-4 xs:p-6 bg-white">
+        <div class="text-center max-w-2xl">
+            <h2 class="text-xl xs:text-2xl sm:text-3xl font-bold text-blue-600 mb-4 xs:mb-6">문제 섞기 기능</h2>
+            <div class="bg-gray-100 p-4 xs:p-6 rounded-lg mb-4 xs:mb-6">
+                <div class="text-lg xs:text-xl mb-3 xs:mb-4">문제를 무작위로 섞어서 학습하세요</div>
+                <button onclick="shuffleEffect()" class="bg-gradient-to-r from-blue-500 to-indigo-500 text-white px-4 xs:px-6 py-2 rounded-lg text-base xs:text-lg">
+                    <i class="fa-solid fa-arrows-rotate mr-2"></i>문제 섞기
+                </button>
+            </div>
+            <a href="#toggle" class="inline-block text-blue-600 hover:text-blue-800 text-sm xs:text-base">
+                다음 기능 보기 <i class="fa-solid fa-arrow-down ml-2"></i>
+            </a>
+        </div>
+    </section>
+
+    <!-- 문제/답 가리기 기능 섹션 -->
+    <section id="toggle" class="min-h-screen flex flex-col justify-center items-center p-4 xs:p-6 bg-gray-50">
+        <div class="text-center max-w-2xl">
+            <h2 class="text-xl xs:text-2xl sm:text-3xl font-bold text-blue-600 mb-4 xs:mb-6">문제/답 가리기 기능</h2>
+            <div class="bg-white p-4 xs:p-6 rounded-lg shadow-lg mb-4 xs:mb-6">
+                <div class="flex flex-wrap justify-center gap-2 xs:gap-4 mb-4 xs:mb-6">
+                    <button onclick="setToggle('all')" class="px-3 xs:px-4 py-2 rounded-md bg-gradient-to-r from-blue-500 to-indigo-500 text-white text-sm xs:text-base">
+                        전체
+                    </button>
+                    <button onclick="setToggle('question')" class="px-3 xs:px-4 py-2 rounded-md bg-gray-200 text-gray-800 text-sm xs:text-base">
+                        문제
+                    </button>
+                    <button onclick="setToggle('answer')" class="px-3 xs:px-4 py-2 rounded-md bg-gray-200 text-gray-800 text-sm xs:text-base">
+                        답
+                    </button>
+                </div>
+                <p class="text-sm xs:text-base text-gray-700">문제나 답을 선택적으로 가려서 학습 효과를 높이세요</p>
+            </div>
+            <a href="#special-modes" class="inline-block text-blue-600 hover:text-blue-800 text-sm xs:text-base">
+                다음 기능 보기 <i class="fa-solid fa-arrow-down ml-2"></i>
+            </a>
+        </div>
+    </section>
+
+    <!-- 씽크독 스마트 기능 섹션 -->
+    <section id="special-modes" class="min-h-screen flex flex-col justify-center items-center p-4 xs:p-6 bg-white">
+        <div class="text-center max-w-2xl">
+            <h2 class="text-xl xs:text-2xl sm:text-3xl font-bold text-blue-600 mb-4 xs:mb-6">씽크독 스마트 기능</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 xs:gap-4 mb-4 xs:mb-6">
+                <div class="bg-gray-100 p-4 xs:p-6 rounded-lg">
+                    <h3 class="text-lg xs:text-xl font-semibold mb-2 xs:mb-3">집중모드</h3>
+                    <p class="text-sm xs:text-base text-gray-700 mb-3 xs:mb-4">한 문제에 집중하여 학습</p>
+                    <button onclick="startFocusMode()" class="bg-gradient-to-r from-blue-500 to-indigo-500 text-white px-3 xs:px-4 py-2 rounded-lg text-sm xs:text-base">
+                        시작하기
+                    </button>
+                </div>
+                <div class="bg-gray-100 p-4 xs:p-6 rounded-lg">
+                    <h3 class="text-lg xs:text-xl font-semibold mb-2 xs:mb-3">깜빡이모드</h3>
+                    <p class="text-sm xs:text-base text-gray-700 mb-3 xs:mb-4">문제와 답이 번갈아가며 표시</p>
+                    <button onclick="startFlashMode()" class="bg-gradient-to-r from-blue-500 to-indigo-500 text-white px-3 xs:px-4 py-2 rounded-lg text-sm xs:text-base">
+                        시작하기
+                    </button>
+                </div>
+            </div>
+            <a href="#use-cases" class="inline-block text-blue-600 hover:text-blue-800 text-sm xs:text-base">
+                다음 기능 보기 <i class="fa-solid fa-arrow-down ml-2"></i>
+            </a>
+        </div>
+    </section>
+
+    <!-- 어디에 활용할 수 있나요? 섹션 -->
+    <section id="use-cases" class="min-h-screen flex flex-col justify-center items-center p-4 xs:p-6 bg-gray-50">
+        <div class="text-center max-w-2xl">
+            <h2 class="text-xl xs:text-2xl sm:text-3xl font-bold text-blue-600 mb-4 xs:mb-6">어디에 활용할 수 있나요?</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 xs:gap-4 mb-4 xs:mb-6">
+                <div class="bg-white p-4 xs:p-6 rounded-lg shadow-lg">
+                    <h3 class="text-lg xs:text-xl font-semibold mb-2 xs:mb-3">학생</h3>
+                    <p class="text-sm xs:text-base text-gray-700">시험 준비, 과제 복습, 개념 정리</p>
+                </div>
+                <div class="bg-white p-4 xs:p-6 rounded-lg shadow-lg">
+                    <h3 class="text-lg xs:text-xl font-semibold mb-2 xs:mb-3">직장인</h3>
+                    <p class="text-sm xs:text-base text-gray-700">자격증 준비, 업무 지식 습득</p>
+                </div>
+                <div class="bg-white p-4 xs:p-6 rounded-lg shadow-lg">
+                    <h3 class="text-lg xs:text-xl font-semibold mb-2 xs:mb-3">취준생</h3>
+                    <p class="text-sm xs:text-base text-gray-700">면접 준비, 자기소개서 작성</p>
+                </div>
+                <div class="bg-white p-4 xs:p-6 rounded-lg shadow-lg">
+                    <h3 class="text-lg xs:text-xl font-semibold mb-2 xs:mb-3">일반인</h3>
+                    <p class="text-sm xs:text-base text-gray-700">취미 학습, 자기계발</p>
+                </div>
+            </div>
+            <a href="#language-learning" class="inline-block text-blue-600 hover:text-blue-800 text-sm xs:text-base">
+                다음 기능 보기 <i class="fa-solid fa-arrow-down ml-2"></i>
+            </a>
+        </div>
+    </section>
+
+    <!-- 언어학습 섹션 -->
+    <section id="language-learning" class="min-h-screen flex flex-col justify-center items-center p-4 xs:p-6 bg-white">
+        <div class="text-center max-w-2xl">
+            <h2 class="text-xl xs:text-2xl sm:text-3xl font-bold text-blue-600 mb-4 xs:mb-6">언어학습</h2>
+            <div class="bg-gray-100 p-4 xs:p-6 rounded-lg mb-4 xs:mb-6">
+                <p class="text-base xs:text-lg mb-3 xs:mb-4">단어, 문법, 회화 등 다양한 언어 학습에 활용하세요</p>
+                <div class="flex flex-wrap justify-center gap-2 xs:gap-4">
+                    <button class="bg-gradient-to-r from-blue-500 to-indigo-500 text-white px-4 xs:px-6 py-2 rounded-lg text-sm xs:text-base">
+                        영어
+                    </button>
+                    <button class="bg-gradient-to-r from-blue-500 to-indigo-500 text-white px-4 xs:px-6 py-2 rounded-lg text-sm xs:text-base">
+                        일본어
+                    </button>
+                    <button class="bg-gradient-to-r from-blue-500 to-indigo-500 text-white px-4 xs:px-6 py-2 rounded-lg text-sm xs:text-base">
+                        중국어
+                    </button>
+                </div>
+            </div>
+            <a href="#start-learning" class="inline-block text-blue-600 hover:text-blue-800 text-sm xs:text-base">
+                학습 시작하기 <i class="fa-solid fa-arrow-right ml-2"></i>
+            </a>
+        </div>
+    </section>
+
+    <!-- 학습 시작 섹션 -->
+    <section id="start-learning" class="min-h-screen flex flex-col justify-center items-center p-4 xs:p-6 bg-gradient-to-b from-white to-blue-50">
+        <div class="text-center max-w-2xl">
+            <h2 class="text-xl xs:text-2xl sm:text-3xl font-bold text-blue-600 mb-4 xs:mb-6">지금 바로 시작하세요</h2>
+            <div class="bg-white p-4 xs:p-6 rounded-lg shadow-lg mb-4 xs:mb-6">
+                <p class="text-base xs:text-lg mb-3 xs:mb-4">ThinkDock과 함께 더 효율적인 학습을 시작해보세요</p>
+                <button onclick="location.href='/study_no_auth'" class="bg-gradient-to-r from-blue-500 to-indigo-500 text-white px-6 xs:px-8 py-2 xs:py-3 rounded-lg text-base xs:text-lg hover:opacity-90 transition">
+                    학습 시작하기
+                </button>
+            </div>
+        </div>
+    </section>
+</div>
+
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+        let studys = [];
+        let currentToggleMode = 'all';
+        let activePopoverId = null;
+        let currentIndex = 0;
+        let isFocusMode = false;
+        let isFlashMode = false;
+        let flashInterval = null;
+
+        // 로컬 스토리지에서 데이터 로드
+        function loadFromLocalStorage() {
+            const savedData = localStorage.getItem('studys');
+            if (savedData) {
+                studys = JSON.parse(savedData);
+            }
+            drawList();
+        }
+
+        // 로컬 스토리지에 데이터 저장
+        function saveToLocalStorage() {
+            localStorage.setItem('studys', JSON.stringify(studys));
+        }
+
+        window.onload = () => {
+            loadFromLocalStorage();
+            document.addEventListener("click", closePopoverOnOutsideClick);
+            alert('현재 비로그인 모드로 사용 중입니다.\n\n이 모드에서는 데이터 저장이 보장되지 않습니다.\n더 안정적인 사용을 위해 로그인 후 이용해주세요.');
+        };
+
+        function saveQuestion() {
+            const formData = new FormData(find('#saveForm'));
+            const newStudy = {
+                studyId: Date.now(), // 타임스탬프를 ID로 사용
+                questionText: formData.get('questionText'),
+                answerText: formData.get('answerText'),
+                description: formData.get('description')
+            };
+
+            studys.push(newStudy);
+            saveToLocalStorage();
+            closeModal('modal-save');
+            drawList();
+        }
+
+        function updateStudy() {
+            const studyId = parseInt(find('#studyId').value);
+            const formData = new FormData(find('#updateForm'));
+            
+            const index = studys.findIndex(study => study.studyId === studyId);
+            if (index !== -1) {
+                studys[index] = {
+                    ...studys[index],
+                    questionText: formData.get('questionText'),
+                    answerText: formData.get('answerText'),
+                    description: formData.get('description')
+                };
+                saveToLocalStorage();
+                closeModal('modal-update');
+                drawList();
+            }
+        }
+
+        function deleteById(event, studyId) {
+            studys = studys.filter(study => study.studyId !== studyId);
+            saveToLocalStorage();
+            drawList();
+        }
+
+        function drawList() {
+            let html = ``;
+            html += `<div class="flex flex-col md:flex-row gap-4 min-h-[400px]">`;
+
+            if (studys.length === 0) {
+                html += `
+                    <div class="flex flex-col gap-4 w-full md:w-1/2 flex-1 max-h-[calc(100vh-200px)] overflow-y-auto pr-1">
+                        <div class="text-center text-gray-500 py-10 text-base">
+                            등록된 문제가 없습니다.<br>문제를 추가해 주세요!
+                        </div>
+                    </div>`;
+            } else {
+                html += `<div class="flex flex-col gap-4 w-full md:w-1/2 flex-1 max-h-[calc(100vh-200px)] overflow-y-auto pr-1">`;
+                studys.forEach((study, index) => {
+                    html += `
+                           <div onclick="revealHidden(${index})"
+                                class="bg-white shadow-lg rounded-lg p-4 cursor-pointer flex flex-col relative">
+                               <div class="absolute top-3 right-3 cursor-pointer text-gray-500 hover:text-gray-700 text-xl" onclick="openSettings(event, ${study.studyId})">
+                                   <i class="fa-solid fa-gear"></i>
+                               </div>
+                               <div class="flex items-start">
+                                   <div class="text-blue-600 font-bold mr-2 text-lg">${index + 1}.</div>
+                                   <div class="text-start break-words flex-1">
+                                       <div class="text-blue-600 text-xl font-medium mb-2 questionText">
+                                           ${study.questionText}
+                                       </div>
+                                       <div class="text-gray-700 answerText text-base">
+                                           ${study.answerText}
+                                       </div>
+                                   </div>
+                               </div>
+                               <div id="hint-${index}" class="descriptionText text-sm text-gray-500 mt-2 ml-6 hidden">
+                                   ${study.description || "설명 없음"}
+                               </div>
+                               <div id="popover-${study.studyId}"
+                                    class="popover-menu absolute right-2 top-6 w-44 bg-white border border-gray-200 shadow-xl rounded-lg hidden z-30">
+                                   <ul class="text-sm text-gray-800">
+                                       <li class="flex items-center gap-2 px-4 py-2 cursor-pointer hover:bg-blue-50 hover:text-blue-600 transition"
+                                           onclick="updateMode(event, ${study.studyId})">
+                                           <i class="fa-solid fa-pen-to-square"></i> 수정
+                                       </li>
+                                       <li class="flex items-center gap-2 px-4 py-2 cursor-pointer hover:bg-red-50 text-red-500 hover:text-red-600 transition"
+                                           onclick="deleteById(event, ${study.studyId})">
+                                           <i class="fa-solid fa-trash-can"></i> 삭제
+                                       </li>
+                                   </ul>
+                               </div>
+                           </div>`;
+                });
+                html += `</div>`;
+            }
+
+            html += `
+                    <div class="hidden md:block flex-1">
+                        <textarea class="w-full border border-gray-300 rounded p-4 text-sm resize-y"
+                          style="height: calc(100vh - 250px);"
+                          placeholder="자유롭게 작성하면서 공부해보세요! (해당 내용은 저장되지 않습니다.)"
+                          ></textarea>
+                    </div>
+                 `;
+
+            html += `</div>`;
+            find('.listArea').innerHTML = html;
+        }
+
+        function revealHidden(index) {
+            const questionEl = document.querySelectorAll('.questionText')[index];
+            const answerEl = document.querySelectorAll('.answerText')[index];
+            const hintEl = document.getElementById(`hint-${index}`);
+
+            if (currentToggleMode === 'question') {
+                answerEl.style.visibility = (answerEl.style.visibility === 'visible') ? 'hidden' : 'visible';
+            } else if (currentToggleMode === 'answer') {
+                questionEl.style.visibility = (questionEl.style.visibility === 'visible') ? 'hidden' : 'visible';
+            } else if (currentToggleMode === 'all') {
+                if (hintEl.classList.contains('hidden')) {
+                    hintEl.classList.remove('hidden');
+                } else {
+                    hintEl.classList.add('hidden');
+                }
+            }
+        }
+
+        function shuffleQuestions() {
+            if (studys.length < 2) return;
+
+            let shuffled;
+            let attempt = 0;
+            const maxAttempts = 10;
+
+            do {
+                shuffled = [...studys].sort(() => Math.random() - 0.5);
+                attempt++;
+            } while (JSON.stringify(shuffled) === JSON.stringify(studys) && attempt < maxAttempts);
+
+            studys = shuffled;
+            drawList();
+            setToggle(currentToggleMode);
+        }
+
+        function setToggle(mode) {
+            currentToggleMode = mode;
+
+            document.querySelectorAll("div[id^='toggle']").forEach(btn => {
+                btn.classList.remove('bg-gradient-to-r', 'from-blue-500', 'to-indigo-500', 'text-white');
+                btn.classList.add('bg-gray-300', 'text-gray-800');
+            });
+
+            document.getElementById(`toggle${mode.charAt(0).toUpperCase() + mode.slice(1)}`)
+                .classList.add('bg-gradient-to-r', 'from-blue-500', 'to-indigo-500', 'text-white');
+
+            findAll('.questionText').forEach(el => {
+                el.style.visibility = (mode === 'answer') ? 'hidden' : 'visible';
+            });
+
+            findAll('.answerText').forEach(el => {
+                el.style.visibility = (mode === 'question') ? 'hidden' : 'visible';
+            });
+
+            findAll('.descriptionText').forEach(hint => {
+                if (!hint.classList.contains('hidden')) {
+                    hint.classList.add('hidden');
+                }
+            });
+        }
+
+        function shuffleEffect() {
+            const shuffleBtn = document.getElementById('shuffleButton');
+
+            shuffleBtn.classList.add('bg-gradient-to-r', 'from-blue-500', 'to-indigo-500', 'text-white');
+            shuffleBtn.classList.remove('bg-gray-300', 'text-gray-800');
+
+            setTimeout(() => {
+                shuffleBtn.classList.remove('bg-gradient-to-r', 'from-blue-500', 'to-indigo-500', 'text-white');
+                shuffleBtn.classList.add('bg-gray-300', 'text-gray-800');
+            }, 100);
+
+            shuffleQuestions();
+        }
+
+        function toggleFocusMenu() {
+            if(studys.length === 0){
+                alert('문제를 등록해주세요');
+                return;
+            }
+            const menu = document.getElementById("focusModeMenu");
+            menu.classList.toggle("hidden");
+
+            document.removeEventListener("click", closeFocusMenu);
+            setTimeout(() => document.addEventListener("click", closeFocusMenu), 0);
+        }
+
+        function closeFocusMenu(event) {
+            const menu = document.getElementById("focusModeMenu");
+            const button = document.getElementById("focusModeButton");
+
+            if (menu.contains(event.target) || button.contains(event.target)) return;
+
+            menu.classList.add("hidden");
+            document.removeEventListener("click", closeFocusMenu);
+        }
+
+        function startFocusMode() {
+            if (studys.length === 0) return;
+
+            currentIndex = 0;
+            isFocusMode = true;
+            isFlashMode = false;
+            clearInterval(flashInterval);
+
+            const specialModeContainer = document.getElementById('specialModeContainer');
+            const specialModeQuestion = document.getElementById('specialModeQuestion');
+            const specialModeAnswer = document.getElementById('specialModeAnswer');
+
+            specialModeContainer.style.display = 'flex';
+            updateSpecialModeContent();
+
+            specialModeContainer.onclick = function (event) {
+                if (event.target.closest('button')) return;
+
+                if (specialModeAnswer.style.display === 'none') {
+                    specialModeAnswer.style.display = 'block';
+                } else {
+                    currentIndex = (currentIndex + 1) % studys.length;
+                    updateSpecialModeContent();
+                }
+            };
+        }
+
+        function startFlashMode() {
+            if (studys.length === 0) return;
+
+            currentIndex = 0;
+            isFocusMode = false;
+            isFlashMode = true;
+
+            const specialModeContainer = document.getElementById('specialModeContainer');
+            specialModeContainer.style.display = 'flex';
+
+            specialModeContainer.onclick = function (event) {
+                if (!event.target.closest('button')) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+            };
+
+            updateSpecialModeContent();
+
+            clearInterval(flashInterval);
+            flashInterval = setInterval(() => {
+                currentIndex = (currentIndex + 1) % studys.length;
+                updateSpecialModeContent();
+            }, 3000);
+        }
+
+        function closeSpecialMode() {
+            const specialModeContainer = document.getElementById('specialModeContainer');
+            specialModeContainer.style.display = 'none';
+
+            isFocusMode = false;
+            isFlashMode = false;
+            clearInterval(flashInterval);
+        }
+
+        function updateSpecialModeContent() {
+            if (studys.length === 0) return;
+
+            const currentQuestion = studys[currentIndex];
+            const specialModeQuestion = document.getElementById('specialModeQuestion');
+            const specialModeAnswer = document.getElementById('specialModeAnswer');
+
+            specialModeQuestion.textContent = currentQuestion.questionText;
+            specialModeAnswer.textContent = currentQuestion.answerText;
+
+            if (isFlashMode) {
+                specialModeAnswer.style.display = 'block';
+            } else {
+                specialModeAnswer.style.display = 'none';
+            }
+        }
+
+        function closePopoverOnOutsideClick(event) {
+            if (!event.target.closest(".popover-menu") && !event.target.closest(".text-xl")) {
+                document.querySelectorAll(".popover-menu").forEach(el => el.classList.add("hidden"));
+                activePopoverId = null;
+            }
+        }
+
+        function openModal(name) {
+            document.getElementById(name).classList.remove('hidden');
+            document.getElementById('plus-button').classList.add('hidden');
+        }
+
+        function closeModal(name) {
+            document.getElementById(name).classList.add('hidden');
+            document.getElementById('plus-button').classList.remove('hidden');
+        }
+
+        function toggleDescription(modalType) {
+            const descArea = document.getElementById(`descriptionArea-${modalType}`);
+            const icon = document.getElementById(`descriptionIcon-${modalType}`);
+
+            if (descArea.classList.contains('hidden')) {
+                descArea.classList.remove('hidden');
+                icon.classList.add('transform', 'rotate-90');
+            } else {
+                descArea.classList.add('hidden');
+                icon.classList.remove('transform', 'rotate-90');
+            }
+        }
+
+        function updateMode(event, studyId) {
+            event.stopPropagation();
+            const study = studys.find(s => s.studyId === studyId);
+            if (study) {
+                find('#studyId').value = study.studyId;
+                find('#questionText').value = study.questionText;
+                find('#answerText').value = study.answerText;
+                find('#description').value = study.description;
+                find(`#popover-${studyId}`).classList.add('hidden');
+                openModal('modal-update');
+            }
+        }
+
+        function openSettings(event, studyId) {
+            event.stopPropagation();
+            const popover = document.querySelector(`#popover-${studyId}`);
+            
+            if (activePopoverId === studyId) {
+                popover.classList.add("hidden");
+                activePopoverId = null;
+            } else {
+                document.querySelectorAll(".popover-menu").forEach(el => el.classList.add("hidden"));
+                popover.classList.remove("hidden");
+                activePopoverId = studyId;
+            }
+        }
+
+        // 유틸리티 함수들
+        function find(selector) {
+            return document.querySelector(selector);
+        }
+
+        function findAll(selector) {
+            return document.querySelectorAll(selector);
+        }
+    </script>
+</th:block>
+</html> 

@@ -27,12 +27,23 @@
 <!-- 로고 -->
 <img src="/static/common/image/logo.png" alt="로고" class="w-80 h-auto">
 
-<!-- 네이버 로그인 버튼 (onclick 이벤트로 변경) -->
-<div onclick="handleNaverLogin()"
-     class="flex items-center px-16 py-6 space-x-8 bg-green-500 text-white text-3xl font-bold rounded-2xl shadow-xl
-              hover:bg-green-600 transition duration-300 cursor-pointer">
-    <span class="bg-white text-green-500 font-extrabold text-3xl px-4 py-2 rounded">N</span>
-    <span>네이버 로그인</span>
+<!-- 로그인 버튼 컨테이너 -->
+<div class="flex flex-col space-y-4">
+    <!-- 네이버 로그인 버튼 -->
+    <div onclick="handleNaverLogin()"
+         class="flex items-center px-16 py-6 space-x-8 bg-green-500 text-white text-3xl font-bold rounded-2xl shadow-xl
+                  hover:bg-green-600 transition duration-300 cursor-pointer">
+        <span class="bg-white text-green-500 font-extrabold text-3xl px-4 py-2 rounded">N</span>
+        <span>네이버 로그인</span>
+    </div>
+
+    <!-- 로그인 없이 사용하기 버튼 -->
+    <div onclick="handleNoAuthLogin()"
+         class="flex items-center px-16 py-6 space-x-8 bg-gray-500 text-white text-3xl font-bold rounded-2xl shadow-xl
+                  hover:bg-gray-600 transition duration-300 cursor-pointer">
+        <span class="bg-white text-gray-500 font-extrabold text-3xl px-4 py-2 rounded">?</span>
+        <span>비회원 로그인</span>
+    </div>
 </div>
 
 <!-- 개인정보 처리방침 링크 -->
@@ -40,7 +51,6 @@
     <a href="#" onclick="handlePrivacyClick(event)" class="underline block">개인정보 처리방침</a>
     <a class="block mt-2">씽크독(Think Dock)</a>
 </footer>
-
 
 <!-- 개선된 로딩 오버레이 -->
 <div id="loadingOverlay" class="fixed inset-0 bg-white bg-opacity-95 z-[9999] flex items-center justify-center hidden">
@@ -57,6 +67,12 @@
     function handleNaverLogin() {
         document.querySelector("#loadingOverlay").classList.remove('hidden');
         window.location.href = "/oauth2/authorization/naver";
+    }
+
+    // 로그인 없이 사용하기 처리
+    function handleNoAuthLogin() {
+        document.querySelector("#loadingOverlay").classList.remove('hidden');
+        window.location.href = "/study_no_auth";
     }
 
     // 개인정보 처리방침 링크 처리
