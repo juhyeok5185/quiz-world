@@ -4,148 +4,166 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="user/layout">
 
-<div layout:fragment="content" class="flex flex-col">
-    <!-- 스마트한 학습의 시작 섹션 -->
-    <section class="min-h-screen flex flex-col justify-center items-center p-4 xs:p-6 bg-gradient-to-b from-blue-50 to-white">
-        <div class="text-center max-w-2xl">
-            <h1 class="text-2xl xs:text-3xl sm:text-4xl font-bold text-blue-600 mb-4 xs:mb-6">스마트한 학습의 시작</h1>
-            <p class="text-base xs:text-lg sm:text-xl text-gray-700 mb-6 xs:mb-8">ThinkDock과 함께 더 효율적인 학습을 시작해보세요</p>
-            <a href="#features" class="inline-block bg-gradient-to-r from-blue-500 to-indigo-500 text-white px-6 xs:px-8 py-2 xs:py-3 rounded-lg text-base xs:text-lg hover:opacity-90 transition">
-                시작하기
-            </a>
-        </div>
-    </section>
-
-    <!-- 문제 섞기 기능 섹션 -->
-    <section id="features" class="min-h-screen flex flex-col justify-center items-center p-4 xs:p-6 bg-white">
-        <div class="text-center max-w-2xl">
-            <h2 class="text-xl xs:text-2xl sm:text-3xl font-bold text-blue-600 mb-4 xs:mb-6">문제 섞기 기능</h2>
-            <div class="bg-gray-100 p-4 xs:p-6 rounded-lg mb-4 xs:mb-6">
-                <div class="text-lg xs:text-xl mb-3 xs:mb-4">문제를 무작위로 섞어서 학습하세요</div>
-                <button onclick="shuffleEffect()" class="bg-gradient-to-r from-blue-500 to-indigo-500 text-white px-4 xs:px-6 py-2 rounded-lg text-base xs:text-lg">
-                    <i class="fa-solid fa-arrows-rotate mr-2"></i>문제 섞기
-                </button>
-            </div>
-            <a href="#toggle" class="inline-block text-blue-600 hover:text-blue-800 text-sm xs:text-base">
-                다음 기능 보기 <i class="fa-solid fa-arrow-down ml-2"></i>
-            </a>
-        </div>
-    </section>
-
-    <!-- 문제/답 가리기 기능 섹션 -->
-    <section id="toggle" class="min-h-screen flex flex-col justify-center items-center p-4 xs:p-6 bg-gray-50">
-        <div class="text-center max-w-2xl">
-            <h2 class="text-xl xs:text-2xl sm:text-3xl font-bold text-blue-600 mb-4 xs:mb-6">문제/답 가리기 기능</h2>
-            <div class="bg-white p-4 xs:p-6 rounded-lg shadow-lg mb-4 xs:mb-6">
-                <div class="flex flex-wrap justify-center gap-2 xs:gap-4 mb-4 xs:mb-6">
-                    <button onclick="setToggle('all')" class="px-3 xs:px-4 py-2 rounded-md bg-gradient-to-r from-blue-500 to-indigo-500 text-white text-sm xs:text-base">
-                        전체
-                    </button>
-                    <button onclick="setToggle('question')" class="px-3 xs:px-4 py-2 rounded-md bg-gray-200 text-gray-800 text-sm xs:text-base">
-                        문제
-                    </button>
-                    <button onclick="setToggle('answer')" class="px-3 xs:px-4 py-2 rounded-md bg-gray-200 text-gray-800 text-sm xs:text-base">
-                        답
-                    </button>
+<div layout:fragment="content" class="p-4 sm:p-6 space-y-4">
+    <!-- 컨트롤 버튼 영역 -->
+    <div class="flex flex-col sm:flex-row gap-4 mb-6">
+        <!-- 상단 컨트롤 버튼 그룹 -->
+        <div class="flex flex-wrap gap-3 items-center justify-between sm:justify-start">
+            <!-- 토글 버튼 그룹 -->
+            <div class="bg-gray-200 p-2 rounded-lg flex space-x-2">
+                <div id="toggleAll" onclick="setToggle('all')"
+                     class="px-4 py-2 rounded-md transition bg-gradient-to-r from-blue-500 to-indigo-500 text-white cursor-pointer text-base">
+                    전체
                 </div>
-                <p class="text-sm xs:text-base text-gray-700">문제나 답을 선택적으로 가려서 학습 효과를 높이세요</p>
-            </div>
-            <a href="#special-modes" class="inline-block text-blue-600 hover:text-blue-800 text-sm xs:text-base">
-                다음 기능 보기 <i class="fa-solid fa-arrow-down ml-2"></i>
-            </a>
-        </div>
-    </section>
-
-    <!-- 씽크독 스마트 기능 섹션 -->
-    <section id="special-modes" class="min-h-screen flex flex-col justify-center items-center p-4 xs:p-6 bg-white">
-        <div class="text-center max-w-2xl">
-            <h2 class="text-xl xs:text-2xl sm:text-3xl font-bold text-blue-600 mb-4 xs:mb-6">씽크독 스마트 기능</h2>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 xs:gap-4 mb-4 xs:mb-6">
-                <div class="bg-gray-100 p-4 xs:p-6 rounded-lg">
-                    <h3 class="text-lg xs:text-xl font-semibold mb-2 xs:mb-3">집중모드</h3>
-                    <p class="text-sm xs:text-base text-gray-700 mb-3 xs:mb-4">한 문제에 집중하여 학습</p>
-                    <button onclick="startFocusMode()" class="bg-gradient-to-r from-blue-500 to-indigo-500 text-white px-3 xs:px-4 py-2 rounded-lg text-sm xs:text-base">
-                        시작하기
-                    </button>
+                <div id="toggleQuestion" onclick="setToggle('question')"
+                     class="px-4 py-2 rounded-md transition bg-gray-300 text-gray-800 cursor-pointer text-base">
+                    문제
                 </div>
-                <div class="bg-gray-100 p-4 xs:p-6 rounded-lg">
-                    <h3 class="text-lg xs:text-xl font-semibold mb-2 xs:mb-3">깜빡이모드</h3>
-                    <p class="text-sm xs:text-base text-gray-700 mb-3 xs:mb-4">문제와 답이 번갈아가며 표시</p>
-                    <button onclick="startFlashMode()" class="bg-gradient-to-r from-blue-500 to-indigo-500 text-white px-3 xs:px-4 py-2 rounded-lg text-sm xs:text-base">
-                        시작하기
-                    </button>
+                <div id="toggleAnswer" onclick="setToggle('answer')"
+                     class="px-4 py-2 rounded-md transition bg-gray-300 text-gray-800 cursor-pointer text-base">
+                    답
                 </div>
             </div>
-            <a href="#use-cases" class="inline-block text-blue-600 hover:text-blue-800 text-sm xs:text-base">
-                다음 기능 보기 <i class="fa-solid fa-arrow-down ml-2"></i>
-            </a>
-        </div>
-    </section>
 
-    <!-- 어디에 활용할 수 있나요? 섹션 -->
-    <section id="use-cases" class="min-h-screen flex flex-col justify-center items-center p-4 xs:p-6 bg-gray-50">
-        <div class="text-center max-w-2xl">
-            <h2 class="text-xl xs:text-2xl sm:text-3xl font-bold text-blue-600 mb-4 xs:mb-6">어디에 활용할 수 있나요?</h2>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 xs:gap-4 mb-4 xs:mb-6">
-                <div class="bg-white p-4 xs:p-6 rounded-lg shadow-lg">
-                    <h3 class="text-lg xs:text-xl font-semibold mb-2 xs:mb-3">학생</h3>
-                    <p class="text-sm xs:text-base text-gray-700">시험 준비, 과제 복습, 개념 정리</p>
+            <!-- 우측 액션 버튼들 -->
+            <div class="flex gap-2">
+                <!-- 셔플 버튼 -->
+                <div id="shuffleButton" onclick="shuffleEffect()"
+                     class="px-4 py-2 rounded-md transition bg-gray-300 text-gray-800 flex items-center cursor-pointer">
+                    <i class="fa-solid fa-arrows-rotate text-base"></i>
                 </div>
-                <div class="bg-white p-4 xs:p-6 rounded-lg shadow-lg">
-                    <h3 class="text-lg xs:text-xl font-semibold mb-2 xs:mb-3">직장인</h3>
-                    <p class="text-sm xs:text-base text-gray-700">자격증 준비, 업무 지식 습득</p>
-                </div>
-                <div class="bg-white p-4 xs:p-6 rounded-lg shadow-lg">
-                    <h3 class="text-lg xs:text-xl font-semibold mb-2 xs:mb-3">취준생</h3>
-                    <p class="text-sm xs:text-base text-gray-700">면접 준비, 자기소개서 작성</p>
-                </div>
-                <div class="bg-white p-4 xs:p-6 rounded-lg shadow-lg">
-                    <h3 class="text-lg xs:text-xl font-semibold mb-2 xs:mb-3">일반인</h3>
-                    <p class="text-sm xs:text-base text-gray-700">취미 학습, 자기계발</p>
+
+                <!-- 집중모드 버튼 -->
+                <div class="relative">
+                    <div id="focusModeButton" onclick="toggleFocusMenu()"
+                         class="px-4 py-2 rounded-md transition bg-gray-300 text-gray-800 flex items-center cursor-pointer text-base">
+                        ▶
+                    </div>
+
+                    <!-- 집중모드 선택 메뉴 -->
+                    <div id="focusModeMenu"
+                         class="absolute top-full right-0 mt-2 bg-white shadow-lg rounded-md p-2 hidden flex flex-col w-32 z-50">
+                        <div onclick="startFocusMode()"
+                             class="w-full px-4 py-2 text-gray-800 hover:bg-gray-200 rounded-md cursor-pointer text-base">
+                            집중모드
+                        </div>
+                        <div onclick="startFlashMode()"
+                             class="w-full px-4 py-2 text-gray-800 hover:bg-gray-200 rounded-md cursor-pointer text-base">
+                            깜빡이모드
+                        </div>
+                    </div>
                 </div>
             </div>
-            <a href="#language-learning" class="inline-block text-blue-600 hover:text-blue-800 text-sm xs:text-base">
-                다음 기능 보기 <i class="fa-solid fa-arrow-down ml-2"></i>
-            </a>
         </div>
-    </section>
+    </div>
 
-    <!-- 언어학습 섹션 -->
-    <section id="language-learning" class="min-h-screen flex flex-col justify-center items-center p-4 xs:p-6 bg-white">
-        <div class="text-center max-w-2xl">
-            <h2 class="text-xl xs:text-2xl sm:text-3xl font-bold text-blue-600 mb-4 xs:mb-6">언어학습</h2>
-            <div class="bg-gray-100 p-4 xs:p-6 rounded-lg mb-4 xs:mb-6">
-                <p class="text-base xs:text-lg mb-3 xs:mb-4">단어, 문법, 회화 등 다양한 언어 학습에 활용하세요</p>
-                <div class="flex flex-wrap justify-center gap-2 xs:gap-4">
-                    <button class="bg-gradient-to-r from-blue-500 to-indigo-500 text-white px-4 xs:px-6 py-2 rounded-lg text-sm xs:text-base">
-                        영어
-                    </button>
-                    <button class="bg-gradient-to-r from-blue-500 to-indigo-500 text-white px-4 xs:px-6 py-2 rounded-lg text-sm xs:text-base">
-                        일본어
-                    </button>
-                    <button class="bg-gradient-to-r from-blue-500 to-indigo-500 text-white px-4 xs:px-6 py-2 rounded-lg text-sm xs:text-base">
-                        중국어
+    <!-- 리스트 출력 영역 -->
+    <div class="listArea grid grid-cols-1 gap-4 mt-4"></div>
+
+    <!-- 문제 추가 버튼 -->
+    <div id="plus-button" class="fixed bottom-20 right-6 md:bottom-20 md:right-[calc(50%+10px)] z-50">
+        <div onclick="openModal('modal-save');"
+             class="w-14 h-14 bg-gradient-to-r from-blue-500 to-indigo-500 text-white text-[28px] font-bold rounded-full shadow-xl hover:opacity-90 transition flex items-center justify-center cursor-pointer">
+            <span class="flex items-center justify-center">+</span>
+        </div>
+    </div>
+
+    <!-- 문제 추가 모달 -->
+    <div id="modal-save"
+         class="fixed inset-0 left-0 top-[-16px] bg-black bg-opacity-50 flex items-center justify-center hidden">
+        <div class="bg-white p-6 rounded-lg shadow-lg w-[90%] md:w-[450px] lg:w-[500px] mx-auto max-h-[90vh] overflow-y-auto">
+            <h2 class="text-xl font-bold mb-4">새 문제 추가</h2>
+            <form id="saveForm">
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2">문제</label>
+                    <textarea name="questionText" id="questionTextArea" rows="3" placeholder="문제를 입력해주세요!"
+                              class="w-full border p-3 rounded resize-none focus:ring-blue-500 focus:border-blue-500 text-base"></textarea>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2">정답</label>
+                    <textarea name="answerText" id="answerTextArea" rows="3" placeholder="정답을 입력해주세요!"
+                              class="w-full border p-3 rounded resize-none focus:ring-blue-500 focus:border-blue-500 text-base"></textarea>
+                </div>
+                <div class="mb-3">
+                    <button type="button" onclick="toggleDescription('save')" class="text-sm text-blue-600 hover:text-blue-800 flex items-center">
+                        <i id="descriptionIcon-save" class="fa-solid fa-chevron-right mr-1 transition-transform"></i>
+                        <span>설명 추가하기 (선택사항)</span>
                     </button>
                 </div>
-            </div>
-            <a href="#start-learning" class="inline-block text-blue-600 hover:text-blue-800 text-sm xs:text-base">
-                학습 시작하기 <i class="fa-solid fa-arrow-right ml-2"></i>
-            </a>
+                <div id="descriptionArea-save" class="mb-4 hidden">
+                    <label class="block text-gray-700 text-sm font-bold mb-2">설명</label>
+                    <textarea name="description" id="descriptionTextArea" rows="3" placeholder="설명을 입력해주세요!"
+                              class="w-full border p-3 rounded resize-none focus:ring-blue-500 focus:border-blue-500 text-base"></textarea>
+                </div>
+                <div class="flex justify-end gap-2">
+                    <div onclick="closeModal('modal-save');"
+                         class="bg-gray-300 text-gray-700 px-4 py-2 rounded-md cursor-pointer text-base">
+                        취소
+                    </div>
+                    <div onclick="saveQuestion()"
+                         class="bg-gradient-to-r from-blue-500 to-indigo-500 text-white px-4 py-2 rounded-md hover:opacity-90 transition cursor-pointer text-base">
+                        저장
+                    </div>
+                </div>
+            </form>
         </div>
-    </section>
+    </div>
 
-    <!-- 학습 시작 섹션 -->
-    <section id="start-learning" class="min-h-screen flex flex-col justify-center items-center p-4 xs:p-6 bg-gradient-to-b from-white to-blue-50">
-        <div class="text-center max-w-2xl">
-            <h2 class="text-xl xs:text-2xl sm:text-3xl font-bold text-blue-600 mb-4 xs:mb-6">지금 바로 시작하세요</h2>
-            <div class="bg-white p-4 xs:p-6 rounded-lg shadow-lg mb-4 xs:mb-6">
-                <p class="text-base xs:text-lg mb-3 xs:mb-4">ThinkDock과 함께 더 효율적인 학습을 시작해보세요</p>
-                <button onclick="location.href='/study_no_auth'" class="bg-gradient-to-r from-blue-500 to-indigo-500 text-white px-6 xs:px-8 py-2 xs:py-3 rounded-lg text-base xs:text-lg hover:opacity-90 transition">
-                    학습 시작하기
-                </button>
+    <!-- 문제 수정 모달 -->
+    <div id="modal-update" class="fixed inset-0 left-0 top-[-16px] bg-black bg-opacity-50 flex items-center justify-center hidden">
+        <div class="bg-white p-6 rounded-lg shadow-lg w-[90%] md:w-[450px] lg:w-[500px] mx-auto max-h-[90vh] overflow-y-auto">
+            <h2 class="text-xl font-bold mb-4">문제 수정</h2>
+            <form id="updateForm">
+                <input type="hidden" id="studyId" name="studyId">
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2">문제</label>
+                    <textarea id="questionText" name="questionText" rows="3" placeholder="문제를 입력해주세요!"
+                              class="w-full border p-3 rounded resize-none focus:ring-blue-500 focus:border-blue-500 text-base"></textarea>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2">정답</label>
+                    <textarea id="answerText" name="answerText" rows="3" placeholder="정답을 입력해주세요!"
+                              class="w-full border p-3 rounded resize-none focus:ring-blue-500 focus:border-blue-500 text-base"></textarea>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2">설명</label>
+                    <textarea id="description" name="description" rows="3" placeholder="설명을 입력해주세요(선택사항)"
+                              class="w-full border p-3 rounded resize-none focus:ring-blue-500 focus:border-blue-500 text-base"></textarea>
+                </div>
+                <div class="flex justify-end gap-2">
+                    <div onclick="closeModal('modal-update')" class="bg-gray-300 text-gray-700 px-4 py-2 rounded-md cursor-pointer text-base">
+                        취소
+                    </div>
+                    <div onclick="updateStudy()"
+                         class="bg-gradient-to-r from-blue-500 to-indigo-500 text-white px-4 py-2 rounded-md hover:opacity-90 transition cursor-pointer text-base">
+                        수정
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 특수 모드 컨테이너 -->
+    <div id="specialModeContainer"
+         class="fixed top-[-16px] left-0 w-full h-full bg-white z-[9999] flex items-center justify-center hidden">
+        <div class="absolute top-4 left-4">
+            <div onclick="closeSpecialMode()" class="text-gray-700 hover:text-gray-900 cursor-pointer">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24"
+                     stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M6 18L18 6M6 6l12 12"/>
+                </svg>
             </div>
         </div>
-    </section>
+        <div id="specialModeContent" class="text-center w-full max-w-3xl px-4 h-[80vh] flex flex-col justify-center">
+            <div id="specialModeQuestion"
+                 class="text-3xl font-bold mb-6 break-words whitespace-pre-wrap overflow-y-auto max-h-[60vh] text-center px-8">
+            </div>
+            <div id="specialModeAnswer"
+                 class="text-2xl mt-4 hidden break-words whitespace-pre-wrap overflow-y-auto max-h-[60vh] text-center px-8">
+            </div>
+        </div>
+    </div>
 </div>
 
 <th:block layout:fragment="script">
